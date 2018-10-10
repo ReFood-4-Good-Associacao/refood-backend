@@ -1,0 +1,436 @@
+﻿<#
+    // ################################################################
+    //                 Service Layer - Unit Tests
+    // ################################################################
+#>
+
+// ################################################################
+//                      Code generated with T4
+// ################################################################
+<#
+    CodeClass currentClass = classes.FirstOrDefault(c => c.Name == EntityNamePrefix + EntityName);
+    var properties = currentClass.Members.OfType<EnvDTE.CodeProperty>().Where(p => p.Access.HasFlag(vsCMAccess.vsCMAccessPublic));
+#>
+
+<#if(UseDNN) {#>
+using DotNetNuke.Framework;
+<#}#>
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using <#=NamespaceCore#>;
+using <#=NamespaceCore#>.Repositories;
+using <#=NamespaceCore#>.Repositories.Interfaces;
+using <#=NamespaceServices#>;
+using <#=NamespaceServices#>.DTOs;
+using <#=NamespaceServices#>.Interfaces;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
+
+namespace <#=NamespaceServices#>.UnitTests
+{
+    [TestClass]
+    public partial class <#=EntityName#>ServiceUnitTests
+    {
+<#if (Uselog4net) {#>
+        //private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+<#}#>
+
+        [TestMethod]
+        public void Add<#=EntityName#>_Success_Test()
+        {
+            // Arrange
+            <#=EntityNameDTO#> dto = Sample<#=EntityNameDTO#>(1);
+
+            // create mock for repository
+            var mock = new Mock<I<#=EntityName#>Repository>();
+            mock.Setup(s => s.Add<#=EntityName#>(Moq.It.IsAny<<#=EntityNamePrefix + EntityName#>>())).Returns(1);
+
+            // service
+            <#=EntityName#>Service <#=EntityNameLowerCase#>Service = new <#=EntityName#>Service();
+            <#=EntityName#>Service.Repository = mock.Object;
+
+            // Act
+            int id = <#=EntityNameLowerCase#>Service.Add<#=EntityName#>(dto);
+
+            // Assert
+            Assert.AreEqual(1, id);
+            Assert.AreEqual(1, dto.<#=EntityName#>Id);
+        }
+
+        [TestMethod]
+        public void Delete<#=EntityName#>_Success_Test()
+        {
+            // Arrange
+            <#=EntityNameDTO#> dto = Sample<#=EntityNameDTO#>(1);
+            dto.IsDeleted = false;
+
+            // create mock for repository
+            var mock = new Mock<I<#=EntityName#>Repository>();
+            mock.Setup(s => s.Delete<#=EntityName#>(Moq.It.IsAny<<#=EntityNamePrefix + EntityName#>>())).Verifiable();
+
+            // service
+            <#=EntityName#>Service <#=EntityNameLowerCase#>Service = new <#=EntityName#>Service();
+            <#=EntityName#>Service.Repository = mock.Object;
+
+            // Act
+            <#=EntityNameLowerCase#>Service.Delete<#=EntityName#>(dto);
+
+            // Assert
+            Assert.IsTrue(true);
+        }
+
+        [TestMethod]
+        public void Delete<#=EntityName#>ById_Success_Test()
+        {
+            // Arrange
+            int id = 1;
+
+            // create mock for repository
+            var mock = new Mock<I<#=EntityName#>Repository>();
+            mock.Setup(s => s.Delete<#=EntityName#>(Moq.It.IsAny<int>())).Verifiable();
+
+            // service
+            <#=EntityName#>Service <#=EntityNameLowerCase#>Service = new <#=EntityName#>Service();
+            <#=EntityName#>Service.Repository = mock.Object;
+
+            // Act
+            <#=EntityNameLowerCase#>Service.Delete<#=EntityName#>(id);
+
+            // Assert
+            Assert.IsTrue(true);
+        }
+
+        [TestMethod]
+        public void Get<#=EntityName#>_Success_Test()
+        {
+            // Arrange
+            int id = 1;
+            <#=EntityNamePrefix + EntityName#> <#=EntityNameLowerCase#> = Sample<#=EntityName#>(id);
+
+            // create mock for repository
+            var mock = new Mock<I<#=EntityName#>Repository>();
+            mock.Setup(s => s.Get<#=EntityName#>(Moq.It.IsAny<int>())).Returns(<#=EntityNameLowerCase#>);
+
+            // service
+            <#=EntityName#>Service <#=EntityNameLowerCase#>Service = new <#=EntityName#>Service();
+            <#=EntityName#>Service.Repository = mock.Object;
+
+            // Act
+            <#=EntityNameDTO#> result = <#=EntityNameLowerCase#>Service.Get<#=EntityName#>(id);
+
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(1, result.<#=EntityName#>Id);
+        }
+
+        [TestMethod]
+        public void Get<#=EntityName#>s_Success_Test()
+        {
+            // Arrange
+            <#=EntityNamePrefix + EntityName#> <#=EntityNameLowerCase#> = Sample<#=EntityName#>(1);
+            
+            IList<<#=EntityNamePrefix + EntityName#>> list = new List<<#=EntityNamePrefix + EntityName#>>();
+            list.Add(<#=EntityNameLowerCase#>);
+
+            // create mock for repository
+            var mock = new Mock<I<#=EntityName#>Repository>();
+            mock.Setup(s => s.Get<#=EntityName#>s()).Returns(list);
+
+            // service
+            <#=EntityName#>Service <#=EntityNameLowerCase#>Service = new <#=EntityName#>Service();
+            <#=EntityName#>Service.Repository = mock.Object;
+
+            // Act
+            var resultList = <#=EntityNameLowerCase#>Service.Get<#=EntityName#>s();
+            <#=EntityNameDTO#> result = resultList.FirstOrDefault();
+
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(1, result.<#=EntityName#>Id);
+        }
+
+        [TestMethod]
+        public void Get<#=EntityName#>sPaged_Success_Test()
+        {
+            // Arrange
+            string searchTerm = "";
+            int pageIndex = 0;
+            int pageSize = 10;
+            
+            // list
+            IList<<#=EntityNamePrefix + EntityName#>> list = new List<<#=EntityNamePrefix + EntityName#>>();
+            for(int i = 1; i <= pageSize; i++)
+            {
+                list.Add(Sample<#=EntityName#>(i));
+            }
+
+            // create mock for repository
+            var mock = new Mock<I<#=EntityName#>Repository>();
+            mock.Setup(s => s.Get<#=EntityName#>s(Moq.It.IsAny<string>(), Moq.It.IsAny<int>(), Moq.It.IsAny<int>())).Returns(list);
+
+            // service
+            <#=EntityName#>Service <#=EntityNameLowerCase#>Service = new <#=EntityName#>Service();
+            <#=EntityName#>Service.Repository = mock.Object;
+
+            // Act
+            var resultList = <#=EntityNameLowerCase#>Service.Get<#=EntityName#>s(searchTerm, pageIndex, pageSize);
+            <#=EntityNameDTO#> result = resultList.FirstOrDefault();
+
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(1, result.<#=EntityName#>Id);
+            Assert.AreEqual(10, resultList.Count);
+        }
+
+<#if(GenerateViewPage_SearchFilters){#>
+        [TestMethod]
+        public void Get<#=EntityName#>ListAdvancedSearch_Success_Test()
+        {
+            // Arrange
+<#
+    // advanced search filters - function arguments
+    int countArgs = 0;
+    foreach(var currentProperty in properties)
+    {
+        // skip audit properties because they are set with specific values
+        if(currentProperty.Name != "ModuleId" 
+            && currentProperty.Name != "CreateBy"
+            && currentProperty.Name != "UpdateBy"
+            && currentProperty.Name != "CreateOn"
+            && currentProperty.Name != "UpdateOn"
+            && currentProperty.Name != "IsDeleted"
+            && currentProperty.Name != EntityName + "Id")
+        {
+            string propertyNameLowerCase = currentProperty.Name.Substring(0, 1).ToLower() + currentProperty.Name.Substring(1, currentProperty.Name.Length - 1);
+
+            // add each property
+
+            if (currentProperty.Type.AsString.Contains("System.DateTime")) {#>
+            <#=currentProperty.Type.AsString#><#if(!currentProperty.Type.AsString.EndsWith("?")){#>?<#}#> <#=propertyNameLowerCase#>From = null; 
+            <#=currentProperty.Type.AsString#><#if(!currentProperty.Type.AsString.EndsWith("?")){#>?<#}#> <#=propertyNameLowerCase#>To = null; 
+<#          }#>
+<#          else {#>
+            <#=currentProperty.Type.AsString#><#if(!currentProperty.Type.AsString.EndsWith("?") && currentProperty.Type.AsString != "string"){#>?<#}#> <#=propertyNameLowerCase#> = null; 
+<#          }#>
+<#          countArgs++;#>
+<#      }#>
+<#  }#>
+
+            //int pageIndex = 0;
+            int pageSize = 10;
+            
+            // list
+            IList<<#=EntityNamePrefix + EntityName#>> list = new List<<#=EntityNamePrefix + EntityName#>>();
+            for(int i = 1; i <= pageSize; i++)
+            {
+                list.Add(Sample<#=EntityName#>(i));
+            }
+
+            // create mock for repository
+            var mock = new Mock<I<#=EntityName#>Repository>();
+            mock.Setup(s => s.Get<#=EntityName#>ListAdvancedSearch(
+<#
+    // advanced search filters - function arguments
+    countArgs = 0;
+    foreach(var currentProperty in properties)
+    {
+        // skip audit properties because they are set with specific values
+        if(currentProperty.Name != "ModuleId" 
+            && currentProperty.Name != "CreateBy"
+            && currentProperty.Name != "UpdateBy"
+            && currentProperty.Name != "CreateOn"
+            && currentProperty.Name != "UpdateOn"
+            && currentProperty.Name != "IsDeleted"
+            && currentProperty.Name != EntityName + "Id")
+        {
+            string propertyNameLowerCase = currentProperty.Name.Substring(0, 1).ToLower() + currentProperty.Name.Substring(1, currentProperty.Name.Length - 1);
+
+            // add each property
+            if (currentProperty.Type.AsString.Contains("System.DateTime")) {#>
+                <#if(countArgs > 0){#>,<#}#> Moq.It.IsAny<<#=currentProperty.Type.AsString#><#if(!currentProperty.Type.AsString.EndsWith("?")){#>?<#}#>>() // <#=propertyNameLowerCase#>From 
+                <#if(countArgs > 0){#>,<#}#> Moq.It.IsAny<<#=currentProperty.Type.AsString#><#if(!currentProperty.Type.AsString.EndsWith("?")){#>?<#}#>>() // <#=propertyNameLowerCase#>To 
+<#          }#>
+<#          else {#>
+                <#if(countArgs > 0){#>,<#}#> Moq.It.IsAny<<#=currentProperty.Type.AsString#><#if(!currentProperty.Type.AsString.EndsWith("?") && currentProperty.Type.AsString != "string"){#>?<#}#>>() // <#=propertyNameLowerCase#> 
+<#          }#>
+<#          countArgs++;#>
+<#      }#>
+<#  }#>
+            )).Returns(list);
+
+            // service
+            <#=EntityName#>Service <#=EntityNameLowerCase#>Service = new <#=EntityName#>Service();
+            <#=EntityName#>Service.Repository = mock.Object;
+
+            // Act
+            var resultList = <#=EntityNameLowerCase#>Service.Get<#=EntityName#>ListAdvancedSearch(
+<#
+    // advanced search filters - function arguments
+    countArgs = 0;
+    foreach(var currentProperty in properties)
+    {
+        // skip audit properties because they are set with specific values
+        if(currentProperty.Name != "ModuleId" 
+            && currentProperty.Name != "CreateBy"
+            && currentProperty.Name != "UpdateBy"
+            && currentProperty.Name != "CreateOn"
+            && currentProperty.Name != "UpdateOn"
+            && currentProperty.Name != "IsDeleted"
+            && currentProperty.Name != EntityName + "Id")
+        {
+            string propertyNameLowerCase = currentProperty.Name.Substring(0, 1).ToLower() + currentProperty.Name.Substring(1, currentProperty.Name.Length - 1);
+
+            // add each property
+            if (currentProperty.Type.AsString.Contains("System.DateTime")) {#>
+                <#if(countArgs > 0){#>,<#}#> <#=propertyNameLowerCase#>From 
+                <#if(countArgs > 0){#>,<#}#> <#=propertyNameLowerCase#>To 
+<#          }#>
+<#          else {#>
+                <#if(countArgs > 0){#>,<#}#> <#=propertyNameLowerCase#> 
+<#          }#>
+<#          countArgs++;#>
+<#      }#>
+<#  }#>
+            );
+            
+            <#=EntityNameDTO#> result = resultList.FirstOrDefault();
+
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(1, result.<#=EntityName#>Id);
+        }
+
+<#}#>
+        [TestMethod]
+        public void Update<#=EntityName#>_Success_Test()
+        {
+            // Arrange
+            <#=EntityNameDTO#> dto = Sample<#=EntityNameDTO#>(1);
+            
+            // create mock for repository
+            var mock = new Mock<I<#=EntityName#>Repository>();
+            mock.Setup(s => s.Update<#=EntityName#>(Moq.It.IsAny<<#=EntityNamePrefix + EntityName#>>())).Verifiable();
+
+            // service
+            <#=EntityName#>Service <#=EntityNameLowerCase#>Service = new <#=EntityName#>Service();
+            <#=EntityName#>Service.Repository = mock.Object;
+
+            // Act
+            <#=EntityNameLowerCase#>Service.Update<#=EntityName#>(dto);
+
+            // Assert
+            Assert.IsNotNull(dto);
+        }
+
+<#if (ShouldGenerateParentEntityFunctions) {#>
+        [TestMethod]
+        public void Get<#=EntityName#>ListBy<#=ParentEntityName#>Id_Success_Test()
+        {
+            // Arrange
+
+
+            // Act
+
+
+            // Assert
+
+
+            Assert.Fail();
+        }
+
+<#}#>
+
+
+        // example data
+
+        public static <#=EntityNamePrefix + EntityName#> Sample<#=EntityName#>(int id = 1)
+        {
+            <#=EntityNamePrefix + EntityName#> <#=EntityNameLowerCase#> = new <#=EntityNamePrefix + EntityName#>();
+
+<#          // Iterate each property of the domain class
+            foreach(var currentProperty in properties)
+            {
+                string propertyNameLowerCase = currentProperty.Name.Substring(0, 1).ToLower() + currentProperty.Name.Substring(1, currentProperty.Name.Length - 1);
+                string propertyType = currentProperty.Type.AsString;
+            #>
+            // <#=propertyType#>
+<#if(currentProperty.Type.AsString == "bool" || currentProperty.Type.AsString == "bool?")#>
+<#{#>
+            <#=EntityNameLowerCase#>.<#=currentProperty.Name#> = false;
+<#}#>
+<#else if(currentProperty.Type.AsString.Contains("System.DateTime"))#>
+<#{#>
+            <#=EntityNameLowerCase#>.<#=currentProperty.Name#> = new System.DateTime();
+<#}#>
+<#else if(currentProperty.Name == EntityName + "Id")#>
+<#{#>
+            <#=EntityNameLowerCase#>.<#=currentProperty.Name#> = id;
+<#}#>
+<#else if((currentProperty.Type.AsString == "int" || currentProperty.Type.AsString == "int?") && currentProperty.Name != "ModuleId" && currentProperty.Name != EntityName + "Id" && !currentProperty.Name.EndsWith("Id"))#>
+<#{#>
+            <#=EntityNameLowerCase#>.<#=currentProperty.Name#> = 1;
+<#}#>
+<#else if(currentProperty.Name != "ModuleId" && currentProperty.Name != EntityName + "Id" && currentProperty.Name.EndsWith("Id"))#>
+<#{#>
+            <#=EntityNameLowerCase#>.<#=currentProperty.Name#> = 1;
+<#}#>
+<#else if(currentProperty.Type.AsString == "double" || currentProperty.Type.AsString == "double?" || currentProperty.Type.AsString == "float" || currentProperty.Type.AsString == "float?")#>
+<#{#>
+            <#=EntityNameLowerCase#>.<#=currentProperty.Name#> = 1;
+<#}#>
+<#else#>
+<#{#>
+            <#=EntityNameLowerCase#>.<#=currentProperty.Name#> = "<#=currentProperty.Name#>TestValue";
+<#}#>
+<#          }#>
+            
+            return <#=EntityNameLowerCase#>;
+        }
+        
+        public static <#=EntityNameDTO#> Sample<#=EntityNameDTO#>(int id = 1)
+        {
+            <#=EntityNameDTO#> <#=EntityNameLowerCase#> = new <#=EntityNameDTO#>();
+
+<#          // Iterate each property of the domain class
+            foreach(var currentProperty in properties)
+            {
+                string propertyNameLowerCase = currentProperty.Name.Substring(0, 1).ToLower() + currentProperty.Name.Substring(1, currentProperty.Name.Length - 1);
+                string propertyType = currentProperty.Type.AsString;
+            #>
+            // <#=propertyType#>
+<#if(currentProperty.Type.AsString == "bool" || currentProperty.Type.AsString == "bool?")#>
+<#{#>
+            <#=EntityNameLowerCase#>.<#=currentProperty.Name#> = false;
+<#}#>
+<#else if(currentProperty.Type.AsString.Contains("System.DateTime"))#>
+<#{#>
+            <#=EntityNameLowerCase#>.<#=currentProperty.Name#> = new System.DateTime();
+<#}#>
+<#else if(currentProperty.Name == EntityName + "Id")#>
+<#{#>
+            <#=EntityNameLowerCase#>.<#=currentProperty.Name#> = id;
+<#}#>
+<#else if((currentProperty.Type.AsString == "int" || currentProperty.Type.AsString == "int?") && currentProperty.Name != "ModuleId" && currentProperty.Name != EntityName + "Id" && !currentProperty.Name.EndsWith("Id"))#>
+<#{#>
+            <#=EntityNameLowerCase#>.<#=currentProperty.Name#> = 1;
+<#}#>
+<#else if(currentProperty.Name != "ModuleId" && currentProperty.Name != EntityName + "Id" && currentProperty.Name.EndsWith("Id"))#>
+<#{#>
+            <#=EntityNameLowerCase#>.<#=currentProperty.Name#> = 1;
+<#}#>
+<#else if(currentProperty.Type.AsString == "double" || currentProperty.Type.AsString == "double?" || currentProperty.Type.AsString == "float" || currentProperty.Type.AsString == "float?")#>
+<#{#>
+            <#=EntityNameLowerCase#>.<#=currentProperty.Name#> = 1;
+<#}#>
+<#else#>
+<#{#>
+            <#=EntityNameLowerCase#>.<#=currentProperty.Name#> = "<#=currentProperty.Name#>TestValue";
+<#}#>
+<#          }#>
+            
+            return <#=EntityNameLowerCase#>;
+        }
+        
+    }
+}

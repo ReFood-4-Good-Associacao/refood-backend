@@ -1,0 +1,198 @@
+
+<!-- ################################################################ -->
+<!--                      Code generated with T4                      -->
+<!-- ################################################################ -->
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css" />
+
+<h2 id="Equipments-pageTitle">
+    Equipment
+</h2>
+
+<div id="Equipments-0">
+
+    <div id="Equipments-filters" style="margin-top: 20px; margin-bottom: 5px; width: 100%; ">
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="nameFilter">Name</label>
+                    </td>
+                    <td>
+                        <input id="nameFilter" type="text" data-bind="textInput: nameFilter" class="form-control" style="width: 190px; " />
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="descriptionFilter">Description</label>
+                    </td>
+                    <td>
+                        <input id="descriptionFilter" type="text" data-bind="textInput: descriptionFilter" class="form-control" style="width: 190px; " />
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="categoryFilter">Category</label>
+                    </td>
+                    <td>
+                        <input id="categoryFilter" type="text" data-bind="textInput: categoryFilter" class="form-control" style="width: 190px; " />
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="photoFilter">Photo</label>
+                    </td>
+                    <td>
+                        <input id="photoFilter" type="text" data-bind="textInput: photoFilter" class="form-control" style="width: 190px; " />
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="quantityInStockFilter">Quantity In Stock</label>
+                    </td>
+                    <td>
+                        <input id="quantityInStockFilter" type="text" data-bind="textInput: quantityInStockFilter" class="form-control" style="width: 190px; " />
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="minimumQuantityNeededFilter">Minimum Quantity Needed</label>
+                    </td>
+                    <td>
+                        <input id="minimumQuantityNeededFilter" type="text" data-bind="textInput: minimumQuantityNeededFilter" class="form-control" style="width: 190px; " />
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="pricePerUnitFilter">Price Per Unit</label>
+                    </td>
+                    <td>
+                        <input id="pricePerUnitFilter" type="text" data-bind="textInput: pricePerUnitFilter" class="form-control" style="width: 190px; " />
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="storageLocationFilter">Storage Location</label>
+                    </td>
+                    <td>
+                        <input id="storageLocationFilter" type="text" data-bind="textInput: storageLocationFilter" class="form-control" style="width: 190px; " />
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="activeFilter">Active</label>
+                    </td>
+                    <td>
+                        <input id="activeFilter" type="checkbox" data-bind="checked: activeFilter" />
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div style="clear: both;">
+    </div>
+
+    <div id="Equipments-filterButtonsBar" style="width: 100%; text-align: right; margin-bottom: 20px; ">
+        <input type="button" value="Clear" data-bind="click: clearSearchFilters" class="btn btn-default" />
+        <input type="button" value="Search" data-bind="click: advancedSearch" class="btn btn-default" />
+        <a class="btn btn-primary" href="/Equipment/Edit/">Create</a>
+    </div>
+
+    <div class="dnnClear">
+    </div>
+
+    <table id="EquipmentsTable-0" class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th class="Equipment-name">Name</th>
+                <th class="Equipment-description">Description</th>
+                <th class="Equipment-category">Category</th>
+                <th class="Equipment-photo">Photo</th>
+                <th class="Equipment-quantityInStock">Quantity In Stock</th>
+                <th class="Equipment-minimumQuantityNeeded">Minimum Quantity Needed</th>
+                <th class="Equipment-pricePerUnit">Price Per Unit</th>
+                <th class="Equipment-storageLocation">Storage Location</th>
+                <th class="Equipment-active">Active</th>
+                <th class="datatable-buttons"></th>
+            </tr>
+        </thead>
+    </table>
+
+    <p><a class="btn btn-primary" href="/Equipment/Edit/">Create</a></p>
+</div>
+
+@section scripts{
+<script type="text/javascript" src="~/Scripts/knockout-3.4.2.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.16/datatables.min.js"></script>
+<script type="text/javascript" src="~/Scripts/dataTables.bootstrap4.min.js"></script>
+<link rel="stylesheet" type="text/css" href="~/Scripts/jquery-ui-1.12.1.custom/jquery-ui.css" />
+<script type="text/javascript" src="~/Scripts/jquery-ui-1.12.1.custom/jquery-ui.js"></script>
+
+<script type="text/javascript" src="~/Scripts/EquipmentView.js"></script>
+
+
+
+<script language="javascript" type="text/javascript">
+    var vm;
+
+    //jQuery(function ($) {
+        var moduleId = 0;
+
+        var localizedSettings = {};
+
+        var viewmodel = new Web.equipmentListViewModel(moduleId, localizedSettings);
+        viewmodel.init();
+
+        ko.applyBindings(viewmodel, $("#Equipments-" + moduleId)[0]);
+
+        vm = viewmodel;
+
+        // datatables
+
+        function initDataTable() {
+            $("#EquipmentsTable-" + moduleId).DataTable();
+        }
+
+        $(function () {
+            initDataTable();
+        });
+
+    //});
+</script>
+}
+
+    

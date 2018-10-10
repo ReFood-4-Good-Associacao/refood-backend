@@ -1,0 +1,130 @@
+
+<!-- ################################################################ -->
+<!--                      Code generated with T4                      -->
+<!-- ################################################################ -->
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css" />
+
+<h2 id="ProjectPartners-pageTitle">
+    Project Partner
+</h2>
+
+<div id="ProjectPartners-0">
+
+    <div id="ProjectPartners-filters" style="margin-top: 20px; margin-bottom: 5px; width: 100%; ">
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="projectIdFilter">Project</label>
+                    </td>
+                    <td>
+                        <select data-bind="options: projectList,
+                                            optionsText: 'name',
+                                            optionsValue: 'projectId',
+                                            value: projectIdFilter,
+                                            optionsCaption: ''" class="form-control" style="width: 190px; " ></select>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="partnerIdFilter">Partner</label>
+                    </td>
+                    <td>
+                        <select data-bind="options: partnerList,
+                                            optionsText: 'name',
+                                            optionsValue: 'partnerId',
+                                            value: partnerIdFilter,
+                                            optionsCaption: ''" class="form-control" style="width: 190px; " ></select>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="grantValueFilter">Grant Value</label>
+                    </td>
+                    <td>
+                        <input id="grantValueFilter" type="text" data-bind="textInput: grantValueFilter" class="form-control" style="width: 190px; " />
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div style="clear: both;">
+    </div>
+
+    <div id="ProjectPartners-filterButtonsBar" style="width: 100%; text-align: right; margin-bottom: 20px; ">
+        <input type="button" value="Clear" data-bind="click: clearSearchFilters" class="btn btn-default" />
+        <input type="button" value="Search" data-bind="click: advancedSearch" class="btn btn-default" />
+        <a class="btn btn-primary" href="/ProjectPartner/Edit/">Create</a>
+    </div>
+
+    <div class="dnnClear">
+    </div>
+
+    <table id="ProjectPartnersTable-0" class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th class="ProjectPartner-projectId">Project</th>
+                <th class="ProjectPartner-partnerId">Partner</th>
+                <th class="ProjectPartner-grantValue">Grant Value</th>
+                <th class="datatable-buttons"></th>
+            </tr>
+        </thead>
+    </table>
+
+    <p><a class="btn btn-primary" href="/ProjectPartner/Edit/">Create</a></p>
+</div>
+
+@section scripts{
+<script type="text/javascript" src="~/Scripts/knockout-3.4.2.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.16/datatables.min.js"></script>
+<script type="text/javascript" src="~/Scripts/dataTables.bootstrap4.min.js"></script>
+<link rel="stylesheet" type="text/css" href="~/Scripts/jquery-ui-1.12.1.custom/jquery-ui.css" />
+<script type="text/javascript" src="~/Scripts/jquery-ui-1.12.1.custom/jquery-ui.js"></script>
+
+<script type="text/javascript" src="~/Scripts/ProjectPartnerView.js"></script>
+
+
+<script type="text/javascript" src="~/Scripts/ProjectHelper.js"></script>
+<script type="text/javascript" src="~/Scripts/PartnerHelper.js"></script>
+
+<script language="javascript" type="text/javascript">
+    var vm;
+
+    //jQuery(function ($) {
+        var moduleId = 0;
+
+        var localizedSettings = {};
+
+        var viewmodel = new Web.projectPartnerListViewModel(moduleId, localizedSettings);
+        viewmodel.init();
+
+        ko.applyBindings(viewmodel, $("#ProjectPartners-" + moduleId)[0]);
+
+        vm = viewmodel;
+
+        // datatables
+
+        function initDataTable() {
+            $("#ProjectPartnersTable-" + moduleId).DataTable();
+        }
+
+        $(function () {
+            initDataTable();
+        });
+
+    //});
+</script>
+}
+
+    

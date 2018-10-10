@@ -1,0 +1,148 @@
+
+<!-- ################################################################ -->
+<!--                      Code generated with T4                      -->
+<!-- ################################################################ -->
+
+<div id="Vehicle-0">
+    <div class="dnnForm dnnEditBasicSettings" id="dnnEditBasicSettings">
+        <!--<div class="dnnFormExpandContent dnnRight "><a href="#">Expand All</a></div>-->
+
+        <h2 id="dnnSitePanel-BasicSettings" class="dnnFormSectionHead dnnClear">
+            Vehicle
+        </h2>
+        <fieldset>
+            <div class="formItem" style="margin-bottom: 20px; ">
+                <div><label for="make">Make</label></div>
+                <input id="make" type="text" data-bind="textInput: make" class="form-control" />
+            </div>
+            <div class="formItem" style="margin-bottom: 20px; ">
+                <div><label for="model">Model</label></div>
+                <input id="model" type="text" data-bind="textInput: model" class="form-control" />
+            </div>
+            <div class="formItem" style="margin-bottom: 20px; ">
+                <div><label for="owner">Owner</label></div>
+                <input id="owner" type="text" data-bind="textInput: owner" class="form-control" />
+            </div>
+            <div class="formItem" style="margin-bottom: 20px; ">
+                <div><label for="ownerId">Owner</label></div>
+                <select data-bind="options: ownerList,
+                                    optionsText: 'name',
+                                    optionsValue: 'ownerId',
+                                    value: ownerId,
+                                    optionsCaption: ''" class="form-control"></select>
+            </div>
+            <div class="formItem" style="margin-bottom: 20px; ">
+                <div><label for="nucleoId">Nucleo</label></div>
+                <select data-bind="options: nucleoList,
+                                    optionsText: 'name',
+                                    optionsValue: 'nucleoId',
+                                    value: nucleoId,
+                                    optionsCaption: ''" class="form-control"></select>
+            </div>
+            <div class="formItem" style="margin-bottom: 20px; ">
+                <div><label for="vehicleTypeId">Vehicle Type</label></div>
+                <select data-bind="options: vehicleTypeList,
+                                    optionsText: 'name',
+                                    optionsValue: 'vehicleTypeId',
+                                    value: vehicleTypeId,
+                                    optionsCaption: ''" class="form-control"></select>
+            </div>
+            <div class="formItem" style="margin-bottom: 20px; ">
+                <div><label for="energySourceId">Energy Source</label></div>
+                <select data-bind="options: energySourceList,
+                                    optionsText: 'name',
+                                    optionsValue: 'energySourceId',
+                                    value: energySourceId,
+                                    optionsCaption: ''" class="form-control"></select>
+            </div>
+            <div class="formItem" style="margin-bottom: 20px; ">
+                <div><label for="averageSpeed">Average Speed</label></div>
+                <input id="averageSpeed" type="text" data-bind="textInput: averageSpeed" class="form-control" />
+            </div>
+            <div class="formItem" style="margin-bottom: 20px; ">
+                <div><label for="horsePower">Horse Power</label></div>
+                <input id="horsePower" type="text" data-bind="textInput: horsePower" class="form-control" />
+            </div>
+            <div class="formItem" style="margin-bottom: 20px; ">
+                <div><label for="fuelConsumption">Fuel Consumption</label></div>
+                <input id="fuelConsumption" type="text" data-bind="textInput: fuelConsumption" class="form-control" />
+            </div>
+            <div class="formItem" style="margin-bottom: 20px; ">
+                <div><label for="fuelAutonomyDistance">Fuel Autonomy Distance</label></div>
+                <input id="fuelAutonomyDistance" type="text" data-bind="textInput: fuelAutonomyDistance" class="form-control" />
+            </div>
+            <div class="formItem" style="margin-bottom: 20px; ">
+                <div><label for="rechargeTime">Recharge Time</label></div>
+                <input id="rechargeTime" type="text" data-bind="textInput: rechargeTime" class="form-control" />
+            </div>
+            <div class="formItem" style="margin-bottom: 20px; ">
+                <div><label for="licensePlate">License Plate</label></div>
+                <input id="licensePlate" type="text" data-bind="textInput: licensePlate" class="form-control" />
+            </div>
+            <div class="formItem" style="margin-bottom: 20px; ">
+                <div><label for="color">Color</label></div>
+                <input id="color" type="text" data-bind="textInput: color" class="form-control" />
+            </div>
+            <div class="formItem" style="margin-bottom: 20px; ">
+                <div><label for="numberSeats">Number Seats</label></div>
+                <input id="numberSeats" type="text" data-bind="textInput: numberSeats" class="form-control" />
+            </div>
+            <div class="formItem" style="margin-bottom: 20px; ">
+                <div><label for="cargoVolumeCapacity">Cargo Volume Capacity</label></div>
+                <input id="cargoVolumeCapacity" type="text" data-bind="textInput: cargoVolumeCapacity" class="form-control" />
+            </div>
+            <div class="formItem" style="margin-bottom: 20px; ">
+                <div><label for="active">Active</label></div>
+                <input id="active" type="checkbox" data-bind="checked: active" class="form-control" />
+            </div>
+        </fieldset>
+    </div>
+    <hr />
+    <div class="text-right">
+		<a data-bind="click: cancel" href="#" class="btn btn-link">Cancel</a>
+		<a data-bind="click: save" href="#" class="btn btn-primary">Save</a>
+    </div>
+</div>
+
+@section scripts{
+<script type="text/javascript" src="~/Scripts/knockout-3.4.2.js"></script>
+<link rel="stylesheet" type="text/css" href="~/Scripts/jquery-ui-1.12.1.custom/jquery-ui.css" />
+<script type="text/javascript" src="~/Scripts/jquery-ui-1.12.1.custom/jquery-ui.js"></script>
+<script src="~/Scripts/toastr.js"></script>
+<link href="~/Content/toastr.css" rel="stylesheet" />
+
+<script type="text/javascript" src="~/Scripts/VehicleEdit.js"></script>
+
+<script type="text/javascript" src="~/Scripts/OwnerHelper.js"></script>
+<script type="text/javascript" src="~/Scripts/NucleoHelper.js"></script>
+<script type="text/javascript" src="~/Scripts/VehicleTypeHelper.js"></script>
+<script type="text/javascript" src="~/Scripts/EnergySourceHelper.js"></script>
+
+<link rel="stylesheet" type="text/css" href="~/Content/jquery-ui-datepicker.css" />
+
+<script type="text/javascript">
+
+        //jQuery(function ($) {
+            var moduleId = 0;
+
+            var localizedSettings = {};
+
+            var viewmodel = new Web.vehicleViewModel(moduleId, localizedSettings);
+            viewmodel.init();
+
+            ko.applyBindings(viewmodel, $("#Vehicle-" + moduleId)[0]);
+
+            //function dnnEditBasicSettings() {
+                //$('#dnnEditBasicSettings').dnnPanels();
+                //$('#dnnEditBasicSettings .dnnFormExpandContent a').dnnExpandAll({ expandText: 'Expandir', collapseText: 'Minimizar', targetArea: '#dnnEditBasicSettings' });
+            //}
+
+            //dnnEditBasicSettings();
+            //Sys.WebForms.PageRequestManager.getInstance().add_endRequest(function () {
+                //dnnEditBasicSettings();
+            //});
+        //});
+</script>
+}
+
+    

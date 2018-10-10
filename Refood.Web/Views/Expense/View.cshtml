@@ -1,0 +1,245 @@
+
+<!-- ################################################################ -->
+<!--                      Code generated with T4                      -->
+<!-- ################################################################ -->
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css" />
+
+<h2 id="Expenses-pageTitle">
+    Expense
+</h2>
+
+<div id="Expenses-0">
+
+    <div id="Expenses-filters" style="margin-top: 20px; margin-bottom: 5px; width: 100%; ">
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="nucleoIdFilter">Nucleo</label>
+                    </td>
+                    <td>
+                        <select data-bind="options: nucleoList,
+                                            optionsText: 'name',
+                                            optionsValue: 'nucleoId',
+                                            value: nucleoIdFilter,
+                                            optionsCaption: ''" class="form-control" style="width: 190px; " ></select>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="nameFilter">Name</label>
+                    </td>
+                    <td>
+                        <input id="nameFilter" type="text" data-bind="textInput: nameFilter" class="form-control" style="width: 190px; " />
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="descriptionFilter">Description</label>
+                    </td>
+                    <td>
+                        <input id="descriptionFilter" type="text" data-bind="textInput: descriptionFilter" class="form-control" style="width: 190px; " />
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="responsiblePersonIdFilter">Responsible Person</label>
+                    </td>
+                    <td>
+                        <select data-bind="options: responsiblePersonList,
+                                            optionsText: 'name',
+                                            optionsValue: 'responsiblePersonId',
+                                            value: responsiblePersonIdFilter,
+                                            optionsCaption: ''" class="form-control" style="width: 190px; " ></select>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="executerPersonIdFilter">Executer Person</label>
+                    </td>
+                    <td>
+                        <select data-bind="options: executerPersonList,
+                                            optionsText: 'name',
+                                            optionsValue: 'executerPersonId',
+                                            value: executerPersonIdFilter,
+                                            optionsCaption: ''" class="form-control" style="width: 190px; " ></select>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="documentIdFilter">Document</label>
+                    </td>
+                    <td>
+                        <select data-bind="options: documentList,
+                                            optionsText: 'name',
+                                            optionsValue: 'documentId',
+                                            value: documentIdFilter,
+                                            optionsCaption: ''" class="form-control" style="width: 190px; " ></select>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="partnerIdFilter">Partner</label>
+                    </td>
+                    <td>
+                        <select data-bind="options: partnerList,
+                                            optionsText: 'name',
+                                            optionsValue: 'partnerId',
+                                            value: partnerIdFilter,
+                                            optionsCaption: ''" class="form-control" style="width: 190px; " ></select>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="invoiceDateFilter">Invoice Date</label>
+                    </td>
+                    <td>
+                        <table style="margin-bottom: 10px; ">
+                            <tr>
+                                <td>
+                                    <input data-bind="datepicker: invoiceDateFromFilter, datepickerOptions: {
+                                                        yearRange: '-20:+100',
+                                                        changeMonth: true,
+                                                        changeYear: true,
+                                                        dateFormat: 'dd-mm-yy' }"
+                                             class="form-control" />
+                                </td>
+                                <td>
+                                    <span style="width: 20px; ">-</span>
+                                </td>
+                                <td>
+                                    <input data-bind="datepicker: invoiceDateToFilter, datepickerOptions: {
+                                                        yearRange: '-20:+100',
+                                                        changeMonth: true,
+                                                        changeYear: true,
+                                                        dateFormat: 'dd-mm-yy' }"
+                                             class="form-control" />
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="amountFilter">Amount</label>
+                    </td>
+                    <td>
+                        <input id="amountFilter" type="text" data-bind="textInput: amountFilter" class="form-control" style="width: 190px; " />
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div style="clear: both;">
+    </div>
+
+    <div id="Expenses-filterButtonsBar" style="width: 100%; text-align: right; margin-bottom: 20px; ">
+        <input type="button" value="Clear" data-bind="click: clearSearchFilters" class="btn btn-default" />
+        <input type="button" value="Search" data-bind="click: advancedSearch" class="btn btn-default" />
+        <a class="btn btn-primary" href="/Expense/Edit/">Create</a>
+    </div>
+
+    <div class="dnnClear">
+    </div>
+
+    <table id="ExpensesTable-0" class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th class="Expense-nucleoId">Nucleo</th>
+                <th class="Expense-name">Name</th>
+                <th class="Expense-description">Description</th>
+                <th class="Expense-responsiblePersonId">Responsible Person</th>
+                <th class="Expense-executerPersonId">Executer Person</th>
+                <th class="Expense-documentId">Document</th>
+                <th class="Expense-partnerId">Partner</th>
+                <th class="Expense-invoiceDate">Invoice Date</th>
+                <th class="Expense-amount">Amount</th>
+                <th class="datatable-buttons"></th>
+            </tr>
+        </thead>
+    </table>
+
+    <p><a class="btn btn-primary" href="/Expense/Edit/">Create</a></p>
+</div>
+
+@section scripts{
+<script type="text/javascript" src="~/Scripts/knockout-3.4.2.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.16/datatables.min.js"></script>
+<script type="text/javascript" src="~/Scripts/dataTables.bootstrap4.min.js"></script>
+<link rel="stylesheet" type="text/css" href="~/Scripts/jquery-ui-1.12.1.custom/jquery-ui.css" />
+<script type="text/javascript" src="~/Scripts/jquery-ui-1.12.1.custom/jquery-ui.js"></script>
+
+<script type="text/javascript" src="~/Scripts/ExpenseView.js"></script>
+
+
+<script type="text/javascript" src="~/Scripts/NucleoHelper.js"></script>
+<script type="text/javascript" src="~/Scripts/ResponsiblePersonHelper.js"></script>
+<script type="text/javascript" src="~/Scripts/ExecuterPersonHelper.js"></script>
+<script type="text/javascript" src="~/Scripts/DocumentHelper.js"></script>
+<script type="text/javascript" src="~/Scripts/PartnerHelper.js"></script>
+
+<script language="javascript" type="text/javascript">
+    var vm;
+
+    //jQuery(function ($) {
+        var moduleId = 0;
+
+        var localizedSettings = {};
+
+        var viewmodel = new Web.expenseListViewModel(moduleId, localizedSettings);
+        viewmodel.init();
+
+        ko.applyBindings(viewmodel, $("#Expenses-" + moduleId)[0]);
+
+        vm = viewmodel;
+
+        // datatables
+
+        function initDataTable() {
+            $("#ExpensesTable-" + moduleId).DataTable();
+        }
+
+        $(function () {
+            initDataTable();
+        });
+
+    //});
+</script>
+}
+
+    

@@ -1,0 +1,117 @@
+﻿body {
+    padding-bottom: 20px;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+
+.navbar {
+    background-color: #f9b817;
+}
+
+.navbar-brand {
+    border-radius: 0.25rem;
+    color: #000000;
+}
+
+.navbar-brand:hover {
+    background-color: #000000;
+    color: #ffffff;
+}
+
+.btn-primary {
+    color: #000000;
+    background-color: #f9b817;
+    border-color: #f9b817;
+}
+
+.btn-primary:hover {
+    color: #f9b817;
+    background-color: #000000;
+    border-color: #000000;
+}
+
+.btn-secondary {
+    color: #f9b817;
+    background-color: #000000;
+    border-color: #000000;
+}
+
+.btn-secondary:hover {
+    color: #000000;
+    background-color: #f9b817;
+    border-color: #f9b817;
+}
+
+.btn-default {
+    color: #f9b817;
+    background-color: #000000;
+    border-color: #000000;
+}
+
+.btn-default:hover {
+    color: #000000;
+    background-color: #f9b817;
+    border-color: #f9b817;
+}
+
+.primary-colors {
+    color: #000000;
+    background-color: #f9b817;
+}
+
+.secondary-colors {
+    color: #ffffff;
+    background-color: #000000;
+}
+
+.searchFilter {
+    width: 300px;
+    float: left;
+    margin-right: 40px;
+}
+
+.formItem {
+    margin-bottom: 20px;
+    margin-right: 20px;
+    float: left;
+}
+
+.formItem select {
+    width: 190px;
+}
+
+.form-control .hasDatepicker{
+    width: 90px;
+}
+
+fieldset {
+    padding: 10px;
+    background-color: #fff5e6;
+    border-radius: 20px;
+}
+
+
+
+/* Always set the map height explicitly to define the size of the div
+* element that contains the map. */
+#map {
+    height: 700px;
+}
+
+/* Optional: Makes the sample page fill the window. */
+/*html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}*/

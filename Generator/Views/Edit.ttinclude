@@ -1,0 +1,120 @@
+﻿<#
+    // ################################################################
+    //                            Edit html
+    // ################################################################
+#>
+<#
+    CodeClass currentClass = classes.FirstOrDefault(c => c.Name == EntityNamePrefix + EntityName);
+    var properties = currentClass.Members.OfType<EnvDTE.CodeProperty>().Where(p => p.Access.HasFlag(vsCMAccess.vsCMAccessPublic));
+#>
+[JavaScript:{ jsname: "JQuery" }]
+[JavaScript:{ jsname: "Knockout" }]
+[JavaScript:{ path: "~/Resources/Shared/scripts/dnn.jquery.js"}]
+[JavaScript:{ path: "~/Resources/Shared/Scripts/jquery/jquery.hoverIntent.min.js"}]
+[JavaScript:{ path: "~/DesktopModules/<#=NamespaceModule#>/scripts/<#=EntityName#>Edit.js"}]
+<#
+// Find properties for combo boxes
+foreach(var currentProperty in properties)
+{
+    if(currentProperty.Name != "ModuleId" 
+        && currentProperty.Name != EntityName + "Id" 
+        && (!ShouldGenerateParentEntityFunctions || currentProperty.Name != ParentEntityName + "Id") 
+        && currentProperty.Name.EndsWith("Id"))
+    {
+#>
+[JavaScript:{ path: "~/DesktopModules/<#=NamespaceModule#>/scripts/<#=RemoveTailId(currentProperty.Name)#>Helper.js"}]
+<#  }#>
+<#}#>
+<#if(UsejQueryDatepickerPlugin)#>
+<#{#>
+<link rel="stylesheet" type="text/css" href="/DesktopModules/<#=NamespaceModule#>/jquery-ui-datepicker.css" />
+<#}#>
+
+<!-- ################################################################ -->
+<!--                      Code generated with T4                      -->
+<!-- ################################################################ -->
+
+<div id="<#=EntityName#>-[ModuleContext:ModuleId]">
+    <div class="dnnForm dnnEditBasicSettings" id="dnnEditBasicSettings">
+        <div class="dnnFormExpandContent dnnRight "><a href="#">[Resx:{key:"ExpandAll"}]</a></div>
+
+        <h2 id="dnnSitePanel-BasicSettings" class="dnnFormSectionHead dnnClear">
+            <a href="#" class="dnnSectionExpanded">[Resx:{key:"BasicSettings"}]</a>
+        </h2>
+        <fieldset>
+<#
+// Iterate each property of the domain class, and write the respective mapping to the view model
+foreach(var currentProperty in properties)
+{
+// skip the entity id, the IsDeleted flag, and the audit properties (because they are set with specific values)
+if(currentProperty.Name != "ModuleId" 
+    && currentProperty.Name != "CreateBy"
+    && currentProperty.Name != "UpdateBy"
+    && currentProperty.Name != "CreateOn"
+    && currentProperty.Name != "UpdateOn"
+    && currentProperty.Name != "IsDeleted"
+    && currentProperty.Name != EntityName + "Id")
+{
+    string propertyNameLowerCase = currentProperty.Name.Substring(0, 1).ToLower() + currentProperty.Name.Substring(1, currentProperty.Name.Length - 1);
+
+            // a input field of each property in the viewmodel
+#>
+            <div class="dnnFormItem">
+                <div><label for="<#=propertyNameLowerCase#>">[Resx:{key:"lbl<#=currentProperty.Name#>"}]</label></div>
+<#if(currentProperty.Type.AsString == "bool")#>
+<#{#>
+                <input id="<#=propertyNameLowerCase#>" type="checkbox" data-bind="checked: <#=propertyNameLowerCase#>" class="form-control" />
+<#}#>
+<#else if(currentProperty.Type.AsString.Contains("System.DateTime") && UsejQueryDatepickerPlugin)#>
+<#{#>
+                <input data-bind="datepicker: <#=propertyNameLowerCase#>, datepickerOptions: {
+                                    yearRange: '-20:+100',
+                                    changeMonth: true,
+                                    changeYear: true,
+                                    dateFormat: 'dd-mm-yy' }"
+                                    class="form-control" />
+<#}#>
+<#else if(currentProperty.Name != "ModuleId" && currentProperty.Name != EntityName + "Id" && currentProperty.Name.EndsWith("Id"))#>
+<#{#>
+                <select data-bind="options: <#=RemoveTailId(propertyNameLowerCase)#>List,
+                                    optionsText: 'name',
+                                    optionsValue: '<#=propertyNameLowerCase#>',
+                                    value: <#=propertyNameLowerCase#>,
+                                    optionsCaption: ''" class="form-control"></select>
+<#}#>
+<#else#>
+<#{#>
+                <input id="<#=propertyNameLowerCase#>" type="text" data-bind="textInput: <#=propertyNameLowerCase#>" class="form-control" />
+<#}#>
+            </div>
+<#}#>
+<#}#>
+        </fieldset>
+    </div>
+    <a data-bind="click: save" href="#" class="dnnPrimaryAction">[Resx:{key:"btnSubmit"}]</a>
+    <a data-bind="click: cancel" href="#" class="dnnSecondaryAction">[Resx:{key:"btnCancel"}]</a>
+</div>
+
+<script type="text/javascript">
+
+        jQuery(function ($) {
+            var moduleId = parseInt("[ModuleContext:ModuleId]");
+
+            var localizedSettings = {};
+
+            var viewmodel = new <#=ModuleName#>.<#=EntityNameLowerCase#>ViewModel(moduleId, localizedSettings);
+            viewmodel.init();
+
+            ko.applyBindings(viewmodel, $("#<#=EntityName#>-" + moduleId)[0]);
+
+            function dnnEditBasicSettings() {
+                $('#dnnEditBasicSettings').dnnPanels();
+                $('#dnnEditBasicSettings .dnnFormExpandContent a').dnnExpandAll({ expandText: '[Resx:{key:"ExpandAll"}]', collapseText: '[Resx:{key:"CollapseAll"}]', targetArea: '#dnnEditBasicSettings' });
+            }
+
+            dnnEditBasicSettings();
+            Sys.WebForms.PageRequestManager.getInstance().add_endRequest(function () {
+                dnnEditBasicSettings();
+            });
+        });
+</script>

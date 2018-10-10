@@ -1,0 +1,120 @@
+﻿<#
+    // ################################################################
+    //                Web Service Interface
+    // ################################################################
+#>
+
+// ################################################################
+//                      Code generated with T4
+// ################################################################
+
+using System.ServiceModel;
+using <#=NamespaceDataContracts#>;
+
+namespace <#=NamespaceBase + ".WebServices." + EntityName + "WS"#>
+{
+<#
+    CodeClass currentClass = classes.FirstOrDefault(c => c.Name == EntityNamePrefix + EntityName);
+    var properties = currentClass.Members.OfType<EnvDTE.CodeProperty>().Where(p => p.Access.HasFlag(vsCMAccess.vsCMAccessPublic));
+#>
+    [ServiceContract]
+    public partial interface I<#=EntityName#>WebService
+    {
+        
+        /// <summary>
+        /// Delete <#=EntityName#> by id
+        /// </summary>
+        /// <param name="id"><#=EntityName#> id</param>
+        /// <returns>true if the <#=EntityName#> is deleted successfully</returns>
+        [OperationContract]
+        public bool Delete(int id);
+
+        /// <summary>
+        /// Get <#=EntityName#> by id
+        /// </summary>
+        /// <param name="id"><#=EntityName#> id</param>
+        /// <returns><#=EntityName#></returns>
+        [OperationContract]
+        public <#=EntityName#>DataContract Get(int id);
+
+        /// <summary>
+        /// Get list of <#=EntityName#>s
+        /// </summary>
+        /// <returns>list of <#=EntityName#>s</returns>
+        [OperationContract]
+        public <#=EntityName#>DataContract[] GetList();
+
+        /// <summary>
+        /// Get paged list of <#=EntityName#>s
+        /// </summary>
+        /// <param name="id">(not used)</param>
+        /// <param name="searchTerm">search text</param>
+        /// <param name="pageIndex">current page index (starts at 0)</param>
+        /// <param name="pageSize">page size</param>
+        /// <returns>a single page from the list of <#=EntityName#>s</returns>
+        [OperationContract]
+        public <#=EntityName#>DataContract[] GetPage(int id = 0, string searchTerm = "", int pageIndex = 1, int pageSize = 10);
+
+<#if(GenerateViewPage_SearchFilters){#>
+        [OperationContract]
+        public <#=EntityName#>DataContract[] GetListAdvancedSearch(
+            int id = 0 
+<#
+    // advanced search filters - function arguments
+    int countArgs = 1;
+    foreach(var currentProperty in properties)
+    {
+        // skip audit properties because they are set with specific values
+        if(currentProperty.Name != "ModuleId" 
+            && currentProperty.Name != "CreateBy"
+            && currentProperty.Name != "UpdateBy"
+            && currentProperty.Name != "CreateOn"
+            && currentProperty.Name != "UpdateOn"
+            && currentProperty.Name != "IsDeleted"
+            && currentProperty.Name != EntityName + "Id")
+        {
+            string propertyNameLowerCase = currentProperty.Name.Substring(0, 1).ToLower() + currentProperty.Name.Substring(1, currentProperty.Name.Length - 1);
+
+            // add each property
+
+            if (currentProperty.Type.AsString.Contains("System.DateTime")) {#>
+            <#if(countArgs > 0){#>,<#}#> <#=currentProperty.Type.AsString#><#if(!currentProperty.Type.AsString.EndsWith("?")){#>?<#}#> <#=propertyNameLowerCase#>From = null 
+            <#if(countArgs > 0){#>,<#}#> <#=currentProperty.Type.AsString#><#if(!currentProperty.Type.AsString.EndsWith("?")){#>?<#}#> <#=propertyNameLowerCase#>To = null 
+<#          }#>
+<#          else {#>
+            <#if(countArgs > 0){#>,<#}#> <#=currentProperty.Type.AsString#><#if(!currentProperty.Type.AsString.EndsWith("?") && currentProperty.Type.AsString != "string"){#>?<#}#> <#=propertyNameLowerCase#> = null 
+<#          }#>
+<#          countArgs++;#>
+<#      }#>
+<#  }#>
+        );
+
+<#}#>
+        
+<#if (ShouldGenerateParentEntityFunctions) {#>
+        [OperationContract]
+        public <#=EntityName#>DataContract[] Get<#=EntityName#>ListBy<#=ParentEntityName#>Id(int id);
+        
+<#}#>
+
+        //[ValidateAntiForgeryToken]
+        /// <summary>
+        /// Updates data for an existing <#=EntityName#>, or creates a new <#=EntityName#> if the Id is 0
+        /// </summary>
+        /// <param name="dataContract"><#=EntityName#> data</param>
+        /// <returns><#=EntityName#> id</returns>
+        [OperationContract]
+        public int Upsert(<#=EntityName#>DataContract dataContract);
+
+        //[ValidateAntiForgeryToken]
+        /// <summary>
+        /// Save a list of <#=EntityName#>
+        /// </summary>
+        /// <param name="dataContracts"><#=EntityName#>s</param>
+        /// <param name="id">(not used)</param>
+        /// <returns>true if the operation is successfull</returns>
+        [OperationContract]
+        public bool SaveList(<#=EntityName#>DataContract[] dataContracts, int? id);
+
+    }
+}

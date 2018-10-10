@@ -1,0 +1,168 @@
+
+<!-- ################################################################ -->
+<!--                      Code generated with T4                      -->
+<!-- ################################################################ -->
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css" />
+
+<h2 id="DeliveryReports-pageTitle">
+    Delivery Report
+</h2>
+
+<div id="DeliveryReports-0">
+
+    <div id="DeliveryReports-filters" style="margin-top: 20px; margin-bottom: 5px; width: 100%; ">
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="nameFilter">Name</label>
+                    </td>
+                    <td>
+                        <input id="nameFilter" type="text" data-bind="textInput: nameFilter" class="form-control" style="width: 190px; " />
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="descriptionFilter">Description</label>
+                    </td>
+                    <td>
+                        <input id="descriptionFilter" type="text" data-bind="textInput: descriptionFilter" class="form-control" style="width: 190px; " />
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="reportDateFilter">Report Date</label>
+                    </td>
+                    <td>
+                        <table style="margin-bottom: 10px; ">
+                            <tr>
+                                <td>
+                                    <input data-bind="datepicker: reportDateFromFilter, datepickerOptions: {
+                                                        yearRange: '-20:+100',
+                                                        changeMonth: true,
+                                                        changeYear: true,
+                                                        dateFormat: 'dd-mm-yy' }"
+                                             class="form-control" />
+                                </td>
+                                <td>
+                                    <span style="width: 20px; ">-</span>
+                                </td>
+                                <td>
+                                    <input data-bind="datepicker: reportDateToFilter, datepickerOptions: {
+                                                        yearRange: '-20:+100',
+                                                        changeMonth: true,
+                                                        changeYear: true,
+                                                        dateFormat: 'dd-mm-yy' }"
+                                             class="form-control" />
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="weekDayFilter">Week Day</label>
+                    </td>
+                    <td>
+                        <input id="weekDayFilter" type="text" data-bind="textInput: weekDayFilter" class="form-control" style="width: 190px; " />
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="submittedFilter">Submitted</label>
+                    </td>
+                    <td>
+                        <input id="submittedFilter" type="checkbox" data-bind="checked: submittedFilter" />
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div style="clear: both;">
+    </div>
+
+    <div id="DeliveryReports-filterButtonsBar" style="width: 100%; text-align: right; margin-bottom: 20px; ">
+        <input type="button" value="Clear" data-bind="click: clearSearchFilters" class="btn btn-default" />
+        <input type="button" value="Search" data-bind="click: advancedSearch" class="btn btn-default" />
+        <a class="btn btn-primary" href="/DeliveryReport/Edit/">Create</a>
+    </div>
+
+    <div class="dnnClear">
+    </div>
+
+    <table id="DeliveryReportsTable-0" class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th class="DeliveryReport-name">Name</th>
+                <th class="DeliveryReport-description">Description</th>
+                <th class="DeliveryReport-reportDate">Report Date</th>
+                <th class="DeliveryReport-weekDay">Week Day</th>
+                <th class="DeliveryReport-submitted">Submitted</th>
+                <th class="datatable-buttons"></th>
+            </tr>
+        </thead>
+    </table>
+
+    <p><a class="btn btn-primary" href="/DeliveryReport/Edit/">Create</a></p>
+</div>
+
+@section scripts{
+<script type="text/javascript" src="~/Scripts/knockout-3.4.2.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.16/datatables.min.js"></script>
+<script type="text/javascript" src="~/Scripts/dataTables.bootstrap4.min.js"></script>
+<link rel="stylesheet" type="text/css" href="~/Scripts/jquery-ui-1.12.1.custom/jquery-ui.css" />
+<script type="text/javascript" src="~/Scripts/jquery-ui-1.12.1.custom/jquery-ui.js"></script>
+
+<script type="text/javascript" src="~/Scripts/DeliveryReportView.js"></script>
+
+
+
+<script language="javascript" type="text/javascript">
+    var vm;
+
+    //jQuery(function ($) {
+        var moduleId = 0;
+
+        var localizedSettings = {};
+
+        var viewmodel = new Web.deliveryReportListViewModel(moduleId, localizedSettings);
+        viewmodel.init();
+
+        ko.applyBindings(viewmodel, $("#DeliveryReports-" + moduleId)[0]);
+
+        vm = viewmodel;
+
+        // datatables
+
+        function initDataTable() {
+            $("#DeliveryReportsTable-" + moduleId).DataTable();
+        }
+
+        $(function () {
+            initDataTable();
+        });
+
+    //});
+</script>
+}
+
+    

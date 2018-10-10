@@ -1,0 +1,297 @@
+
+<!-- ################################################################ -->
+<!--                      Code generated with T4                      -->
+<!-- ################################################################ -->
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css" />
+
+<h2 id="ContributionMonetarys-pageTitle">
+    Contribution Monetary
+</h2>
+
+<div id="ContributionMonetarys-0">
+
+    <div id="ContributionMonetarys-filters" style="margin-top: 20px; margin-bottom: 5px; width: 100%; ">
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="nucleoIdFilter">Nucleo</label>
+                    </td>
+                    <td>
+                        <select data-bind="options: nucleoList,
+                                            optionsText: 'name',
+                                            optionsValue: 'nucleoId',
+                                            value: nucleoIdFilter,
+                                            optionsCaption: ''" class="form-control" style="width: 190px; " ></select>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="responsiblePersonIdFilter">Responsible Person</label>
+                    </td>
+                    <td>
+                        <select data-bind="options: responsiblePersonList,
+                                            optionsText: 'name',
+                                            optionsValue: 'responsiblePersonId',
+                                            value: responsiblePersonIdFilter,
+                                            optionsCaption: ''" class="form-control" style="width: 190px; " ></select>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="documentIdFilter">Document</label>
+                    </td>
+                    <td>
+                        <select data-bind="options: documentList,
+                                            optionsText: 'name',
+                                            optionsValue: 'documentId',
+                                            value: documentIdFilter,
+                                            optionsCaption: ''" class="form-control" style="width: 190px; " ></select>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="partnerIdFilter">Partner</label>
+                    </td>
+                    <td>
+                        <select data-bind="options: partnerList,
+                                            optionsText: 'name',
+                                            optionsValue: 'partnerId',
+                                            value: partnerIdFilter,
+                                            optionsCaption: ''" class="form-control" style="width: 190px; " ></select>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="contributionDateFilter">Contribution Date</label>
+                    </td>
+                    <td>
+                        <table style="margin-bottom: 10px; ">
+                            <tr>
+                                <td>
+                                    <input data-bind="datepicker: contributionDateFromFilter, datepickerOptions: {
+                                                        yearRange: '-20:+100',
+                                                        changeMonth: true,
+                                                        changeYear: true,
+                                                        dateFormat: 'dd-mm-yy' }"
+                                             class="form-control" />
+                                </td>
+                                <td>
+                                    <span style="width: 20px; ">-</span>
+                                </td>
+                                <td>
+                                    <input data-bind="datepicker: contributionDateToFilter, datepickerOptions: {
+                                                        yearRange: '-20:+100',
+                                                        changeMonth: true,
+                                                        changeYear: true,
+                                                        dateFormat: 'dd-mm-yy' }"
+                                             class="form-control" />
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="amountFilter">Amount</label>
+                    </td>
+                    <td>
+                        <input id="amountFilter" type="text" data-bind="textInput: amountFilter" class="form-control" style="width: 190px; " />
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="contactPersonFilter">Contact Person</label>
+                    </td>
+                    <td>
+                        <input id="contactPersonFilter" type="text" data-bind="textInput: contactPersonFilter" class="form-control" style="width: 190px; " />
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="ibanOriginFilter">Iban Origin</label>
+                    </td>
+                    <td>
+                        <input id="ibanOriginFilter" type="text" data-bind="textInput: ibanOriginFilter" class="form-control" style="width: 190px; " />
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="bicSwiftOriginFilter">Bic Swift Origin</label>
+                    </td>
+                    <td>
+                        <input id="bicSwiftOriginFilter" type="text" data-bind="textInput: bicSwiftOriginFilter" class="form-control" style="width: 190px; " />
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="ibanDestinationFilter">Iban Destination</label>
+                    </td>
+                    <td>
+                        <input id="ibanDestinationFilter" type="text" data-bind="textInput: ibanDestinationFilter" class="form-control" style="width: 190px; " />
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="bicSwiftDestinationFilter">Bic Swift Destination</label>
+                    </td>
+                    <td>
+                        <input id="bicSwiftDestinationFilter" type="text" data-bind="textInput: bicSwiftDestinationFilter" class="form-control" style="width: 190px; " />
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="fiscalNumberFilter">Fiscal Number</label>
+                    </td>
+                    <td>
+                        <input id="fiscalNumberFilter" type="text" data-bind="textInput: fiscalNumberFilter" class="form-control" style="width: 190px; " />
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="contributionChannelIdFilter">Contribution Channel</label>
+                    </td>
+                    <td>
+                        <select data-bind="options: contributionChannelList,
+                                            optionsText: 'name',
+                                            optionsValue: 'contributionChannelId',
+                                            value: contributionChannelIdFilter,
+                                            optionsCaption: ''" class="form-control" style="width: 190px; " ></select>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div style="clear: both;">
+    </div>
+
+    <div id="ContributionMonetarys-filterButtonsBar" style="width: 100%; text-align: right; margin-bottom: 20px; ">
+        <input type="button" value="Clear" data-bind="click: clearSearchFilters" class="btn btn-default" />
+        <input type="button" value="Search" data-bind="click: advancedSearch" class="btn btn-default" />
+        <a class="btn btn-primary" href="/ContributionMonetary/Edit/">Create</a>
+    </div>
+
+    <div class="dnnClear">
+    </div>
+
+    <table id="ContributionMonetarysTable-0" class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th class="ContributionMonetary-nucleoId">Nucleo</th>
+                <th class="ContributionMonetary-responsiblePersonId">Responsible Person</th>
+                <th class="ContributionMonetary-documentId">Document</th>
+                <th class="ContributionMonetary-partnerId">Partner</th>
+                <th class="ContributionMonetary-contributionDate">Contribution Date</th>
+                <th class="ContributionMonetary-amount">Amount</th>
+                <th class="ContributionMonetary-contactPerson">Contact Person</th>
+                <th class="ContributionMonetary-ibanOrigin">Iban Origin</th>
+                <th class="ContributionMonetary-bicSwiftOrigin">Bic Swift Origin</th>
+                <th class="ContributionMonetary-ibanDestination">Iban Destination</th>
+                <th class="ContributionMonetary-bicSwiftDestination">Bic Swift Destination</th>
+                <th class="ContributionMonetary-fiscalNumber">Fiscal Number</th>
+                <th class="ContributionMonetary-contributionChannelId">Contribution Channel</th>
+                <th class="datatable-buttons"></th>
+            </tr>
+        </thead>
+    </table>
+
+    <p><a class="btn btn-primary" href="/ContributionMonetary/Edit/">Create</a></p>
+</div>
+
+@section scripts{
+<script type="text/javascript" src="~/Scripts/knockout-3.4.2.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.16/datatables.min.js"></script>
+<script type="text/javascript" src="~/Scripts/dataTables.bootstrap4.min.js"></script>
+<link rel="stylesheet" type="text/css" href="~/Scripts/jquery-ui-1.12.1.custom/jquery-ui.css" />
+<script type="text/javascript" src="~/Scripts/jquery-ui-1.12.1.custom/jquery-ui.js"></script>
+
+<script type="text/javascript" src="~/Scripts/ContributionMonetaryView.js"></script>
+
+
+<script type="text/javascript" src="~/Scripts/NucleoHelper.js"></script>
+<script type="text/javascript" src="~/Scripts/ResponsiblePersonHelper.js"></script>
+<script type="text/javascript" src="~/Scripts/DocumentHelper.js"></script>
+<script type="text/javascript" src="~/Scripts/PartnerHelper.js"></script>
+<script type="text/javascript" src="~/Scripts/ContributionChannelHelper.js"></script>
+
+<script language="javascript" type="text/javascript">
+    var vm;
+
+    //jQuery(function ($) {
+        var moduleId = 0;
+
+        var localizedSettings = {};
+
+        var viewmodel = new Web.contributionMonetaryListViewModel(moduleId, localizedSettings);
+        viewmodel.init();
+
+        ko.applyBindings(viewmodel, $("#ContributionMonetarys-" + moduleId)[0]);
+
+        vm = viewmodel;
+
+        // datatables
+
+        function initDataTable() {
+            $("#ContributionMonetarysTable-" + moduleId).DataTable();
+        }
+
+        $(function () {
+            initDataTable();
+        });
+
+    //});
+</script>
+}
+
+    

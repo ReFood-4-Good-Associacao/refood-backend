@@ -1,0 +1,289 @@
+﻿<#@ template hostspecific="true" language="C#" debug="true" #>
+<#@ assembly name="System.Core" #>
+<#@ assembly name="System.Data" #>
+<#@ assembly name="System.Xml" #>
+<#@ assembly name="EnvDTE" #>
+<#@ assembly name="envdte80" #>
+<#@ import namespace="EnvDTE" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#
+
+// ################################################################
+//                  Declare generator parameters
+// ################################################################
+
+string NamespaceBase = "";
+string NamespaceServices = "";
+string NamespaceCore = "";
+string NamespaceModule = "";
+string NamespaceViewModels = "";
+string NamespaceDataContracts = "";
+
+string ModuleName = "";
+
+string EntityNamePrefix = "";
+string EntityName = "";
+string EntityNameLowerCase = "";
+string EntityNameDTO = "";
+string EntityNameDataContract = "";
+string ParentEntityName = "";
+
+string DestinationFolderDefault = "";
+string SolutionFolder = "";
+string FileNameGeneratedSuffix = "";
+
+string DatabaseOwner = "";
+string DatabaseObjectQualifier = "";
+
+List<string> Entities = new List<string>();
+
+bool GenerateSQLCreateTableScriptFromDomainClass;
+bool GenerateRepository;
+bool GenerateBusinessLayer;
+bool GenerateDTO;
+bool GenerateViewModel;
+bool GenerateWebAPIController;
+bool GenerateJavascript;
+bool GenerateJavascript_HelperScript;
+bool GenerateViewPage;
+bool GenerateEditPage;
+bool GenerateSettingsPage;
+bool GenerateResources;
+bool GenerateWebServices;
+bool GenerateUnitTests;
+bool GenerateIntegrationTests;
+bool GenerateLoadTests;
+    
+bool ShouldGenerateAtFinalDestinationFolder = false;
+bool ShouldGenerateOneWebProjectPerEntity = false;
+bool ShouldGenerateParentEntityFunctions = false;
+
+bool GenerateViewPage_SearchFilters = true;
+bool GenerateViewPage_InlineEditTable = false;
+    
+bool UseDataTablesPlugin = true;
+bool UseKnockoutJs = true;
+bool UsejQueryDatepickerPlugin = true;
+
+bool UsePetaPocoORM = true;
+
+bool Uselog4net = true;
+
+bool UseDNN = false;
+bool UseDNNModuleId = false;
+
+bool UseMSTest = true;
+bool UseNUnit = false;
+
+
+// ################################################################
+//                      Default parameters
+// ################################################################
+
+NamespaceBase = "NTSPortals";
+NamespaceCore = NamespaceBase + ".Core";
+NamespaceServices = NamespaceBase + ".Business";
+
+EntityName = "Ship";
+EntityNamePrefix = "NTSP_";
+EntityNameLowerCase = EntityName.Substring(0, 1).ToLower() + EntityName.Substring(1, EntityName.Length - 1);
+EntityNameDTO = EntityName + "DTO";
+
+ModuleName = EntityName + "Module";
+NamespaceModule = NamespaceBase + "." + EntityName + "Module";
+NamespaceViewModels = NamespaceModule + ".Services.ViewModels";
+
+DestinationFolderDefault = "Generated";
+SolutionFolder = "Generated";
+FileNameGeneratedSuffix = ".gen";
+
+Entities = new List<string> { "Ship" };
+
+
+// ################################################################
+//              Access Visual Studio's project metadata
+// ################################################################
+
+// access Visual Studio's DTE object model to read state from other code in the project and use that as metadata for code generation.
+// https://stackoverflow.com/questions/3298121/t4-toolbox-referencing-class-in-current-assembly
+// https://stackoverflow.com/questions/17686061/t4-visualstudiohelper-not-found
+
+var dte = (EnvDTE.DTE)((IServiceProvider)Host).GetService(typeof(EnvDTE.DTE));
+var project = dte.Solution.FindProjectItem(Host.TemplateFile).ContainingProject;
+var classes = FindClasses(project, NamespaceCore, "");
+
+
+
+#><#+
+    // ################################################################
+    //                  Generator Helper Methods
+    // ################################################################
+
+    List<CodeClass> FindClasses(Project project, string ns, string className) {
+        List<CodeClass> result = new List<CodeClass>();
+        FindClasses(project.CodeModel.CodeElements, className, ns, result, false);
+        return result;
+    }
+
+    void FindClasses(CodeElements elements, string className, string searchNamespace, List<CodeClass> result, bool isNamespaceOk) {
+        if (elements == null) return;
+        foreach (CodeElement element in elements) {
+            if (element is CodeNamespace) {
+                CodeNamespace ns = element as CodeNamespace;
+                if (ns != null) {
+                    if (ns.FullName == searchNamespace)
+                        FindClasses(ns.Members, className, searchNamespace, result, true);
+                    else
+                        FindClasses(ns.Members, className, searchNamespace, result, false);
+                }
+            } else if (element is CodeClass && isNamespaceOk) {
+                CodeClass c = element as CodeClass;
+                if (c != null) {
+                    if (c.FullName.Contains(className))
+                        result.Add(c);
+
+                    FindClasses(c.Members, className, searchNamespace, result, true);
+                }
+            }
+        }
+    }
+
+    // http://www.haneycodes.net/automatically-generate-pocos-from-db-with-t4/
+    void SaveOutput(string outputFileName, string destinationFolder)
+    {
+        // Write to destination folder
+        string templateDirectory = Path.Combine(Path.GetDirectoryName(Host.TemplateFile), destinationFolder);
+        string outputFilePath = Path.Combine(templateDirectory, outputFileName);
+        File.Delete(outputFilePath);
+        File.WriteAllText(outputFilePath, this.GenerationEnvironment.ToString()); 
+ 
+        // Flush generation
+        this.GenerationEnvironment.Remove(0, this.GenerationEnvironment.Length);
+    }
+
+    string InsertSpaceBeforeUpperCase(string str)
+    {   
+        var sb = new StringBuilder();
+
+        char previousChar = char.MinValue; // Unicode '\0'
+
+        foreach (char c in str)
+        {
+            if (char.IsUpper(c))
+            {
+                // If not the first character and previous character is not a space, insert a space before uppercase
+
+                if (sb.Length != 0 && previousChar != ' ')
+                {
+                    sb.Append(' ');
+                }           
+            }
+
+            sb.Append(c);
+
+            previousChar = c;
+        }
+
+        return sb.ToString();
+    }
+
+    string RemoveTailId(string str)
+    {   
+        if(str != null && str.EndsWith(" Id"))
+        {
+            str = str.Substring(0, str.Length - 3);
+        }
+        else if(str != null && str.EndsWith("Id"))
+        {
+            str = str.Substring(0, str.Length - 2);
+        }
+        return str;
+    }
+
+    // http://www.haneycodes.net/automatically-generate-pocos-from-db-with-t4/
+    public static string GetNetDataType(string sqlDataTypeName)
+    {
+        switch (sqlDataTypeName.ToLower())
+        {
+            case "bigint":
+                return "Int64";
+            case "binary":
+            case "image":
+            case "varbinary":
+                return "byte[]";
+            case "bit":
+                return "bool";
+            case "char":
+                return "char";
+            case "datetime":
+            case "smalldatetime":
+                return "DateTime";
+            case "decimal":
+            case "money":
+            case "numeric":
+                return "decimal";
+            case "float":
+                return "double";
+            case "int":
+                return "int";
+            case "nchar":
+            case "nvarchar":
+            case "text":
+            case "varchar":
+            case "xml":
+                return "string";
+            case "real":
+                return "single";
+            case "smallint":
+                return "Int16";
+            case "tinyint":
+                return "byte";
+            case "uniqueidentifier":
+                return "Guid";
+                 
+            default:
+                return null;
+        }
+    }
+
+    public static string GetSQLDataType(string netDataTypeName)
+    {
+        switch (netDataTypeName.ToLower())
+        {
+            case "int64":
+                return "bigint";
+            case "byte[]":
+                return "binary";
+            case "bool":
+                return "bit";
+            case "char":
+                return "char";
+            case "datetime":
+            case "system.datetime":
+                return "datetime";
+            case "decimal":
+                return "numeric";
+            case "double":
+            case "float":
+                return "float";
+            case "int":
+                return "int";
+            case "string":
+                return "nvarchar(max)";
+            case "single":
+                return "real";
+            case "int16":
+                return "smallint";
+            case "byte":
+                return "tinyint";
+            case "guid":
+                return "uniqueidentifier";
+                 
+            default:
+                return netDataTypeName;
+        }
+    }
+#>

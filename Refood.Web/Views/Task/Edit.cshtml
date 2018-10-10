@@ -1,0 +1,129 @@
+
+<!-- ################################################################ -->
+<!--                      Code generated with T4                      -->
+<!-- ################################################################ -->
+
+<div id="Task-0">
+    <div class="dnnForm dnnEditBasicSettings" id="dnnEditBasicSettings">
+        <!--<div class="dnnFormExpandContent dnnRight "><a href="#">Expand All</a></div>-->
+
+        <h2 id="dnnSitePanel-BasicSettings" class="dnnFormSectionHead dnnClear">
+            Task
+        </h2>
+        <fieldset>
+            <div class="formItem" style="margin-bottom: 20px; ">
+                <div><label for="name">Name</label></div>
+                <input id="name" type="text" data-bind="textInput: name" class="form-control" />
+            </div>
+            <div class="formItem" style="margin-bottom: 20px; ">
+                <div><label for="taskTypeId">Task Type</label></div>
+                <select data-bind="options: taskTypeList,
+                                    optionsText: 'name',
+                                    optionsValue: 'taskTypeId',
+                                    value: taskTypeId,
+                                    optionsCaption: ''" class="form-control"></select>
+            </div>
+            <div class="formItem" style="margin-bottom: 20px; ">
+                <div><label for="taskDate">Task Date</label></div>
+                <input data-bind="datepicker: taskDate, datepickerOptions: {
+                                    yearRange: '-20:+100',
+                                    changeMonth: true,
+                                    changeYear: true,
+                                    dateFormat: 'dd-mm-yy' }"
+                                    class="form-control" />
+            </div>
+            <div class="formItem" style="margin-bottom: 20px; ">
+                <div><label for="weekDay">Week Day</label></div>
+                <input id="weekDay" type="text" data-bind="textInput: weekDay" class="form-control" />
+            </div>
+            <div class="formItem" style="margin-bottom: 20px; ">
+                <div><label for="startTime">Start Time</label></div>
+                <input data-bind="datepicker: startTime, datepickerOptions: {
+                                    yearRange: '-20:+100',
+                                    changeMonth: true,
+                                    changeYear: true,
+                                    dateFormat: 'dd-mm-yy' }"
+                                    class="form-control" />
+            </div>
+            <div class="formItem" style="margin-bottom: 20px; ">
+                <div><label for="endTime">End Time</label></div>
+                <input data-bind="datepicker: endTime, datepickerOptions: {
+                                    yearRange: '-20:+100',
+                                    changeMonth: true,
+                                    changeYear: true,
+                                    dateFormat: 'dd-mm-yy' }"
+                                    class="form-control" />
+            </div>
+            <div class="formItem" style="margin-bottom: 20px; ">
+                <div><label for="estimatedDuration">Estimated Duration</label></div>
+                <input id="estimatedDuration" type="text" data-bind="textInput: estimatedDuration" class="form-control" />
+            </div>
+            <div class="formItem" style="margin-bottom: 20px; ">
+                <div><label for="description">Description</label></div>
+                <input id="description" type="text" data-bind="textInput: description" class="form-control" />
+            </div>
+            <div class="formItem" style="margin-bottom: 20px; ">
+                <div><label for="requiresCar">Requires Car</label></div>
+                <input id="requiresCar" type="text" data-bind="textInput: requiresCar" class="form-control" />
+            </div>
+            <div class="formItem" style="margin-bottom: 20px; ">
+                <div><label for="teamLeaderId">Team Leader</label></div>
+                <select data-bind="options: teamLeaderList,
+                                    optionsText: 'name',
+                                    optionsValue: 'teamLeaderId',
+                                    value: teamLeaderId,
+                                    optionsCaption: ''" class="form-control"></select>
+            </div>
+            <div class="formItem" style="margin-bottom: 20px; ">
+                <div><label for="active">Active</label></div>
+                <input id="active" type="checkbox" data-bind="checked: active" class="form-control" />
+            </div>
+        </fieldset>
+    </div>
+    <hr />
+    <div class="text-right">
+		<a data-bind="click: cancel" href="#" class="btn btn-link">Cancel</a>
+		<a data-bind="click: save" href="#" class="btn btn-primary">Save</a>
+    </div>
+</div>
+
+@section scripts{
+<script type="text/javascript" src="~/Scripts/knockout-3.4.2.js"></script>
+<link rel="stylesheet" type="text/css" href="~/Scripts/jquery-ui-1.12.1.custom/jquery-ui.css" />
+<script type="text/javascript" src="~/Scripts/jquery-ui-1.12.1.custom/jquery-ui.js"></script>
+<script src="~/Scripts/toastr.js"></script>
+<link href="~/Content/toastr.css" rel="stylesheet" />
+
+<script type="text/javascript" src="~/Scripts/TaskEdit.js"></script>
+
+<script type="text/javascript" src="~/Scripts/TaskTypeHelper.js"></script>
+<script type="text/javascript" src="~/Scripts/TeamLeaderHelper.js"></script>
+
+<link rel="stylesheet" type="text/css" href="~/Content/jquery-ui-datepicker.css" />
+
+<script type="text/javascript">
+
+        //jQuery(function ($) {
+            var moduleId = 0;
+
+            var localizedSettings = {};
+
+            var viewmodel = new Web.taskViewModel(moduleId, localizedSettings);
+            viewmodel.init();
+
+            ko.applyBindings(viewmodel, $("#Task-" + moduleId)[0]);
+
+            //function dnnEditBasicSettings() {
+                //$('#dnnEditBasicSettings').dnnPanels();
+                //$('#dnnEditBasicSettings .dnnFormExpandContent a').dnnExpandAll({ expandText: 'Expandir', collapseText: 'Minimizar', targetArea: '#dnnEditBasicSettings' });
+            //}
+
+            //dnnEditBasicSettings();
+            //Sys.WebForms.PageRequestManager.getInstance().add_endRequest(function () {
+                //dnnEditBasicSettings();
+            //});
+        //});
+</script>
+}
+
+    

@@ -1,0 +1,73 @@
+﻿<#
+    // ################################################################
+    //                 Service Layer - Interface
+    // ################################################################
+#>
+
+// ################################################################
+//                      Code generated with T4
+// ################################################################
+<#
+    CodeClass currentClass = classes.FirstOrDefault(c => c.Name == EntityNamePrefix + EntityName);
+    var properties = currentClass.Members.OfType<EnvDTE.CodeProperty>().Where(p => p.Access.HasFlag(vsCMAccess.vsCMAccessPublic));
+#>
+
+using System.Collections.Generic;
+using <#=NamespaceServices#>.DTOs;
+
+namespace <#=NamespaceServices#>.Interfaces
+{
+    public partial interface I<#=EntityName#>Service
+    {
+        int Add<#=EntityName#>(<#=EntityNameDTO#> dto);
+
+        void Delete<#=EntityName#>(int <#=EntityNameLowerCase#>Id<#if(UseDNNModuleId) {#>, int moduleId<#}#>);
+
+        void Delete<#=EntityName#>(<#=EntityNameDTO#> dto);
+
+        <#=EntityNameDTO#> Get<#=EntityName#>(int <#=EntityNameLowerCase#>Id<#if(UseDNNModuleId) {#>, int moduleId<#}#>);
+
+        IEnumerable<<#=EntityNameDTO#>> Get<#=EntityName#>s(<#if(UseDNNModuleId) {#>int moduleId<#}#>);
+
+        IList<<#=EntityNameDTO#>> Get<#=EntityName#>s(string searchTerm,<#if(UseDNNModuleId) {#> int moduleId,<#}#> int pageIndex, int pageSize);
+
+<#if(GenerateViewPage_SearchFilters){#>
+        IEnumerable<<#=EntityNameDTO#>> Get<#=EntityName#>ListAdvancedSearch(
+<#
+    // advanced search filters - function arguments
+    int countArgs = 0;
+    foreach(var currentProperty in properties)
+    {
+        // skip audit properties because they are set with specific values
+        if(currentProperty.Name != "ModuleId" 
+            && currentProperty.Name != "CreateBy"
+            && currentProperty.Name != "UpdateBy"
+            && currentProperty.Name != "CreateOn"
+            && currentProperty.Name != "UpdateOn"
+            && currentProperty.Name != "IsDeleted"
+            && currentProperty.Name != EntityName + "Id")
+        {
+            string propertyNameLowerCase = currentProperty.Name.Substring(0, 1).ToLower() + currentProperty.Name.Substring(1, currentProperty.Name.Length - 1);
+
+            // add each property
+            if (currentProperty.Type.AsString.Contains("System.DateTime")) {#>
+            <#if(countArgs > 0){#>,<#}#><#=currentProperty.Type.AsString#><#if(!currentProperty.Type.AsString.EndsWith("?")){#>?<#}#> <#=propertyNameLowerCase#>From 
+            <#if(countArgs > 0){#>,<#}#><#=currentProperty.Type.AsString#><#if(!currentProperty.Type.AsString.EndsWith("?")){#>?<#}#> <#=propertyNameLowerCase#>To 
+<#          }#>
+<#          else {#>
+            <#if(countArgs > 0){#>,<#}#><#=currentProperty.Type.AsString#><#if(!currentProperty.Type.AsString.EndsWith("?") && currentProperty.Type.AsString != "string"){#>?<#}#> <#=propertyNameLowerCase#> 
+<#          }#>
+<#          countArgs++;#>
+<#      }#>
+<#  }#>
+        );
+
+<#}#>
+        void Update<#=EntityName#>(<#=EntityNameDTO#> dto);
+
+<#if (ShouldGenerateParentEntityFunctions) {#>
+        IEnumerable<<#=EntityNameDTO#>> Get<#=EntityName#>ListBy<#=ParentEntityName#>Id(int <#=EntityNameLowerCase#>Id<#if(UseDNNModuleId) {#>, int moduleId<#}#>);
+
+<#}#>
+    }
+}

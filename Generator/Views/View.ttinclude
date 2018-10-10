@@ -1,0 +1,325 @@
+﻿<#
+    // ################################################################
+    //                            View html
+    // ################################################################
+#>
+<#
+    CodeClass currentClass = classes.FirstOrDefault(c => c.Name == EntityNamePrefix + EntityName);
+    var properties = currentClass.Members.OfType<EnvDTE.CodeProperty>().Where(p => p.Access.HasFlag(vsCMAccess.vsCMAccessPublic));
+#>
+[JavaScript:{ jsname: "JQuery" }]
+[JavaScript:{ jsname: "Knockout" }]
+[JavaScript:{ path: "~/Resources/Shared/scripts/dnn.jquery.js"}]
+[JavaScript:{ path: "~/DesktopModules/<#=NamespaceModule#>/scripts/<#=EntityName#>View.js"}]
+<#
+// Find properties for combo boxes
+foreach(var currentProperty in properties)
+{
+    if(currentProperty.Name != "ModuleId" 
+        && currentProperty.Name != EntityName + "Id" 
+        && (!ShouldGenerateParentEntityFunctions || currentProperty.Name != ParentEntityName + "Id") 
+        && currentProperty.Name.EndsWith("Id"))
+    {
+#>
+[JavaScript:{ path: "~/DesktopModules/<#=NamespaceModule#>/scripts/<#=RemoveTailId(currentProperty.Name)#>Helper.js"}]
+<#  }#>
+<#}#>
+
+[ModuleAction:{controlKey : "Edit", securityAccessLevel : "Edit",  titleKey: "EditModule", localResourceFile: "~/DesktopModules/<#=NamespaceModule#>/App_LocalResources/View.resx" }]
+
+<#if(UsejQueryDatepickerPlugin)#>
+<#{#>
+<link rel="stylesheet" type="text/css" href="/DesktopModules/<#=NamespaceModule#>/jquery-ui-datepicker.css" />
+
+<#}#>
+<!-- ################################################################ -->
+<!--                      Code generated with T4                      -->
+<!-- ################################################################ -->
+
+<#if(UseDataTablesPlugin)#>
+<#{#>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" />
+
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+
+<#}#>
+<h2 id="<#=EntityName#>s-pageTitle">
+    [Resx:{key:"Title"}]
+</h2>
+
+<div id="<#=EntityName#>s-[ModuleContext:ModuleId]">
+
+<#
+
+// Advanced Search Filters
+
+if(GenerateViewPage_SearchFilters)
+{#>
+    <div id="<#=EntityName#>s-filters" style="margin-top: 20px; margin-bottom: 5px; width: 100%; ">
+<#
+    // Iterate each property of the domain class, and create a search filter
+    foreach(var currentProperty in properties)
+    {
+        // skip audit properties because they are set with specific values
+        if(currentProperty.Name != "ModuleId" 
+            && currentProperty.Name != "CreateBy"
+            && currentProperty.Name != "UpdateBy"
+            && currentProperty.Name != "CreateOn"
+            && currentProperty.Name != "UpdateOn"
+            && currentProperty.Name != "IsDeleted"
+            && currentProperty.Name != EntityName + "Id")
+        {
+            string propertyNameLowerCase = currentProperty.Name.Substring(0, 1).ToLower() + currentProperty.Name.Substring(1, currentProperty.Name.Length - 1);
+
+            // add search filter label and input
+#>
+        <div class="searchFilter" style="width: 300px; float: left; margin-right: 100px;">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="<#=propertyNameLowerCase#>Filter">[Resx:{key:"lbl<#=currentProperty.Name#>"}]</label>
+                    </td>
+                    <td>
+<#if(currentProperty.Type.AsString == "bool")#>
+<#{#>
+                        <input id="<#=propertyNameLowerCase#>Filter" type="checkbox" data-bind="checked: <#=propertyNameLowerCase#>Filter" class="form-control" />
+<#}#>
+<#else if(currentProperty.Type.AsString.Contains("System.DateTime"))#>
+<#{#>
+<#  if(UsejQueryDatepickerPlugin)#>
+<#  {#>
+                        <table style="margin-bottom: 10px; ">
+                            <tr>
+                                <td>
+                                    <input data-bind="datepicker: <#=propertyNameLowerCase#>FromFilter, datepickerOptions: {
+                                                        yearRange: '-20:+100',
+                                                        changeMonth: true,
+                                                        changeYear: true,
+                                                        dateFormat: 'dd-mm-yy' }"
+                                            style="width: 80px; " />
+                                </td>
+                                <td>
+                                    <span style="width: 20px; ">-</span>
+                                </td>
+                                <td>
+                                    <input data-bind="datepicker: <#=propertyNameLowerCase#>ToFilter, datepickerOptions: {
+                                                        yearRange: '-20:+100',
+                                                        changeMonth: true,
+                                                        changeYear: true,
+                                                        dateFormat: 'dd-mm-yy' }"
+                                            style="width: 80px; " />
+                                </td>
+                            </tr>
+                        </table>
+<#  }#>
+<#  else#>
+<#  {#>
+                        <input data-bind="textInput: <#=propertyNameLowerCase#>FromFilter" style="width: 80px; " />
+                        <span style="width: 20px; ">-</span>
+                        <input data-bind="textInput: <#=propertyNameLowerCase#>ToFilter" style="width: 80px; " />
+<#  }#>
+<#}#>
+<#else if(currentProperty.Name != "ModuleId" && currentProperty.Name != EntityName + "Id" && currentProperty.Name.EndsWith("Id"))#>
+<#{#>
+                        <select data-bind="options: <#=RemoveTailId(propertyNameLowerCase)#>List,
+                                            optionsText: 'name',
+                                            optionsValue: '<#=propertyNameLowerCase#>',
+                                            value: <#=propertyNameLowerCase#>Filter,
+                                            optionsCaption: ''" class="form-control" style="width: 208px; " ></select>
+<#}#>
+<#else#>
+<#{#>
+                        <input id="<#=propertyNameLowerCase#>Filter" type="text" data-bind="textInput: <#=propertyNameLowerCase#>Filter" class="form-control" style="width: 190px; " />
+<#}#>
+                    </td>
+                </tr>
+            </table>
+        </div>
+<#      }#>
+<#  }#>
+    </div>
+
+    <div class="dnnClear">
+    </div>
+
+    <div id="<#=EntityName#>s-filterButtonsBar" style="width: 100%; text-align: right; margin-bottom: 20px; ">
+        <input type="button" value="Clear" data-bind="click: clearSearchFilters" />
+        <input type="button" value="Search" data-bind="click: advancedSearch" />
+        <input type="button" value="Add <#=EntityName#>" data-bind="click: openCreateForm" />
+    </div>
+
+    <div class="dnnClear">
+    </div>
+<#}#>
+
+<#
+
+// old
+
+//<!--<div id="EntityNames-[ModuleContext:ModuleId]">
+    //<ul class="tm_tl" data-bind="foreach: EntityNameLowerCaseList">
+        //<li class="tm_t">
+            //<h3 data-bind="text: EntityNameLowerCaseName"></h3>
+            //<div class="tm_td" data-bind="text: company"></div>
+            //<div data-bind="visible: $parent.editMode()">
+                //<a data-bind="attr: {href: editUrl}">[Resx:{key:"EditItem"}]</a>
+                //<a data-bind="click: $parent.deleteEntityName" href="#">[Resx:{key:"DeleteItem"}]</a>
+            //</div>
+        //</li>
+    //</ul>
+//</div>-->
+
+
+
+// Editable table
+
+if(GenerateViewPage_InlineEditTable)
+{#>
+
+    <div style="margin-bottom: 20px; ">
+        <input id="searchText" type="text" data-bind="textInput: searchText" style="height: 10px; " />
+        <a data-bind="click: quickSearch"><img src="/images/Search/SearchButton.png" /></a>
+<#//<input type="button" value="[Resx:{key:"EditModule"}]" style="float: right; " />#>
+        <!--<a href="javascript:dnnModal.show('~/DesktopModules/<#=NamespaceModule#>/ctl/Edit/mid/[ModuleContext:ModuleId]?popUp=true',/*showReturn*/false,550,950,true,'')" style="float: right; " class="dnnSecondaryAction" >[Resx:{key:"EditModule"}]</a>-->
+    </div>
+
+    <table id="<#=EntityName#>sTable-[ModuleContext:ModuleId]" style="margin-bottom: 20px; width: 100%; ">
+        <thead>
+            <tr>
+<#
+    // Iterate each property of the domain class, and write the respective column header
+    foreach(var currentProperty in properties)
+    {
+        // skip the entity id, the IsDeleted flag, and the audit properties
+        if(currentProperty.Name != "ModuleId" 
+            && currentProperty.Name != "CreateBy"
+            && currentProperty.Name != "UpdateBy"
+            && currentProperty.Name != "CreateOn"
+            && currentProperty.Name != "UpdateOn"
+            && currentProperty.Name != "IsDeleted"
+            && currentProperty.Name != EntityName + "Id")
+        {
+            string propertyNameLowerCase = currentProperty.Name.Substring(0, 1).ToLower() + currentProperty.Name.Substring(1, currentProperty.Name.Length - 1);
+
+            // a column header for each property in the viewmodel
+#>
+                <th style="border-right: lightgray 1px solid; ">[Resx:{key:"lbl<#=currentProperty.Name#>"}]</th>
+<#      }#>
+<#  }#>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody data-bind="foreach: <#=EntityNameLowerCase#>List">
+            <tr data-bind="visible: visibleOnSearch" style="text-align: center; ">
+<#  // row to declare the knockout data bindings #>
+<#
+    // Iterate each property of the domain class, and write the respective column
+    foreach(var currentProperty in properties)
+    {
+        // skip the entity id, the IsDeleted flag, and the audit properties
+        if(currentProperty.Name != "ModuleId" 
+            && currentProperty.Name != "CreateBy"
+            && currentProperty.Name != "UpdateBy"
+            && currentProperty.Name != "CreateOn"
+            && currentProperty.Name != "UpdateOn"
+            && currentProperty.Name != "IsDeleted"
+            && currentProperty.Name != EntityName + "Id")
+        {
+            string propertyNameLowerCase = currentProperty.Name.Substring(0, 1).ToLower() + currentProperty.Name.Substring(1, currentProperty.Name.Length - 1);
+
+            // one editable field in a column for each property
+#>
+                <td>
+<#          if(currentProperty.Type.AsString == "bool")#>
+<#          {#>
+                    <input id="<#=propertyNameLowerCase#>" type="checkbox" data-bind="checked: <#=propertyNameLowerCase#>" />
+<#          }#>
+<#          else#>
+<#          {#>
+<#                  //<input id="propertyNameLowerCase" type="text" data-bind="textInput: propertyNameLowerCase" />#>
+                    <span data-bind="text: <#=propertyNameLowerCase#>" />
+<#          }#>
+                </td>
+<#      }#>
+<#  }#>
+                <td>
+                    <div data-bind="visible: $parent.editMode()">
+                        <a data-bind="attr: {href: editUrl}">[Resx:{key:"EditItem"}]</a>
+                        <a data-bind="click: $parent.delete<#=EntityName#>" href="#">[Resx:{key:"DeleteItem"}]</a>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div>
+        <a data-bind="click: save" href="#" class="dnnPrimaryAction" style="float: right; ">[Resx:{key:"btnSubmit"}]</a>
+    </div>
+<#}
+
+
+
+// DataTables 
+
+else
+{#>
+    <table id="<#=EntityName#>sTable-[ModuleContext:ModuleId]" style="margin-bottom: 20px; ">
+        <thead>
+            <tr>
+<#
+    // Iterate each property of the domain class, and write the respective mapping to the view model
+    foreach(var currentProperty in properties)
+    {
+        // skip the entity id, the IsDeleted flag, and the audit properties
+        if(currentProperty.Name != "ModuleId" 
+            && currentProperty.Name != "CreateBy"
+            && currentProperty.Name != "UpdateBy"
+            && currentProperty.Name != "CreateOn"
+            && currentProperty.Name != "UpdateOn"
+            && currentProperty.Name != "IsDeleted"
+            && currentProperty.Name != EntityName + "Id")
+        {
+            string propertyNameLowerCase = currentProperty.Name.Substring(0, 1).ToLower() + currentProperty.Name.Substring(1, currentProperty.Name.Length - 1);
+
+            // a column header for each property in the viewmodel
+#>
+                <th>[Resx:{key:"lbl<#=currentProperty.Name#>"}]</th>
+<#      }#>
+<#  }#>
+                <th></th>
+            </tr>
+        </thead>
+    </table>
+</div>
+<#}#>
+
+<script language="javascript" type="text/javascript">
+    var vm;
+
+    jQuery(function ($) {
+        var moduleId = parseInt("[ModuleContext:ModuleId]");
+
+        var localizedSettings = {};
+
+        var viewmodel = new <#=ModuleName#>.<#=EntityNameLowerCase#>ListViewModel(moduleId, localizedSettings);
+        viewmodel.init();
+
+        ko.applyBindings(viewmodel, $("#<#=EntityName#>s-" + moduleId)[0]);
+
+        vm = viewmodel;
+
+<#if(UseDataTablesPlugin)#>
+<#{#>
+        // datatables
+
+        function initDataTable() {
+            $("#<#=EntityName#>sTable-" + moduleId).DataTable();
+        }
+
+        $(function () {
+            initDataTable();
+        });
+
+<#}#>
+    });
+</script>

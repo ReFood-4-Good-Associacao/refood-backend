@@ -1,0 +1,347 @@
+
+<!-- ################################################################ -->
+<!--                      Code generated with T4                      -->
+<!-- ################################################################ -->
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css" />
+
+<h2 id="Volunteers-pageTitle">
+    Volunteer
+</h2>
+
+<div id="Volunteers-0">
+
+    <div id="Volunteers-filters" style="margin-top: 20px; margin-bottom: 5px; width: 100%; ">
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="nameFilter">Name</label>
+                    </td>
+                    <td>
+                        <input id="nameFilter" type="text" data-bind="textInput: nameFilter" class="form-control" style="width: 190px; " />
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="genderFilter">Gender</label>
+                    </td>
+                    <td>
+                        <input id="genderFilter" type="text" data-bind="textInput: genderFilter" class="form-control" style="width: 190px; " />
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="birthDateFilter">Birth Date</label>
+                    </td>
+                    <td>
+                        <table style="margin-bottom: 10px; ">
+                            <tr>
+                                <td>
+                                    <input data-bind="datepicker: birthDateFromFilter, datepickerOptions: {
+                                                        yearRange: '-20:+100',
+                                                        changeMonth: true,
+                                                        changeYear: true,
+                                                        dateFormat: 'dd-mm-yy' }"
+                                             class="form-control" />
+                                </td>
+                                <td>
+                                    <span style="width: 20px; ">-</span>
+                                </td>
+                                <td>
+                                    <input data-bind="datepicker: birthDateToFilter, datepickerOptions: {
+                                                        yearRange: '-20:+100',
+                                                        changeMonth: true,
+                                                        changeYear: true,
+                                                        dateFormat: 'dd-mm-yy' }"
+                                             class="form-control" />
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="occupationFilter">Occupation</label>
+                    </td>
+                    <td>
+                        <input id="occupationFilter" type="text" data-bind="textInput: occupationFilter" class="form-control" style="width: 190px; " />
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="employerFilter">Employer</label>
+                    </td>
+                    <td>
+                        <input id="employerFilter" type="text" data-bind="textInput: employerFilter" class="form-control" style="width: 190px; " />
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="phoneFilter">Phone</label>
+                    </td>
+                    <td>
+                        <input id="phoneFilter" type="text" data-bind="textInput: phoneFilter" class="form-control" style="width: 190px; " />
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="emailFilter">Email</label>
+                    </td>
+                    <td>
+                        <input id="emailFilter" type="text" data-bind="textInput: emailFilter" class="form-control" style="width: 190px; " />
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="identityCardNumberFilter">Identity Card Number</label>
+                    </td>
+                    <td>
+                        <input id="identityCardNumberFilter" type="text" data-bind="textInput: identityCardNumberFilter" class="form-control" style="width: 190px; " />
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="countryIdFilter">Country</label>
+                    </td>
+                    <td>
+                        <select data-bind="options: countryList,
+                                            optionsText: 'name',
+                                            optionsValue: 'countryId',
+                                            value: countryIdFilter,
+                                            optionsCaption: ''" class="form-control" style="width: 190px; " ></select>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="friendOrFamilyContactFilter">Friend Or Family Contact</label>
+                    </td>
+                    <td>
+                        <input id="friendOrFamilyContactFilter" type="text" data-bind="textInput: friendOrFamilyContactFilter" class="form-control" style="width: 190px; " />
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="photoFilter">Photo</label>
+                    </td>
+                    <td>
+                        <input id="photoFilter" type="text" data-bind="textInput: photoFilter" class="form-control" style="width: 190px; " />
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="addressIdFilter">Address</label>
+                    </td>
+                    <td>
+                        <select data-bind="options: addressList,
+                                            optionsText: 'name',
+                                            optionsValue: 'addressId',
+                                            value: addressIdFilter,
+                                            optionsCaption: ''" class="form-control" style="width: 190px; " ></select>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="hasCarFilter">Has Car</label>
+                    </td>
+                    <td>
+                        <input id="hasCarFilter" type="checkbox" data-bind="checked: hasCarFilter" />
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="hasDriverLicenseFilter">Has Driver License</label>
+                    </td>
+                    <td>
+                        <input id="hasDriverLicenseFilter" type="checkbox" data-bind="checked: hasDriverLicenseFilter" />
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="hasBikeFilter">Has Bike</label>
+                    </td>
+                    <td>
+                        <input id="hasBikeFilter" type="checkbox" data-bind="checked: hasBikeFilter" />
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="vehicleMakeFilter">Vehicle Make</label>
+                    </td>
+                    <td>
+                        <input id="vehicleMakeFilter" type="text" data-bind="textInput: vehicleMakeFilter" class="form-control" style="width: 190px; " />
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="vehicleModelFilter">Vehicle Model</label>
+                    </td>
+                    <td>
+                        <input id="vehicleModelFilter" type="text" data-bind="textInput: vehicleModelFilter" class="form-control" style="width: 190px; " />
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="activeFilter">Active</label>
+                    </td>
+                    <td>
+                        <input id="activeFilter" type="checkbox" data-bind="checked: activeFilter" />
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div style="clear: both;">
+    </div>
+
+    <div id="Volunteers-filterButtonsBar" style="width: 100%; text-align: right; margin-bottom: 20px; ">
+        <input type="button" value="Clear" data-bind="click: clearSearchFilters" class="btn btn-default" />
+        <input type="button" value="Search" data-bind="click: advancedSearch" class="btn btn-default" />
+        <a class="btn btn-primary" href="/Volunteer/Edit/">Create</a>
+    </div>
+
+    <div class="dnnClear">
+    </div>
+
+    <table id="VolunteersTable-0" class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th class="Volunteer-name">Name</th>
+                <th class="Volunteer-gender">Gender</th>
+                <th class="Volunteer-birthDate">Birth Date</th>
+                <th class="Volunteer-occupation">Occupation</th>
+                <th class="Volunteer-employer">Employer</th>
+                <th class="Volunteer-phone">Phone</th>
+                <th class="Volunteer-email">Email</th>
+                <th class="Volunteer-identityCardNumber">Identity Card Number</th>
+                <th class="Volunteer-countryId">Country</th>
+                <th class="Volunteer-friendOrFamilyContact">Friend Or Family Contact</th>
+                <th class="Volunteer-photo">Photo</th>
+                <th class="Volunteer-addressId">Address</th>
+                <th class="Volunteer-hasCar">Has Car</th>
+                <th class="Volunteer-hasDriverLicense">Has Driver License</th>
+                <th class="Volunteer-hasBike">Has Bike</th>
+                <th class="Volunteer-vehicleMake">Vehicle Make</th>
+                <th class="Volunteer-vehicleModel">Vehicle Model</th>
+                <th class="Volunteer-active">Active</th>
+                <th class="datatable-buttons"></th>
+            </tr>
+        </thead>
+    </table>
+
+    <p><a class="btn btn-primary" href="/Volunteer/Edit/">Create</a></p>
+</div>
+
+@section scripts{
+<script type="text/javascript" src="~/Scripts/knockout-3.4.2.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.16/datatables.min.js"></script>
+<script type="text/javascript" src="~/Scripts/dataTables.bootstrap4.min.js"></script>
+<link rel="stylesheet" type="text/css" href="~/Scripts/jquery-ui-1.12.1.custom/jquery-ui.css" />
+<script type="text/javascript" src="~/Scripts/jquery-ui-1.12.1.custom/jquery-ui.js"></script>
+
+<script type="text/javascript" src="~/Scripts/VolunteerView.js"></script>
+
+
+<script type="text/javascript" src="~/Scripts/CountryHelper.js"></script>
+<script type="text/javascript" src="~/Scripts/AddressHelper.js"></script>
+
+<script language="javascript" type="text/javascript">
+    var vm;
+
+    //jQuery(function ($) {
+        var moduleId = 0;
+
+        var localizedSettings = {};
+
+        var viewmodel = new Web.volunteerListViewModel(moduleId, localizedSettings);
+        viewmodel.init();
+
+        ko.applyBindings(viewmodel, $("#Volunteers-" + moduleId)[0]);
+
+        vm = viewmodel;
+
+        // datatables
+
+        function initDataTable() {
+            $("#VolunteersTable-" + moduleId).DataTable();
+        }
+
+        $(function () {
+            initDataTable();
+        });
+
+    //});
+</script>
+}
+
+    

@@ -1,0 +1,227 @@
+﻿<#
+    // ################################################################
+    //                           Repository
+    // ################################################################
+#>
+
+// ################################################################
+//                      Code generated with T4
+// ################################################################
+<#
+    CodeClass currentClass = classes.FirstOrDefault(c => c.Name == EntityNamePrefix + EntityName);
+    var properties = currentClass.Members.OfType<EnvDTE.CodeProperty>().Where(p => p.Access.HasFlag(vsCMAccess.vsCMAccessPublic));
+#>
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using <#=NamespaceCore#>;
+using <#=NamespaceCore#>.Repositories.Interfaces;
+
+namespace <#=NamespaceCore#>.Repositories
+{
+    public partial class <#=EntityName#>Repository : I<#=EntityName#>Repository
+    {
+        public int Add<#=EntityName#>(<#=EntityNamePrefix#><#=EntityName#> t)
+        {
+            int id = (int) t.Insert();
+
+            return id;
+        }
+
+        public void Delete<#=EntityName#>(<#=EntityNamePrefix#><#=EntityName#> t)
+        {
+            t.IsDeleted = true;
+            t.Update();
+        }
+
+        public void Delete<#=EntityName#>(int <#=EntityNameLowerCase#>Id<#if(UseDNNModuleId) {#>, int moduleId<#}#>)
+        {
+            var t = Get<#=EntityName#>(<#=EntityNameLowerCase#>Id<#if(UseDNNModuleId) {#>, moduleId<#}#>);
+            Delete<#=EntityName#>(t);
+        }
+
+        public <#=EntityNamePrefix#><#=EntityName#> Get<#=EntityName#>(int <#=EntityNameLowerCase#>Id<#if(UseDNNModuleId) {#>, int moduleId<#}#>)
+        {
+            //Requires.NotNegative("<#=EntityNameLowerCase#>Id", <#=EntityNameLowerCase#>Id);
+            <#if(UseDNNModuleId) {#>//Requires.NotNegative("moduleId", moduleId);<#}#>
+
+            <#=EntityNamePrefix + EntityName#> t = <#=EntityNamePrefix + EntityName#>.SingleOrDefault(<#=EntityNameLowerCase#>Id);
+
+            return t;
+        }
+
+        public IEnumerable<<#=EntityNamePrefix#><#=EntityName#>> Get<#=EntityName#>s(<#if(UseDNNModuleId) {#>int moduleId<#}#>)
+        {
+            <#if(UseDNNModuleId) {#>
+            //Requires.NotNegative("moduleId", moduleId);
+            
+            <#}#> 
+            IEnumerable<<#=EntityNamePrefix + EntityName#>> results = null;
+
+            var sql = PetaPoco.Sql.Builder
+                .Select("*")
+                .From("<#=EntityNamePrefix + EntityName#>")
+                .Where("IsDeleted = 0")
+                <#if(UseDNNModuleId) {#>.Where("ModuleId = @0", moduleId)<#}#> 
+            ;
+
+            results = <#=EntityNamePrefix + EntityName#>.Query(sql);
+
+            return results;
+        }
+
+        public IList<<#=EntityNamePrefix#><#=EntityName#>> Get<#=EntityName#>s(string searchTerm<#if(UseDNNModuleId) {#>, int moduleId<#}#>, int pageIndex, int pageSize)
+        {
+            <#if(UseDNNModuleId) {#>
+            //Requires.NotNegative("moduleId", moduleId);
+            <#}#>
+            
+            IList<<#=EntityNamePrefix + EntityName#>> results = null;
+
+            var sql = PetaPoco.Sql.Builder
+                .Select("*")
+                .From("<#=EntityNamePrefix + EntityName#>")
+<#if(UseDNNModuleId) {#>
+                .Where("ModuleId = @0", moduleId)
+<#}#>
+                .Where("IsDeleted = 0")
+<#
+    if(properties.FirstOrDefault(p => p.Type.AsString == "string") != null)
+    {
+#>
+                .Where(
+<#
+        // Iterate each property of the domain class, and write the comparison expression for the search query
+        bool first = true;
+        foreach(var currentProperty in properties)
+        {
+            string propertyNameLowerCase = currentProperty.Name.Substring(0, 1).ToLower() + currentProperty.Name.Substring(1, currentProperty.Name.Length - 1);
+
+            // one editable field in a column for each property
+            if(currentProperty.Type.AsString == "string")
+            {
+#>
+                    <#if (!first) { #> + " or " + <#}#>"<#=currentProperty.Name#> like '%" + searchTerm + "%'"
+<#                first = false;#>
+<#          }#>
+<#      }#>
+                )
+<#  }#>
+            ;
+
+            results = <#=EntityNamePrefix + EntityName#>.Fetch(pageIndex, pageSize, sql);
+
+            return results;
+        }
+
+<#if(GenerateViewPage_SearchFilters){#>
+        public IEnumerable<<#=EntityNamePrefix + EntityName#>> Get<#=EntityName#>ListAdvancedSearch(
+<#
+    // advanced search filters - function arguments
+    int countArgs = 0;
+    foreach(var currentProperty in properties)
+    {
+        // skip audit properties because they are set with specific values
+        if(currentProperty.Name != "ModuleId" 
+            && currentProperty.Name != "CreateBy"
+            && currentProperty.Name != "UpdateBy"
+            && currentProperty.Name != "CreateOn"
+            && currentProperty.Name != "UpdateOn"
+            && currentProperty.Name != "IsDeleted"
+            && currentProperty.Name != EntityName + "Id")
+        {
+            string propertyNameLowerCase = currentProperty.Name.Substring(0, 1).ToLower() + currentProperty.Name.Substring(1, currentProperty.Name.Length - 1);
+
+            // add each property
+
+            if (currentProperty.Type.AsString.Contains("System.DateTime")) {#>
+            <#if(countArgs > 0){#>, <#}#><#=currentProperty.Type.AsString#><#if(!currentProperty.Type.AsString.EndsWith("?")){#>?<#}#> <#=propertyNameLowerCase#>From 
+            <#if(countArgs > 0){#>, <#}#><#=currentProperty.Type.AsString#><#if(!currentProperty.Type.AsString.EndsWith("?")){#>?<#}#> <#=propertyNameLowerCase#>To 
+<#          }#>
+<#          else {#>
+            <#if(countArgs > 0){#>, <#}#><#=currentProperty.Type.AsString#><#if(!currentProperty.Type.AsString.EndsWith("?") && currentProperty.Type.AsString != "string"){#>?<#}#> <#=propertyNameLowerCase#> 
+<#          }#>
+<#          countArgs++;#>
+<#      }#>
+<#  }#>
+        )
+        {
+            IEnumerable<<#=EntityNamePrefix + EntityName#>> results = null;
+
+            var sql = PetaPoco.Sql.Builder
+                .Select("*")
+                .From("<#=EntityNamePrefix + EntityName#>")
+                .Where("IsDeleted = 0" 
+<#
+    // filters
+    foreach(var currentProperty in properties)
+    {
+        // skip audit properties because they are set with specific values
+        if(currentProperty.Name != "ModuleId" 
+            && currentProperty.Name != "CreateBy"
+            && currentProperty.Name != "UpdateBy"
+            && currentProperty.Name != "CreateOn"
+            && currentProperty.Name != "UpdateOn"
+            && currentProperty.Name != "IsDeleted"
+            && currentProperty.Name != EntityName + "Id")
+        {
+            string propertyNameLowerCase = currentProperty.Name.Substring(0, 1).ToLower() + currentProperty.Name.Substring(1, currentProperty.Name.Length - 1);
+
+            // add to query a condition for each filter
+
+            if(currentProperty.Type.AsString == "int")
+            {#>
+                    + (<#=propertyNameLowerCase#> != null ? " and <#=currentProperty.Name#> = " + <#=propertyNameLowerCase#> : "")
+<#          }#>
+<#          else if (currentProperty.Type.AsString.Contains("System.DateTime")) {#>
+                    + (<#=propertyNameLowerCase#>From != null ? " and <#=currentProperty.Name#> >= '" + <#=propertyNameLowerCase#>From.Value.ToShortDateString() + "'" : "")
+                    + (<#=propertyNameLowerCase#>To != null ? " and <#=currentProperty.Name#> <= '" + <#=propertyNameLowerCase#>To.Value.ToShortDateString() + "'" : "")
+<#          }#>
+<#          else if (currentProperty.Type.AsString == "bool") {#>
+                    + (<#=propertyNameLowerCase#> != null ? " and <#=currentProperty.Name#> = " + (<#=propertyNameLowerCase#> == true ? "1" : "0") : "")
+<#          }#>
+<#          else {#>
+                    + (<#=propertyNameLowerCase#> != null ? " and <#=currentProperty.Name#> like '%" + <#=propertyNameLowerCase#> + "%'" : "")
+<#          }#>
+<#      }#>
+<#  }#>
+                 )
+            ;
+
+            results = <#=EntityNamePrefix + EntityName#>.Query(sql);
+
+            return results;
+        }
+
+<#}#>
+        public void Update<#=EntityName#>(<#=EntityNamePrefix#><#=EntityName#> t)
+        {
+            //Requires.NotNull(t);
+            //Requires.PropertyNotNegative(t, "<#=EntityName#>Id");
+
+            t.Update();
+        }
+
+<#if (ShouldGenerateParentEntityFunctions) {#>
+        public IEnumerable<<#=EntityNamePrefix#><#=EntityName#>> Get<#=EntityName#>ListBy<#=ParentEntityName#>Id(int itemId<#if(UseDNNModuleId) {#>, int moduleId<#}#>)
+        {
+            <#if(UseDNNModuleId) {#>//Requires.NotNegative("moduleId", moduleId);<#}#>
+
+            IEnumerable<<#=EntityNamePrefix + EntityName#>> results = null;
+
+            var sql = PetaPoco.Sql.Builder
+                .Select("*")
+                .From("<#=EntityNamePrefix + EntityName#>")
+                .Where("IsDeleted = 0 and <#=ParentEntityName#>Id = @0", itemId)
+<#if(UseDNNModuleId) {#>                .Where("ModuleId = @0", moduleId)<#}#>
+            ;
+
+            results = <#=EntityNamePrefix + EntityName#>.Query(sql);
+
+            return results;
+        }
+
+<#}#>
+    }
+}

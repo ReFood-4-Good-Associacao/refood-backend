@@ -1,0 +1,337 @@
+﻿<#
+    // ################################################################
+    //                 Service Layer - Implementation
+    // ################################################################
+#>
+
+// ################################################################
+//                      Code generated with T4
+// ################################################################
+<#
+    CodeClass currentClass = classes.FirstOrDefault(c => c.Name == EntityNamePrefix + EntityName);
+    var properties = currentClass.Members.OfType<EnvDTE.CodeProperty>().Where(p => p.Access.HasFlag(vsCMAccess.vsCMAccessPublic));
+#>
+
+<#if(UseDNN) {#>
+using DotNetNuke.Framework;
+<#}#>
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using <#=NamespaceCore#>;
+using <#=NamespaceCore#>.Repositories;
+using <#=NamespaceCore#>.Repositories.Interfaces;
+using <#=NamespaceServices#>.DTOs;
+using <#=NamespaceServices#>.Interfaces;
+
+namespace <#=NamespaceServices#>
+{
+    public partial class <#=EntityName#>Service : <#if(UseDNN) {#>ServiceLocator<I<#=EntityName#>Service, <#=EntityName#>Service>,<#}#> I<#=EntityName#>Service
+    {
+        public static I<#=EntityName#>Repository Repository;
+
+<#if (Uselog4net) {#>
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+<#}#>
+
+        public <#=EntityName#>Service()
+        {
+            if (Repository == null)
+            {
+                Repository = new <#=EntityName#>Repository();
+            }
+        }
+<#if(UseDNN) {#>
+
+        protected override Func<I<#=EntityName#>Service> GetFactory()
+        {
+            return () => new <#=EntityName#>Service();
+        }
+<#}#>
+
+        public int Add<#=EntityName#>(<#=EntityNameDTO#> dto)
+        {
+            int id = 0;
+
+            try
+            {
+                <#if (Uselog4net) {#>log.Debug(<#=EntityNameDTO#>.Format<#=EntityNameDTO#>(dto));<#}#> 
+
+                <#=EntityNamePrefix#><#=EntityName#> t = <#=EntityNameDTO#>.ConvertDTOtoEntity(dto);
+
+                // add
+                id = Repository.Add<#=EntityName#>(t);
+                dto.<#=EntityName#>Id = id;
+
+                <#if (Uselog4net) {#>log.Debug("result: 'success', id: " + id);<#}#> 
+            }
+            catch(System.Exception e)
+            {
+                // error
+                <#if (Uselog4net) {#>log.Error(e.ToString());<#}#> 
+
+                throw;
+            }
+
+            return id;
+        }
+
+        public void Delete<#=EntityName#>(<#=EntityNameDTO#> dto)
+        {
+            try
+            {
+                <#if (Uselog4net) {#>log.Debug(<#=EntityNameDTO#>.Format<#=EntityNameDTO#>(dto));<#}#> 
+            
+                <#=EntityNamePrefix#><#=EntityName#> t = <#=EntityNameDTO#>.ConvertDTOtoEntity(dto);
+            
+                // delete
+                Repository.Delete<#=EntityName#>(t);
+                dto.IsDeleted = t.IsDeleted;
+
+                <#if (Uselog4net) {#>log.Debug("result: 'success'");<#}#> 
+            }
+            catch(System.Exception e)
+            {
+                // error
+                <#if (Uselog4net) {#>log.Error(e.ToString());<#}#> 
+
+                throw;
+            }
+        }
+
+        public void Delete<#=EntityName#>(int <#=EntityNameLowerCase#>Id<#if(UseDNNModuleId) {#>, int moduleId<#}#>)
+        {
+            try
+            {
+                <#if (Uselog4net) {#>log.Debug("<#=EntityNameLowerCase#>Id: " + <#=EntityNameLowerCase#>Id + " ");<#}#> 
+
+                // delete
+                Repository.Delete<#=EntityName#>(<#=EntityNameLowerCase#>Id<#if(UseDNNModuleId) {#>, moduleId<#}#>);
+
+                <#if (Uselog4net) {#>log.Debug("result: 'success'");<#}#> 
+            }
+            catch(System.Exception e)
+            {
+                // error
+                <#if (Uselog4net) {#>log.Error(e.ToString());<#}#> 
+
+                throw;
+            }
+        }
+
+        public <#=EntityNameDTO#> Get<#=EntityName#>(int <#=EntityNameLowerCase#>Id<#if(UseDNNModuleId) {#>, int moduleId<#}#>)
+        {
+            try
+            {
+                //Requires.NotNegative("<#=EntityNameLowerCase#>Id", <#=EntityNameLowerCase#>Id);
+                <#if(UseDNNModuleId) {#>//Requires.NotNegative("moduleId", moduleId);<#}#>
+
+                <#if (Uselog4net) {#>log.Debug("<#=EntityNameLowerCase#>Id: " + <#=EntityNameLowerCase#>Id + " ");<#}#> 
+
+                // get
+                <#=EntityNamePrefix + EntityName#> t = Repository.Get<#=EntityName#>(<#=EntityNameLowerCase#>Id<#if(UseDNNModuleId) {#>, moduleId<#}#>);
+
+                <#=EntityNameDTO#> dto = new <#=EntityNameDTO#>(t);
+
+                <#if (Uselog4net) {#>log.Debug(<#=EntityNameDTO#>.Format<#=EntityNameDTO#>(dto));<#}#> 
+
+                return dto;
+            }
+            catch(System.Exception e)
+            {
+                // error
+                <#if (Uselog4net) {#>log.Error(e.ToString());<#}#> 
+
+                throw;
+            }
+        }
+
+        public IEnumerable<<#=EntityNameDTO#>> Get<#=EntityName#>s(<#if(UseDNNModuleId) {#>int moduleId<#}#>)
+        {
+            try
+            {
+                <#if(UseDNNModuleId) {#>//Requires.NotNegative("moduleId", moduleId);<#}#>
+
+                <#if (Uselog4net) {#>log.Debug("Get<#=EntityName#>s");<#}#> 
+
+                // get
+                IEnumerable<<#=EntityNamePrefix + EntityName#>> results = Repository.Get<#=EntityName#>s(<#if(UseDNNModuleId) {#>moduleId<#}#>);
+
+                IEnumerable<<#=EntityNameDTO#>> resultsDTO = results.Select(e => new <#=EntityNameDTO#>(e));
+
+                <#if (Uselog4net) {#>log.Debug("result: 'success', count: " + (resultsDTO != null ? resultsDTO.Count().ToString() : "null"));<#}#> 
+
+                return resultsDTO;
+            }
+            catch(System.Exception e)
+            {
+                // error
+                <#if (Uselog4net) {#>log.Error(e.ToString());<#}#> 
+
+                throw;
+            }
+        }
+
+        public IList<<#=EntityNameDTO#>> Get<#=EntityName#>s(string searchTerm<#if(UseDNNModuleId) {#>, int moduleId<#}#>, int pageIndex, int pageSize)
+        {
+            try
+            {
+                <#if(UseDNNModuleId) {#>//Requires.NotNegative("moduleId", moduleId);<#}#>
+
+                <#if (Uselog4net) {#>log.Debug("searchTerm: " + searchTerm != null ? searchTerm : "null" + ", pageIndex: " + pageIndex + ", pageSize: " + pageSize);<#}#> 
+
+                // get
+                IList<<#=EntityNamePrefix + EntityName#>> results = Repository.Get<#=EntityName#>s(searchTerm<#if(UseDNNModuleId) {#>, int moduleId<#}#>, pageIndex, pageSize);
+            
+                IList<<#=EntityNameDTO#>> resultsDTO = results.Select(e => new <#=EntityNameDTO#>(e)).ToList();
+
+                <#if (Uselog4net) {#>log.Debug("result: 'success', count: " + (resultsDTO != null ? resultsDTO.Count().ToString() : "null"));<#}#> 
+
+                return resultsDTO;
+            }
+            catch(System.Exception e)
+            {
+                // error
+                <#if (Uselog4net) {#>log.Error(e.ToString());<#}#> 
+
+                throw;
+            }
+        }
+
+<#if(GenerateViewPage_SearchFilters){#>
+        public IEnumerable<<#=EntityNameDTO#>> Get<#=EntityName#>ListAdvancedSearch(
+<#
+    // advanced search filters - function arguments
+    int countArgs = 0;
+    foreach(var currentProperty in properties)
+    {
+        // skip audit properties because they are set with specific values
+        if(currentProperty.Name != "ModuleId" 
+            && currentProperty.Name != "CreateBy"
+            && currentProperty.Name != "UpdateBy"
+            && currentProperty.Name != "CreateOn"
+            && currentProperty.Name != "UpdateOn"
+            && currentProperty.Name != "IsDeleted"
+            && currentProperty.Name != EntityName + "Id")
+        {
+            string propertyNameLowerCase = currentProperty.Name.Substring(0, 1).ToLower() + currentProperty.Name.Substring(1, currentProperty.Name.Length - 1);
+
+            // add each property
+
+            if (currentProperty.Type.AsString.Contains("System.DateTime")) {#>
+            <#if(countArgs > 0){#>,<#}#> <#=currentProperty.Type.AsString#><#if(!currentProperty.Type.AsString.EndsWith("?")){#>?<#}#> <#=propertyNameLowerCase#>From 
+            <#if(countArgs > 0){#>,<#}#> <#=currentProperty.Type.AsString#><#if(!currentProperty.Type.AsString.EndsWith("?")){#>?<#}#> <#=propertyNameLowerCase#>To 
+<#          }#>
+<#          else {#>
+            <#if(countArgs > 0){#>,<#}#> <#=currentProperty.Type.AsString#><#if(!currentProperty.Type.AsString.EndsWith("?") && currentProperty.Type.AsString != "string"){#>?<#}#> <#=propertyNameLowerCase#> 
+<#          }#>
+<#          countArgs++;#>
+<#      }#>
+<#  }#>
+        )
+        {
+            try
+            {
+                <#if (Uselog4net) {#>log.Debug("Get<#=EntityName#>ListAdvancedSearch");<#}#> 
+
+                IEnumerable<<#=EntityNamePrefix + EntityName#>> results = Repository.Get<#=EntityName#>ListAdvancedSearch(
+<#
+    // advanced search filters - function arguments
+    int countArgs2 = 0;
+    foreach(var currentProperty in properties)
+    {
+        // skip audit properties because they are set with specific values
+        if(currentProperty.Name != "ModuleId" 
+            && currentProperty.Name != "CreateBy"
+            && currentProperty.Name != "UpdateBy"
+            && currentProperty.Name != "CreateOn"
+            && currentProperty.Name != "UpdateOn"
+            && currentProperty.Name != "IsDeleted"
+            && currentProperty.Name != EntityName + "Id")
+        {
+            string propertyNameLowerCase = currentProperty.Name.Substring(0, 1).ToLower() + currentProperty.Name.Substring(1, currentProperty.Name.Length - 1);
+
+            // add each property
+            if (currentProperty.Type.AsString.Contains("System.DateTime")) {#>
+                    <#if(countArgs2 > 0){#>,<#}#> <#=propertyNameLowerCase#>From 
+                    , <#=propertyNameLowerCase#>To 
+<#          }#>
+<#          else {#>
+                    <#if(countArgs2 > 0){#>,<#}#> <#=propertyNameLowerCase#> 
+<#          }#>
+<#          countArgs2++;#>
+<#      }#>
+<#  }#>
+                );
+            
+                IEnumerable<<#=EntityNameDTO#>> resultsDTO = results.Select(e => new <#=EntityNameDTO#>(e));
+
+                <#if (Uselog4net) {#>log.Debug("result: 'success', count: " + (resultsDTO != null ? resultsDTO.Count().ToString() : "null"));<#}#> 
+
+                return resultsDTO;
+            }
+            catch(System.Exception e)
+            {
+                // error
+                <#if (Uselog4net) {#>log.Error(e.ToString());<#}#> 
+
+                throw;
+            }
+        }
+
+<#}#>
+        public void Update<#=EntityName#>(<#=EntityNameDTO#> dto)
+        {
+            try
+            {
+                //Requires.NotNull(t);
+                //Requires.PropertyNotNegative(t, "<#=EntityName#>Id");
+
+                <#if (Uselog4net) {#>log.Debug(<#=EntityNameDTO#>.Format<#=EntityNameDTO#>(dto));<#}#> 
+
+                <#=EntityNamePrefix#><#=EntityName#> t = <#=EntityNameDTO#>.ConvertDTOtoEntity(dto);
+
+                // update
+                Repository.Update<#=EntityName#>(t);
+
+                <#if (Uselog4net) {#>log.Debug("result: 'success'");<#}#> 
+            }
+            catch(System.Exception e)
+            {
+                // error
+                <#if (Uselog4net) {#>log.Error(e.ToString());<#}#> 
+
+                throw;
+            }
+        }
+
+<#if (ShouldGenerateParentEntityFunctions) {#>
+        public IEnumerable<<#=EntityNameDTO#>> Get<#=EntityName#>ListBy<#=ParentEntityName#>Id(int <#=EntityNameLowerCase#>Id<#if(UseDNNModuleId) {#>, int moduleId<#}#>)
+        {
+            try
+            {
+                <#if(UseDNNModuleId) {#>//Requires.NotNegative("moduleId", moduleId);<#}#>
+
+                <#if (Uselog4net) {#>log.Debug("<#=ParentEntityName#>Id: " + <#=EntityNameLowerCase#>Id + " ");<#}#> 
+
+                // get list by <#=ParentEntityName#> id
+                IEnumerable<<#=EntityNamePrefix + EntityName#>> results = Repository.Get<#=EntityName#>ListBy<#=ParentEntityName#>Id(<#=EntityNameLowerCase#>Id<#if(UseDNNModuleId) {#>, moduleId<#}#>);
+            
+                IEnumerable<<#=EntityNameDTO#>> resultsDTO = results.Select(e => new <#=EntityNameDTO#>(e));
+
+                <#if (Uselog4net) {#>log.Debug("result: 'success', count: " + (resultsDTO != null ? resultsDTO.Count().ToString() : "null"));<#}#> 
+
+                return resultsDTO;
+            }
+            catch(System.Exception e)
+            {
+                // error
+                <#if (Uselog4net) {#>log.Error(e.ToString());<#}#> 
+
+                throw;
+            }
+        }
+
+<#}#>
+    }
+}

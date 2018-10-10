@@ -1,0 +1,474 @@
+﻿<#
+    // ################################################################
+    //                Web API Controller Implementation
+    // ################################################################
+#>
+
+// ################################################################
+//                      Code generated with T4
+// ################################################################
+
+<#if(UseDNN) {#>
+using DotNetNuke.Common;
+using DotNetNuke.Common.Utilities;
+using DotNetNuke.Security;
+using DotNetNuke.UI.Modules;
+using DotNetNuke.Web.Api;
+<#}#>
+using <#=NamespaceViewModels#>;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
+using System.Threading;
+using System.Web.Http;
+using Microsoft.AspNet.Identity;
+using <#=NamespaceServices#>;
+using <#=NamespaceServices#>.DTOs;
+using <#=NamespaceServices#>.Interfaces;
+
+namespace <#=NamespaceModule + ".Services"#>
+{
+<#
+    CodeClass currentClass = classes.FirstOrDefault(c => c.Name == EntityNamePrefix + EntityName);
+    var properties = currentClass.Members.OfType<EnvDTE.CodeProperty>().Where(p => p.Access.HasFlag(vsCMAccess.vsCMAccessPublic));
+#>
+<#if(UseDNN) {#>
+    [SupportedModules("<#=NamespaceModule#>")]
+    [DnnModuleAuthorize(AccessLevel = SecurityAccessLevel.View)]
+<#}#>
+    //[Authorize]
+    [RoutePrefix("api/<#=EntityName#>Api")]
+    public partial class <#=EntityName#>ApiController : ApiController
+    {
+        private readonly I<#=EntityName#>Service _<#=EntityNameLowerCase#>Service;
+
+<#if (Uselog4net) {#>
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+<#}#>
+
+        public <#=EntityName#>ApiController(I<#=EntityName#>Service <#=EntityNameLowerCase#>Service)
+        {
+            this._<#=EntityNameLowerCase#>Service = <#=EntityNameLowerCase#>Service;
+        }
+
+        public <#=EntityName#>ApiController() : this(new <#=EntityName#>Service()) { }
+
+        /// <summary>
+        /// Delete <#=EntityName#> by id
+        /// </summary>
+        /// <param name="id"><#=EntityName#> id</param>
+        /// <returns>true if the <#=EntityName#> is deleted successfully</returns>
+        public IHttpActionResult Delete(int id)
+        {
+            try
+            {
+                // delete
+                <#if (Uselog4net) {#>log.Debug("_<#=EntityNameLowerCase#>Service.Delete<#=EntityName#> - <#=EntityNameLowerCase#>Id: " + id + " ");<#}#> 
+
+                _<#=EntityNameLowerCase#>Service.Delete<#=EntityName#>(id<#if(UseDNNModuleId) {#>, ActiveModule.ModuleID<#}#>);
+
+                <#if (Uselog4net) {#>log.Debug("result: 'success'");<#}#> 
+
+                //return JsonConvert.SerializeObject(true);
+                return Ok(true);
+            }
+            catch(Exception e)
+            {
+                // error
+                <#if (Uselog4net) {#>log.Error(e.ToString());<#}#> 
+
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Get <#=EntityName#> by id
+        /// </summary>
+        /// <param name="id"><#=EntityName#> id</param>
+        /// <returns><#=EntityName#> json view model</returns>
+        public IHttpActionResult Get(int id)
+        {
+            try
+            {
+                // get
+                <#if (Uselog4net) {#>log.Debug("_<#=EntityNameLowerCase#>Service.Get<#=EntityName#> - <#=EntityNameLowerCase#>Id: " + id + " ");<#}#> 
+
+                var <#=EntityNameLowerCase#> = new <#=EntityName#>ViewModel(_<#=EntityNameLowerCase#>Service.Get<#=EntityName#>(id<#if(UseDNNModuleId) {#>, ActiveModule.ModuleID<#}#>));
+
+                <#if (Uselog4net) {#>log.Debug("_<#=EntityNameLowerCase#>Service.Get<#=EntityName#> - " + <#=EntityName#>ViewModel.Format<#=EntityName#>ViewModel(<#=EntityNameLowerCase#>));<#}#> 
+
+                <#if (Uselog4net) {#>log.Debug("result: 'success'");<#}#> 
+
+                //return Json(<#=EntityNameLowerCase#>, JsonRequestBehavior.AllowGet);
+                //return Content(JsonConvert.SerializeObject(<#=EntityNameLowerCase#>), "application/json");
+                //return <#=EntityNameLowerCase#>;
+                //return JsonConvert.SerializeObject(<#=EntityNameLowerCase#>);
+                return Ok(<#=EntityNameLowerCase#>);
+            }
+            catch(Exception e)
+            {
+                // error
+                <#if (Uselog4net) {#>log.Error(e.ToString());<#}#> 
+
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Get list of <#=EntityName#>s
+        /// </summary>
+        /// <returns>json list of <#=EntityName#> view models</returns>
+        public IHttpActionResult GetList()
+        {
+            try
+            {
+                // get list
+                List<<#=EntityName#>ViewModel> <#=EntityNameLowerCase#>s;
+
+                <#if (Uselog4net) {#>log.Debug("_<#=EntityNameLowerCase#>Service.Get<#=EntityName#>s");<#}#> 
+
+                // add edit url
+                <#=EntityNameLowerCase#>s = _<#=EntityNameLowerCase#>Service.Get<#=EntityName#>s(<#if(UseDNNModuleId) {#>ActiveModule.ModuleID<#}#>)
+                        .Select(<#=EntityNameLowerCase#> => new <#=EntityName#>ViewModel(<#=EntityNameLowerCase#>, GetEditUrl(<#=EntityNameLowerCase#>.<#=EntityName#>Id)))
+                        .ToList();
+
+                <#if (Uselog4net) {#>log.Debug("result: 'success', count: " + (<#=EntityNameLowerCase#>s != null ? <#=EntityNameLowerCase#>s.Count().ToString() : "null"));<#}#> 
+
+                //return Json(<#=EntityNameLowerCase#>s, JsonRequestBehavior.AllowGet);
+                //return Content(JsonConvert.SerializeObject(<#=EntityNameLowerCase#>s), "application/json");
+                //return JsonConvert.SerializeObject(<#=EntityNameLowerCase#>s);
+                return Ok(<#=EntityNameLowerCase#>s);
+            }
+            catch(Exception e)
+            {
+                // error
+                <#if (Uselog4net) {#>log.Error(e.ToString());<#}#> 
+
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Get paged list of <#=EntityName#>s
+        /// </summary>
+        /// <param name="id">(not used)</param>
+        /// <param name="searchTerm">search text</param>
+        /// <param name="pageIndex">current page index (starts at 0)</param>
+        /// <param name="pageSize">page size</param>
+        /// <returns>a single page from the list of <#=EntityName#>s</returns>
+        public IHttpActionResult GetPage(int id = 0, string searchTerm = "", int pageIndex = 1, int pageSize = 10)
+        {
+            try
+            {
+                // get page
+                List<<#=EntityName#>ViewModel> <#=EntityNameLowerCase#>s;
+
+                if(pageIndex <= 0)
+                {
+                    pageIndex = 1;
+                }
+
+                <#if (Uselog4net) {#>log.Debug("_<#=EntityNameLowerCase#>Service.Get<#=EntityName#>s - searchTerm: '" + (searchTerm != null ? searchTerm : "") + "', pageIndex: " + pageIndex + ", pageSize: " + pageSize);<#}#> 
+
+                // add edit url
+                <#=EntityNameLowerCase#>s = _<#=EntityNameLowerCase#>Service.Get<#=EntityName#>s(searchTerm, pageIndex, pageSize)
+                        .Select(<#=EntityNameLowerCase#> => new <#=EntityName#>ViewModel(<#=EntityNameLowerCase#>, GetEditUrl(<#=EntityNameLowerCase#>.<#=EntityName#>Id)))
+                        .ToList();
+
+                <#if (Uselog4net) {#>log.Debug("result: 'success', count: " + (<#=EntityNameLowerCase#>s != null ? <#=EntityNameLowerCase#>s.Count().ToString() : "null"));<#}#> 
+
+                //return Json(<#=EntityNameLowerCase#>s, JsonRequestBehavior.AllowGet);
+                //return JsonConvert.SerializeObject(<#=EntityNameLowerCase#>s);
+                return Ok(<#=EntityNameLowerCase#>s);
+            }
+            catch(Exception e)
+            {
+                // error
+                <#if (Uselog4net) {#>log.Error(e.ToString());<#}#> 
+
+                throw;
+            }
+        }
+
+<#if(GenerateViewPage_SearchFilters){#>
+        public IHttpActionResult GetListAdvancedSearch(
+            int id = 0 
+<#
+    // advanced search filters - function arguments
+    int countArgs = 1;
+    foreach(var currentProperty in properties)
+    {
+        // skip audit properties because they are set with specific values
+        if(currentProperty.Name != "ModuleId" 
+            && currentProperty.Name != "CreateBy"
+            && currentProperty.Name != "UpdateBy"
+            && currentProperty.Name != "CreateOn"
+            && currentProperty.Name != "UpdateOn"
+            && currentProperty.Name != "IsDeleted"
+            && currentProperty.Name != EntityName + "Id")
+        {
+            string propertyNameLowerCase = currentProperty.Name.Substring(0, 1).ToLower() + currentProperty.Name.Substring(1, currentProperty.Name.Length - 1);
+
+            // add each property
+
+            if (currentProperty.Type.AsString.Contains("System.DateTime")) {#>
+            <#if(countArgs > 0){#>,<#}#> <#=currentProperty.Type.AsString#><#if(!currentProperty.Type.AsString.EndsWith("?")){#>?<#}#> <#=propertyNameLowerCase#>From = null 
+            <#if(countArgs > 0){#>,<#}#> <#=currentProperty.Type.AsString#><#if(!currentProperty.Type.AsString.EndsWith("?")){#>?<#}#> <#=propertyNameLowerCase#>To = null 
+<#          }#>
+<#          else {#>
+            <#if(countArgs > 0){#>,<#}#> <#=currentProperty.Type.AsString#><#if(!currentProperty.Type.AsString.EndsWith("?") && currentProperty.Type.AsString != "string"){#>?<#}#> <#=propertyNameLowerCase#> = null 
+<#          }#>
+<#          countArgs++;#>
+<#      }#>
+<#  }#>
+        )
+        {
+            try
+            {
+                // advanced search
+
+                <#if (Uselog4net) {#>log.Debug("Get<#=EntityName#>ListAdvancedSearch");<#}#> 
+
+                IEnumerable<<#=EntityNameDTO#>> resultsDTO = _<#=EntityNameLowerCase#>Service.Get<#=EntityName#>ListAdvancedSearch(
+<#
+    // advanced search filters - function arguments
+    int countArgs2 = 0;
+    foreach(var currentProperty in properties)
+    {
+        // skip audit properties because they are set with specific values
+        if(currentProperty.Name != "ModuleId" 
+            && currentProperty.Name != "CreateBy"
+            && currentProperty.Name != "UpdateBy"
+            && currentProperty.Name != "CreateOn"
+            && currentProperty.Name != "UpdateOn"
+            && currentProperty.Name != "IsDeleted"
+            && currentProperty.Name != EntityName + "Id")
+        {
+            string propertyNameLowerCase = currentProperty.Name.Substring(0, 1).ToLower() + currentProperty.Name.Substring(1, currentProperty.Name.Length - 1);
+
+            // add each property
+            if (currentProperty.Type.AsString.Contains("System.DateTime")) {#>
+                    <#if(countArgs2 > 0){#>,<#}#> <#=propertyNameLowerCase#>From 
+                    , <#=propertyNameLowerCase#>To 
+<#          }#>
+<#          else {#>
+                    <#if(countArgs2 > 0){#>,<#}#> <#=propertyNameLowerCase#> 
+<#          }#>
+<#          countArgs2++;#>
+<#      }#>
+<#  }#>
+                );
+            
+                // convert to view model list, and add edit url
+                List<<#=EntityName#>ViewModel> <#=EntityNameLowerCase#>List = resultsDTO.Select(<#=EntityNameLowerCase#> => new <#=EntityName#>ViewModel(<#=EntityNameLowerCase#>, GetEditUrl(<#=EntityNameLowerCase#>.<#=EntityName#>Id))).ToList();
+
+                <#if (Uselog4net) {#>log.Debug("result: 'success', count: " + (<#=EntityNameLowerCase#>List != null ? <#=EntityNameLowerCase#>List.Count().ToString() : "null"));<#}#> 
+
+                //return Content(JsonConvert.SerializeObject(<#=EntityNameLowerCase#>List), "application/json");
+                //return JsonConvert.SerializeObject(<#=EntityNameLowerCase#>List);
+                return Ok(<#=EntityNameLowerCase#>List);
+            }
+            catch(System.Exception e)
+            {
+                // error
+                <#if (Uselog4net) {#>log.Error(e.ToString());<#}#> 
+
+                throw;
+            }
+        }
+
+<#}#>
+        
+<#if (ShouldGenerateParentEntityFunctions) {#>
+        public IHttpActionResult Get<#=EntityName#>ListBy<#=ParentEntityName#>Id(int id)
+        {
+            try
+            {
+                <#if (Uselog4net) {#>log.Debug("_<#=EntityNameLowerCase#>Service.Get<#=EntityName#>ListBy<#=ParentEntityName#>Id - <#=ParentEntityName#>Id: " + id + " ");<#}#> 
+
+                List<<#=EntityName#>ViewModel> <#=EntityNameLowerCase#>s;
+            
+                <#=EntityNameLowerCase#>s = _<#=EntityNameLowerCase#>Service.Get<#=EntityName#>ListBy<#=ParentEntityName#>Id(id<#if(UseDNNModuleId) {#>, ActiveModule.ModuleID<#}#>)
+                        .Select(<#=EntityNameLowerCase#> => new <#=EntityName#>ViewModel(<#=EntityNameLowerCase#>, ""))
+                        .ToList();
+
+                <#if (Uselog4net) {#>log.Debug("result: 'success'");<#}#> 
+
+                //return Json(<#=EntityNameLowerCase#>s, JsonRequestBehavior.AllowGet);
+                //return Content(JsonConvert.SerializeObject(<#=EntityNameLowerCase#>s), "application/json");
+                return Ok(<#=EntityNameLowerCase#>s);
+            }
+            catch(Exception e)
+            {
+                // error
+                <#if (Uselog4net) {#>log.Error(e.ToString());<#}#> 
+
+                throw;
+            }
+        }
+        
+<#}#>
+        protected string GetEditUrl(int id)
+        {
+            string editUrl = Url.Content("~/<#=EntityName#>/Edit/?tid=" + id);
+
+            return editUrl;
+        }
+
+        //[ValidateAntiForgeryToken]
+        /// <summary>
+        /// Updates data for an existing <#=EntityName#>, or creates a new <#=EntityName#> if the Id is 0
+        /// </summary>
+        /// <param name="viewModel"><#=EntityName#> data</param>
+        /// <returns><#=EntityName#> id</returns>
+        public IHttpActionResult Upsert(<#=EntityName#>ViewModel viewModel)
+        {
+            <#if (Uselog4net) {#>log.Debug("Upsert");<#}#> 
+
+            if (viewModel.<#=EntityName#>Id > 0)
+            {
+                var t = Update(viewModel);
+                //return Json(true);
+                //return JsonConvert.SerializeObject(t.<#=EntityName#>Id);
+                return Ok(t.<#=EntityName#>Id);
+            }
+            else
+            {
+                var t = Create(viewModel);
+                //return Json(t.<#=EntityName#>Id);
+                //return JsonConvert.SerializeObject(t.<#=EntityName#>Id);
+                return Ok(t.<#=EntityName#>Id);
+            }
+        }
+
+        //[ValidateAntiForgeryToken]
+        /// <summary>
+        /// Save a list of <#=EntityName#>
+        /// </summary>
+        /// <param name="viewModels"><#=EntityName#> view models</param>
+        /// <param name="id">(not used)</param>
+        /// <returns>true if the operation is successfull</returns>
+        public IHttpActionResult SaveList(<#=EntityName#>ViewModel[] viewModels, int? id)
+        {
+            try
+            {
+                <#if (Uselog4net) {#>log.Debug("SaveList");<#}#> 
+
+                if(viewModels != null)
+                {
+                    // save list
+                    foreach(<#=EntityName#>ViewModel viewModel in viewModels)
+                    {
+                        <#if (Uselog4net) {#>log.Debug(<#=EntityName#>ViewModel.Format<#=EntityName#>ViewModel(viewModel));<#}#> 
+
+                        if (viewModel.<#=EntityName#>Id > 0)
+                        {
+                            var t = Update(viewModel);
+                        }
+                        else
+                        {
+                            var t = Create(viewModel);
+                        }
+
+                    }
+                }
+                else
+                {
+                    <#if (Uselog4net) {#>log.Error("viewModels: null");<#}#> 
+                }
+
+                //return Json(true);
+                //return JsonConvert.SerializeObject(true);
+                return Ok(true);
+            }
+            catch(Exception e)
+            {
+                // error
+                <#if (Uselog4net) {#>log.Error(e.ToString());<#}#> 
+
+                throw;
+            }
+        }
+
+        private <#=EntityNameDTO#> Create(<#=EntityName#>ViewModel viewModel)
+        {
+            try
+            {
+                <#if (Uselog4net) {#>log.Debug(<#=EntityName#>ViewModel.Format<#=EntityName#>ViewModel(viewModel));<#}#> 
+
+                <#=EntityNameDTO#> <#=EntityNameLowerCase#> = new <#=EntityNameDTO#>();
+
+                // copy values
+                viewModel.UpdateDTO(<#=EntityNameLowerCase#>, null); //RequestContext.Principal.Identity.GetUserId());
+                <#if(UseDNNModuleId) {#>//<#=EntityNameLowerCase#>.ModuleId = ActiveModule.ModuleID;<#}#>
+
+                // audit
+                <#=EntityNameLowerCase#>.CreateBy = null; //RequestContext.Principal.Identity.GetUserId();
+                <#=EntityNameLowerCase#>.CreateOn = DateTime.UtcNow;
+
+                // add
+                <#if (Uselog4net) {#>log.Debug("_<#=EntityNameLowerCase#>Service.Add<#=EntityName#> - " + <#=EntityNameDTO#>.Format<#=EntityNameDTO#>(<#=EntityNameLowerCase#>));<#}#> 
+
+                int id = _<#=EntityNameLowerCase#>Service.Add<#=EntityName#>(<#=EntityNameLowerCase#>);
+
+                <#=EntityNameLowerCase#>.<#=EntityName#>Id = id;
+
+                <#if (Uselog4net) {#>log.Debug("result: 'success', id: " + id);<#}#> 
+
+                return <#=EntityNameLowerCase#>;
+            }
+            catch(Exception e)
+            {
+                // error
+                <#if (Uselog4net) {#>log.Error(e.ToString());<#}#> 
+
+                throw;
+            }
+        }
+
+        private <#=EntityNameDTO#> Update(<#=EntityName#>ViewModel viewModel)
+        {
+            try
+            {
+                <#if (Uselog4net) {#>log.Debug(<#=EntityName#>ViewModel.Format<#=EntityName#>ViewModel(viewModel));<#}#> 
+
+                // get
+                <#if (Uselog4net) {#>log.Debug("_<#=EntityNameLowerCase#>Service.Get<#=EntityName#> - <#=EntityNameLowerCase#>Id: " + viewModel.<#=EntityName#>Id + " ");<#}#> 
+
+                var existing<#=EntityName#> = _<#=EntityNameLowerCase#>Service.Get<#=EntityName#>(viewModel.<#=EntityName#>Id<#if(UseDNNModuleId) {#>, ActiveModule.ModuleID<#}#>);
+
+                <#if (Uselog4net) {#>log.Debug("_<#=EntityNameLowerCase#>Service.Get<#=EntityName#> - " + <#=EntityNameDTO#>.Format<#=EntityNameDTO#>(existing<#=EntityName#>));<#}#> 
+
+                if (existing<#=EntityName#> != null)
+                {
+                    // copy values
+                    viewModel.UpdateDTO(existing<#=EntityName#>, null); //RequestContext.Principal.Identity.GetUserId());
+
+                    // update
+                    <#if (Uselog4net) {#>log.Debug("_<#=EntityNameLowerCase#>Service.Update<#=EntityName#> - " + <#=EntityNameDTO#>.Format<#=EntityNameDTO#>(existing<#=EntityName#>));<#}#> 
+
+                    _<#=EntityNameLowerCase#>Service.Update<#=EntityName#>(existing<#=EntityName#>);
+
+                    <#if (Uselog4net) {#>log.Debug("result: 'success'");<#}#> 
+                }
+                else
+                {
+                    <#if (Uselog4net) {#>log.Error("existing<#=EntityName#>: null, <#=EntityName#>Id: " + viewModel.<#=EntityName#>Id);<#}#> 
+                }
+
+                return existing<#=EntityName#>;
+            }
+            catch(Exception e)
+            {
+                // error
+                <#if (Uselog4net) {#>log.Error(e.ToString());<#}#> 
+
+                throw;
+            }
+        }
+
+    }
+}

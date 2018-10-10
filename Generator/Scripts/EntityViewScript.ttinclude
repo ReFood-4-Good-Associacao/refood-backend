@@ -1,0 +1,713 @@
+﻿<#
+    // ################################################################
+    //              View page - Javascript Implementation
+    // ################################################################
+#>
+
+// ################################################################
+//                      Code generated with T4
+// ################################################################
+<#
+    CodeClass currentClass = classes.FirstOrDefault(c => c.Name == EntityNamePrefix + EntityName);
+    var properties = currentClass.Members.OfType<EnvDTE.CodeProperty>().Where(p => p.Access.HasFlag(vsCMAccess.vsCMAccessPublic));
+#>
+
+var <#=ModuleName#> = <#=ModuleName#> || {};
+
+<#=ModuleName#>.<#=EntityNameLowerCase#>ListViewModel = function (moduleId, resx) {
+<#if(UseDNN) {#>
+    var service = {
+        path: "<#=NamespaceModule#>",
+        framework: $.ServicesFramework(moduleId)
+    }
+    service.baseUrl = service.framework.getServiceRoot(service.path) + "<#=EntityName#>/";
+<#}#>
+<#else {#>
+    var baseUrl = "api/<#=EntityName#>Api/";
+<#}#>
+
+    var isLoading = ko.observable(false);
+    var <#=EntityNameLowerCase#>List = ko.observableArray([]);
+    var editMode = ko.computed(function () {
+        return <#=EntityNameLowerCase#>List().length > 0 && <#=EntityNameLowerCase#>List()[0].editUrl() != null && <#=EntityNameLowerCase#>List()[0].editUrl().length > 0;
+    });
+    var searchText = ko.observable('');
+
+
+
+    // filters
+
+<#
+    // Iterate each property of the domain class, and declare the respective filter variable
+    foreach(var currentProperty in properties)
+    {
+        // skip audit properties
+        if(currentProperty.Name != "ModuleId" 
+            && currentProperty.Name != "CreateBy"
+            && currentProperty.Name != "UpdateBy"
+            && currentProperty.Name != "CreateOn"
+            && currentProperty.Name != "UpdateOn"
+            && currentProperty.Name != "IsDeleted"
+            && currentProperty.Name != EntityName + "Id")
+        {
+            string propertyNameLowerCase = currentProperty.Name.Substring(0, 1).ToLower() + currentProperty.Name.Substring(1, currentProperty.Name.Length - 1);
+
+            // declare each filter variable
+            if(currentProperty.Name.EndsWith("Id"))
+            {
+#>
+    var <#=propertyNameLowerCase#>Filter = ko.observable(-1);
+<#          }#>
+<#          else if (currentProperty.Type.AsString.Contains("System.DateTime")) {#>
+    var <#=propertyNameLowerCase#>FromFilter = ko.observable('');
+    var <#=propertyNameLowerCase#>ToFilter = ko.observable('');
+<#          }#>
+<#          else {#>
+    var <#=propertyNameLowerCase#>Filter = ko.observable('');
+<#          }#>
+<#      }#>
+<#  }#>
+
+
+
+    // helpers
+
+<#
+    // Find properties for combo boxes
+    foreach(var currentProperty in properties)
+    {
+        string propertyNameLowerCase = currentProperty.Name.Substring(0, 1).ToLower() + currentProperty.Name.Substring(1, currentProperty.Name.Length - 1);
+        if(currentProperty.Name != "ModuleId" && currentProperty.Name != EntityName + "Id" && currentProperty.Name.EndsWith("Id"))
+        {
+            if(UseDNN) 
+            {
+#>
+    var <#=RemoveTailId(propertyNameLowerCase)#>Helper = <#=ModuleName#>.<#=RemoveTailId(propertyNameLowerCase)#>Helper(isLoading, service.framework.getServiceRoot(service.path), service.framework.setModuleHeaders);
+<#          }#>
+<#          else#>
+<#          {#>
+    var <#=RemoveTailId(propertyNameLowerCase)#>Helper = <#=ModuleName#>.<#=RemoveTailId(propertyNameLowerCase)#>Helper(isLoading, '/', function(){});
+<#          }#>
+<#      }#>
+<#  }#>
+
+
+
+    // init
+
+    var init = function () {
+<#if(GenerateViewPage_SearchFilters)#>
+<#{#>
+        //get<#=EntityName#>List();
+        //get<#=EntityName#>Page();
+        get<#=EntityName#>ListAdvanced();
+<#}#>
+<#else#>
+<#{#>
+        get<#=EntityName#>List();
+        //get<#=EntityName#>Page();
+        //get<#=EntityName#>ListAdvanced();
+<#}#>
+
+<#
+    // Find properties for combo boxes
+    foreach(var currentProperty in properties)
+    {
+        string propertyNameLowerCase = currentProperty.Name.Substring(0, 1).ToLower() + currentProperty.Name.Substring(1, currentProperty.Name.Length - 1);
+        if(currentProperty.Name != "ModuleId" && currentProperty.Name != EntityName + "Id" && currentProperty.Name.EndsWith("Id"))
+        {
+#>
+        <#=RemoveTailId(propertyNameLowerCase)#>Helper.get<#=RemoveTailId(currentProperty.Name)#>List();
+<#      }#>
+<#  }#>
+    }
+
+
+
+    // get list
+
+    var get<#=EntityName#>List = function () {
+        isLoading(true);
+        var jqXHR = $.ajax({
+            url: <#if(UseDNN) {#>service.<#}#>baseUrl + "GetList/",
+<#if(UseDNN) {#>
+            beforeSend: service.framework.setModuleHeaders,
+<#}#>
+            dataType: "json"
+        }).done(function (data) {
+            if (data) {
+                load(data);
+
+<#if(UseDataTablesPlugin)#>
+<#{#>
+                // update datatable
+                updateDatatable(data);
+<#}#>
+            }
+            else {
+                // No data to load 
+                <#=EntityNameLowerCase#>List.removeAll();
+            }
+        }).always(function (data) {
+            isLoading(false);
+        });
+    };
+
+
+
+<#if(GenerateViewPage_SearchFilters)#>
+<#{#>
+    // get list - advanced search
+
+    var get<#=EntityName#>ListAdvanced = function () {
+        isLoading(true);
+
+        var searchFilters = "?";
+<#
+    // Iterate each property of the domain class, and write the respective filter
+    foreach(var currentProperty in properties)
+    {
+        // skip audit properties because they are set with specific values
+        if(currentProperty.Name != "ModuleId" 
+            && currentProperty.Name != "CreateBy"
+            && currentProperty.Name != "UpdateBy"
+            && currentProperty.Name != "CreateOn"
+            && currentProperty.Name != "UpdateOn"
+            && currentProperty.Name != "IsDeleted"
+            && currentProperty.Name != EntityName + "Id")
+        {
+            string propertyNameLowerCase = currentProperty.Name.Substring(0, 1).ToLower() + currentProperty.Name.Substring(1, currentProperty.Name.Length - 1);
+
+            // load each property in the viewmodel
+
+            if(currentProperty.Name.EndsWith("Id"))
+            {
+#>
+        searchFilters += (<#=propertyNameLowerCase#>Filter() != -1 && <#=propertyNameLowerCase#>Filter() != undefined ? "&" + "<#=propertyNameLowerCase#>=" + <#=propertyNameLowerCase#>Filter() : "");
+<#          }#>
+<#          else if (currentProperty.Type.AsString.Contains("System.DateTime")) {#>
+        searchFilters += (<#=propertyNameLowerCase#>FromFilter() != '' && <#=propertyNameLowerCase#>FromFilter() != null ? "&" + "<#=propertyNameLowerCase#>From=" + dateToStringServerFormat(<#=propertyNameLowerCase#>FromFilter()) : "");
+        searchFilters += (<#=propertyNameLowerCase#>ToFilter() != '' && <#=propertyNameLowerCase#>ToFilter() != null ? "&" + "<#=propertyNameLowerCase#>To=" + dateToStringServerFormat(<#=propertyNameLowerCase#>ToFilter()) : "");
+<#          }#>
+<#          else {#>
+        searchFilters += (<#=propertyNameLowerCase#>Filter() != '' ? "<#=propertyNameLowerCase#>=" + <#=propertyNameLowerCase#>Filter() : "");
+<#          }#>
+<#      }#>
+<#  }#>
+
+        var jqXHR = $.ajax({
+            url: <#if(UseDNN) {#>service.<#}#>baseUrl + "GetListAdvancedSearch/0/" + searchFilters,
+<#  if(UseDNN) {#>
+            beforeSend: service.framework.setModuleHeaders,
+<#  }#>
+            dataType: "json"
+        }).done(function (data) {
+            if (data) {
+                load(data);
+
+<#  if(UseDataTablesPlugin)#>
+<#  {#>
+                // update datatable
+                updateDatatable(data);
+<#  }#>
+            }
+            else {
+                // No data to load 
+                <#=EntityNameLowerCase#>List.removeAll();
+            }
+        }).always(function (data) {
+            isLoading(false);
+        });
+    };
+
+    var advancedSearch = function () {
+        get<#=EntityName#>ListAdvanced();
+    };
+
+    var clearSearchFilters = function () {
+<#
+    // Iterate each property
+    foreach(var currentProperty in properties)
+    {
+        // skip audit properties
+        if(currentProperty.Name != "ModuleId" 
+            && currentProperty.Name != "CreateBy"
+            && currentProperty.Name != "UpdateBy"
+            && currentProperty.Name != "CreateOn"
+            && currentProperty.Name != "UpdateOn"
+            && currentProperty.Name != "IsDeleted"
+            && currentProperty.Name != EntityName + "Id")
+        {
+            string propertyNameLowerCase = currentProperty.Name.Substring(0, 1).ToLower() + currentProperty.Name.Substring(1, currentProperty.Name.Length - 1);
+
+            // clear each filter
+            if(currentProperty.Name.EndsWith("Id"))
+            {
+#>
+        <#=propertyNameLowerCase#>Filter(-1);
+<#          }#>
+<#          else if (currentProperty.Type.AsString.Contains("System.DateTime")) {#>
+        <#=propertyNameLowerCase#>FromFilter('');
+        <#=propertyNameLowerCase#>ToFilter('');
+<#          }#>
+<#          else {#>
+        <#=propertyNameLowerCase#>Filter('');
+<#          }#>
+<#      }#>
+<#  }#>
+    };
+
+
+
+<#}#>
+    // get list by page
+
+    var get<#=EntityName#>Page = function () {
+        isLoading(true);
+
+        var searchFilters = "?"
+            + (searchText() != '' ? "searchTerm=" + searchText() : "")
+            + "&" + "pageIndex=" + pager.currentPageIndex()
+            + "&" + "pageSize=" + pager.currentPageSize()
+        ;
+
+        var restUrl = <#if(UseDNN) {#>service.<#}#>baseUrl + "GetPage/0/" + searchFilters;
+
+        var jqXHR = $.ajax({
+            url: restUrl,
+<#if(UseDNN) {#>
+            beforeSend: service.framework.setModuleHeaders,
+<#}#>
+            dataType: "json"
+        }).done(function (data) {
+            if (data) {
+                load(data);
+<#if(UseDataTablesPlugin)#>
+<#{#>
+
+                // update datatable
+                updateDatatable(data);
+<#}#>
+            }
+            else {
+                // No data to load 
+                <#=EntityNameLowerCase#>List.removeAll();
+            }
+        }).always(function (data) {
+            isLoading(false);
+        });
+    };
+
+
+
+    // delete
+
+    var delete<#=EntityName#> = function (<#=EntityNameLowerCase#>) {
+        isLoading(true);
+        var restUrl = <#if(UseDNN) {#>service.<#}#>baseUrl + "Delete/" + <#=EntityNameLowerCase#>.<#=EntityNameLowerCase#>Id();
+        var jqXHR = $.ajax({
+            url: restUrl,
+<#if(UseDNN) {#>
+            beforeSend: service.framework.setModuleHeaders,
+<#}#>
+            dataType: "json"
+        }).done(function () {
+            console.log("Deleted: " + <#=EntityNameLowerCase#>.<#=EntityNameLowerCase#>Id());
+            <#=EntityNameLowerCase#>List.remove(<#=EntityNameLowerCase#>);
+        }).fail(function () {
+            console.log("Error");
+        }).always(function (data) {
+            console.log("finished");
+            isLoading(false);
+        });
+    }
+
+    var delete<#=EntityName#>ById = function (<#=EntityNameLowerCase#>Id) {
+        isLoading(true);
+        var restUrl = <#if(UseDNN) {#>service.<#}#>baseUrl + "Delete/" + <#=EntityNameLowerCase#>Id;
+        var jqXHR = $.ajax({
+            method: "GET",
+            url: restUrl,
+<#if(UseDNN) {#>
+            beforeSend: service.framework.setModuleHeaders,
+<#}#>
+            dataType: "json"
+        }).done(function () {
+            console.log("Deleted: " + <#=EntityNameLowerCase#>Id);
+            //<#=EntityNameLowerCase#>List.remove(<#=EntityNameLowerCase#>);
+            // refresh
+            get<#=EntityName#>List();
+        }).fail(function () {
+            console.log("Error");
+        }).always(function (data) {
+            console.log("finished");
+            isLoading(false);
+        });
+    }
+
+
+
+    // load
+
+    var load = function (data) {
+        <#=EntityNameLowerCase#>List.removeAll();
+        var underlyingArray = <#=EntityNameLowerCase#>List();
+        for (var i = 0; i < data.length; i++) {
+            var result = data[i];
+            var <#=EntityNameLowerCase#> = new <#=ModuleName#>.<#=EntityNameLowerCase#>ViewModel();
+            <#=EntityNameLowerCase#>.load(result);
+            underlyingArray.push(<#=EntityNameLowerCase#>);
+        }
+        <#=EntityNameLowerCase#>List.valueHasMutated();
+    };
+
+
+
+<#if(GenerateViewPage_InlineEditTable)#>
+<#{#>
+    // save
+
+    var save = function () {
+        isLoading(true);
+        var ajaxMethod = "POST";
+        var restUrl = <#if(UseDNN) {#>service.<#}#>baseUrl + "SaveList/0/";
+
+        var listToSave = new Array();
+
+        for (var i = 0; i < <#=EntityNameLowerCase#>List().length; i++) {
+            var current<#=EntityName#> = <#=EntityNameLowerCase#>List()[i];
+
+            var <#=EntityNameLowerCase#> = {
+<#
+    // Iterate each property of the domain class, and write the respective mapping to the view model
+    foreach(var currentProperty in properties)
+    {
+        // skip audit properties because they are set with specific values
+        if(currentProperty.Name != "ModuleId" 
+            && currentProperty.Name != "CreateBy"
+            && currentProperty.Name != "UpdateBy"
+            && currentProperty.Name != "CreateOn"
+            && currentProperty.Name != "UpdateOn")
+        {
+            string propertyNameLowerCase = currentProperty.Name.Substring(0, 1).ToLower() + currentProperty.Name.Substring(1, currentProperty.Name.Length - 1);
+
+            // read each property in the viewmodel
+#>
+                <#=propertyNameLowerCase#>: current<#=EntityName#>.<#=propertyNameLowerCase#>(),
+<#      }#>
+<#  }#>
+            };
+
+            listToSave.push(<#=EntityNameLowerCase#>);
+        }
+
+        var jqXHR = $.ajax({
+            method: ajaxMethod,
+            url: restUrl,
+            contentType: "application/json; charset=UTF-8",
+            data: JSON.stringify(listToSave),
+<#if(UseDNN) {#>
+            beforeSend: service.framework.setModuleHeaders,
+<#}#>
+            dataType: "json"
+        }).done(function (data) {
+            console.log(data);
+            dnnModal.closePopUp();
+        }).always(function (data) {
+            isLoading(false);
+        });
+    };
+
+    var quickSearch = function () {
+        for (var i = 0; i < <#=EntityNameLowerCase#>List().length; i++) {
+            var result = <#=EntityNameLowerCase#>List()[i];
+
+            if(searchText() == null || searchText() == '' || (result.description() != null && result.description().toLowerCase().indexOf(searchText().toLowerCase()) >= 0))
+            {
+                result.visibleOnSearch(true);
+            }
+            else
+            {
+                result.visibleOnSearch(false);
+            }
+        }
+    };
+
+    $('#searchText').keyup(function() { quickSearch(); });
+
+
+
+<#}#>
+<#if(UseDataTablesPlugin)#>
+<#{#>
+    // data table
+
+    var updateDatatable = function (data) {
+        var dataArray = new Array();
+        for (var i = 0; i < data.length; i++) {
+            var result = data[i];
+            var fieldsInArray = new Array();
+
+<#
+    // Iterate each property of the domain class, and write the respective mapping to the view model
+    foreach(var currentProperty in properties)
+    {
+        // skip audit properties because they are set with specific values
+        if(currentProperty.Name != "ModuleId" 
+            && currentProperty.Name != "CreateBy"
+            && currentProperty.Name != "UpdateBy"
+            && currentProperty.Name != "CreateOn"
+            && currentProperty.Name != "UpdateOn"
+            && currentProperty.Name != "IsDeleted"
+            && currentProperty.Name != EntityName + "Id")
+        {
+            string propertyNameLowerCase = currentProperty.Name.Substring(0, 1).ToLower() + currentProperty.Name.Substring(1, currentProperty.Name.Length - 1);
+
+            // load each property in the viewmodel
+#>
+            fieldsInArray.push(result.<#=propertyNameLowerCase#>);
+<#      }#>
+<#  }#>
+
+            var viewLinkElement = '<a href=\"' + result.editUrl + '\" style=\"margin-right: 10px;\">View</a>';
+            var editLinkElement = '<a href=\"' + result.editUrl + '\" style=\"margin-right: 10px;\">Edit</a>';
+            var deleteLinkElement = '<a href=\"' + 'javascript:vm.delete<#=EntityName#>ById(' + result.<#=EntityNameLowerCase#>Id + ');' + '\" style=\"margin-right: 10px;\">Delete</a>';
+            fieldsInArray.push(viewLinkElement + editLinkElement + deleteLinkElement);
+
+            dataArray.push(fieldsInArray);
+        }
+
+        var datatable = $("#<#=EntityName#>sTable-" + moduleId).DataTable();
+        datatable.clear();
+        datatable.rows.add(dataArray);
+        datatable.draw();
+    };
+
+
+
+    // open create form
+
+    var openCreateForm = function () {
+        var isPopUp = "?popUp=true";
+        var path = location.pathname + "/ctl/Edit/mid/" + moduleId + isPopUp;
+        dnnModal.show(path, false, 550, 950, true, '');
+    };
+
+
+
+<#}#>
+    return {
+        init: init,
+        load: load,
+        <#=EntityNameLowerCase#>List: <#=EntityNameLowerCase#>List,
+        get<#=EntityName#>List: get<#=EntityName#>List,
+        get<#=EntityName#>Page: get<#=EntityName#>Page,
+        delete<#=EntityName#>: delete<#=EntityName#>,
+        delete<#=EntityName#>ById: delete<#=EntityName#>ById,
+        editMode: editMode,
+        isLoading: isLoading,
+        searchText: searchText,
+        openCreateForm: openCreateForm,
+<#if(GenerateViewPage_InlineEditTable)#>
+<#{#>
+        save: save,
+        quickSearch: quickSearch,
+<#}#>
+<#if(GenerateViewPage_SearchFilters)#>
+<#{#>
+        get<#=EntityName#>ListAdvanced: get<#=EntityName#>ListAdvanced,
+        advancedSearch: advancedSearch,
+        clearSearchFilters: clearSearchFilters,
+<#}#>
+
+<#
+    // Find properties for combo boxes
+    foreach(var currentProperty in properties)
+    {
+        string propertyNameLowerCase = currentProperty.Name.Substring(0, 1).ToLower() + currentProperty.Name.Substring(1, currentProperty.Name.Length - 1);
+        if(currentProperty.Name != "ModuleId" && currentProperty.Name != EntityName + "Id" && currentProperty.Name.EndsWith("Id"))
+        {
+#>
+        <#=RemoveTailId(propertyNameLowerCase)#>List: <#=RemoveTailId(propertyNameLowerCase)#>Helper.<#=RemoveTailId(propertyNameLowerCase)#>List,
+<#      }#>
+<#  }#>
+
+<#
+    // Iterate each property of the domain class, and write the respective mapping to the view model
+    foreach(var currentProperty in properties)
+    {
+        // skip audit properties because they are set with specific values
+        if(currentProperty.Name != "ModuleId" 
+            && currentProperty.Name != "CreateBy"
+            && currentProperty.Name != "UpdateBy"
+            && currentProperty.Name != "CreateOn"
+            && currentProperty.Name != "UpdateOn"
+            && currentProperty.Name != "IsDeleted"
+            && currentProperty.Name != EntityName + "Id")
+        {
+            string propertyNameLowerCase = currentProperty.Name.Substring(0, 1).ToLower() + currentProperty.Name.Substring(1, currentProperty.Name.Length - 1);
+
+            // load each property in the viewmodel
+
+#>
+<#          if (currentProperty.Type.AsString.Contains("System.DateTime")) {#>
+        <#=propertyNameLowerCase#>FromFilter: <#=propertyNameLowerCase#>FromFilter,
+        <#=propertyNameLowerCase#>ToFilter: <#=propertyNameLowerCase#>ToFilter,
+<#          }#>
+<#          else {#>
+        <#=propertyNameLowerCase#>Filter: <#=propertyNameLowerCase#>Filter,
+<#          }#>
+<#      }#>
+<#  }#>
+    }
+};
+
+
+
+// view model
+
+<#=ModuleName#>.<#=EntityNameLowerCase#>ViewModel = function () {
+<#
+// Iterate each property of the domain class, and write the respective mapping to the view model
+foreach(var currentProperty in properties)
+{
+// skip audit properties because they are set with specific values
+if(currentProperty.Name != "ModuleId" 
+    && currentProperty.Name != "CreateBy"
+    && currentProperty.Name != "UpdateBy"
+    && currentProperty.Name != "CreateOn"
+    && currentProperty.Name != "UpdateOn")
+{
+    string propertyNameLowerCase = currentProperty.Name.Substring(0, 1).ToLower() + currentProperty.Name.Substring(1, currentProperty.Name.Length - 1);
+
+    // a ko observable of each property in the viewmodel
+
+if(currentProperty.Name.EndsWith("Id"))
+{
+#>
+    var <#=propertyNameLowerCase#> = ko.observable(-1);
+<#}#>
+<#else {#>
+    var <#=propertyNameLowerCase#> = ko.observable('');
+<#}#>
+<#}#>
+<#}#>
+
+    var editUrl = ko.observable('');
+
+    var visibleOnSearch = ko.observable(true);
+ <#   //var visibleOnSearch = ko.computed(function () {
+        //return searchText == null || searchText.value == '' || (description() != null && description().indexOf(searchText.value) > 0);
+    //});#>
+
+    // load
+
+    var load = function (data) {
+<#
+// Iterate each property of the domain class, and write the respective mapping to the view model
+foreach(var currentProperty in properties)
+{
+// skip audit properties because they are set with specific values
+if(currentProperty.Name != "ModuleId" 
+    && currentProperty.Name != "CreateBy"
+    && currentProperty.Name != "UpdateBy"
+    && currentProperty.Name != "CreateOn"
+    && currentProperty.Name != "UpdateOn")
+{
+    string propertyNameLowerCase = currentProperty.Name.Substring(0, 1).ToLower() + currentProperty.Name.Substring(1, currentProperty.Name.Length - 1);
+
+    // load each property in the viewmodel
+#>
+        <#=propertyNameLowerCase#>(data.<#=propertyNameLowerCase#>);
+<#}#>
+<#}#>
+        editUrl(data.editUrl);
+    };
+
+
+
+    return {
+<#
+// Iterate each property of the domain class, and write the respective mapping to the view model
+foreach(var currentProperty in properties)
+{
+// skip audit properties because they are set with specific values
+if(currentProperty.Name != "ModuleId" 
+    && currentProperty.Name != "CreateBy"
+    && currentProperty.Name != "UpdateBy"
+    && currentProperty.Name != "CreateOn"
+    && currentProperty.Name != "UpdateOn")
+{
+    string propertyNameLowerCase = currentProperty.Name.Substring(0, 1).ToLower() + currentProperty.Name.Substring(1, currentProperty.Name.Length - 1);
+
+    // clear each property in the viewmodel
+#>
+        <#=propertyNameLowerCase#>: <#=propertyNameLowerCase#>,
+<#}#>
+<#}#>
+        editUrl: editUrl,
+        load: load,
+        visibleOnSearch: visibleOnSearch
+    }
+}
+
+
+
+// aux
+
+<#if(UsejQueryDatepickerPlugin && UseKnockoutJs)#>
+<#{#>
+// date picker
+
+ko.bindingHandlers.datepicker = {
+    init: function (element, valueAccessor, allBindingsAccessor) {
+        //initialize datepicker with some optional options
+        var options = allBindingsAccessor().datepickerOptions || {},
+            $el = $(element);
+
+        $el.datepicker(options);
+
+        //handle the field changing
+        ko.utils.registerEventHandler(element, "change", function () {
+            var observable = valueAccessor();
+            observable($el.datepicker("getDate"));
+        });
+
+        //handle disposal (if KO removes by the template binding)
+        ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
+            $el.datepicker("destroy");
+        });
+
+    },
+    update: function (element, valueAccessor) {
+        var value = ko.utils.unwrapObservable(valueAccessor()),
+            $el = $(element);
+
+        //handle date data coming via json from Microsoft
+        if (String(value).indexOf('/Date(') == 0) {
+            value = new Date(parseInt(value.replace(/\/Date\((.*?)\)\//gi, "$1")));
+        }
+
+        var current = $el.datepicker("getDate");
+
+        if (value - current !== 0) {
+            $el.datepicker("setDate", value);
+        }
+    }
+};
+
+
+
+// date format
+
+function dateToStringServerFormat(d) {
+    // server format: 2017-10-20T00:00:00
+    var datestring = d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2) + "T00:00:00";
+    return datestring;
+}
+
+
+
+<#}#>
+
+

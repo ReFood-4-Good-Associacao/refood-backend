@@ -1,0 +1,147 @@
+
+<!-- ################################################################ -->
+<!--                      Code generated with T4                      -->
+<!-- ################################################################ -->
+
+<div id="Volunteer-0">
+    <div class="dnnForm dnnEditBasicSettings" id="dnnEditBasicSettings">
+        <!--<div class="dnnFormExpandContent dnnRight "><a href="#">Expand All</a></div>-->
+
+        <h2 id="dnnSitePanel-BasicSettings" class="dnnFormSectionHead dnnClear">
+            Volunteer
+        </h2>
+        <fieldset>
+            <div class="formItem" style="margin-bottom: 20px; ">
+                <div><label for="name">Name</label></div>
+                <input id="name" type="text" data-bind="textInput: name" class="form-control" />
+            </div>
+            <div class="formItem" style="margin-bottom: 20px; ">
+                <div><label for="gender">Gender</label></div>
+                <input id="gender" type="text" data-bind="textInput: gender" class="form-control" />
+            </div>
+            <div class="formItem" style="margin-bottom: 20px; ">
+                <div><label for="birthDate">Birth Date</label></div>
+                <input data-bind="datepicker: birthDate, datepickerOptions: {
+                                    yearRange: '-20:+100',
+                                    changeMonth: true,
+                                    changeYear: true,
+                                    dateFormat: 'dd-mm-yy' }"
+                                    class="form-control" />
+            </div>
+            <div class="formItem" style="margin-bottom: 20px; ">
+                <div><label for="occupation">Occupation</label></div>
+                <input id="occupation" type="text" data-bind="textInput: occupation" class="form-control" />
+            </div>
+            <div class="formItem" style="margin-bottom: 20px; ">
+                <div><label for="employer">Employer</label></div>
+                <input id="employer" type="text" data-bind="textInput: employer" class="form-control" />
+            </div>
+            <div class="formItem" style="margin-bottom: 20px; ">
+                <div><label for="phone">Phone</label></div>
+                <input id="phone" type="text" data-bind="textInput: phone" class="form-control" />
+            </div>
+            <div class="formItem" style="margin-bottom: 20px; ">
+                <div><label for="email">Email</label></div>
+                <input id="email" type="text" data-bind="textInput: email" class="form-control" />
+            </div>
+            <div class="formItem" style="margin-bottom: 20px; ">
+                <div><label for="identityCardNumber">Identity Card Number</label></div>
+                <input id="identityCardNumber" type="text" data-bind="textInput: identityCardNumber" class="form-control" />
+            </div>
+            <div class="formItem" style="margin-bottom: 20px; ">
+                <div><label for="countryId">Country</label></div>
+                <select data-bind="options: countryList,
+                                    optionsText: 'name',
+                                    optionsValue: 'countryId',
+                                    value: countryId,
+                                    optionsCaption: ''" class="form-control"></select>
+            </div>
+            <div class="formItem" style="margin-bottom: 20px; ">
+                <div><label for="friendOrFamilyContact">Friend Or Family Contact</label></div>
+                <input id="friendOrFamilyContact" type="text" data-bind="textInput: friendOrFamilyContact" class="form-control" />
+            </div>
+            <div class="formItem" style="margin-bottom: 20px; ">
+                <div><label for="photo">Photo</label></div>
+                <input id="photo" type="text" data-bind="textInput: photo" class="form-control" />
+            </div>
+            <div class="formItem" style="margin-bottom: 20px; ">
+                <div><label for="addressId">Address</label></div>
+                <select data-bind="options: addressList,
+                                    optionsText: 'name',
+                                    optionsValue: 'addressId',
+                                    value: addressId,
+                                    optionsCaption: ''" class="form-control"></select>
+            </div>
+            <div class="formItem" style="margin-bottom: 20px; ">
+                <div><label for="hasCar">Has Car</label></div>
+                <input id="hasCar" type="checkbox" data-bind="checked: hasCar" class="form-control" />
+            </div>
+            <div class="formItem" style="margin-bottom: 20px; ">
+                <div><label for="hasDriverLicense">Has Driver License</label></div>
+                <input id="hasDriverLicense" type="checkbox" data-bind="checked: hasDriverLicense" class="form-control" />
+            </div>
+            <div class="formItem" style="margin-bottom: 20px; ">
+                <div><label for="hasBike">Has Bike</label></div>
+                <input id="hasBike" type="checkbox" data-bind="checked: hasBike" class="form-control" />
+            </div>
+            <div class="formItem" style="margin-bottom: 20px; ">
+                <div><label for="vehicleMake">Vehicle Make</label></div>
+                <input id="vehicleMake" type="text" data-bind="textInput: vehicleMake" class="form-control" />
+            </div>
+            <div class="formItem" style="margin-bottom: 20px; ">
+                <div><label for="vehicleModel">Vehicle Model</label></div>
+                <input id="vehicleModel" type="text" data-bind="textInput: vehicleModel" class="form-control" />
+            </div>
+            <div class="formItem" style="margin-bottom: 20px; ">
+                <div><label for="active">Active</label></div>
+                <input id="active" type="checkbox" data-bind="checked: active" class="form-control" />
+            </div>
+        </fieldset>
+    </div>
+    <hr />
+    <div class="text-right">
+		<a data-bind="click: cancel" href="#" class="btn btn-link">Cancel</a>
+		<a data-bind="click: save" href="#" class="btn btn-primary">Save</a>
+    </div>
+</div>
+
+@section scripts{
+<script type="text/javascript" src="~/Scripts/knockout-3.4.2.js"></script>
+<link rel="stylesheet" type="text/css" href="~/Scripts/jquery-ui-1.12.1.custom/jquery-ui.css" />
+<script type="text/javascript" src="~/Scripts/jquery-ui-1.12.1.custom/jquery-ui.js"></script>
+<script src="~/Scripts/toastr.js"></script>
+<link href="~/Content/toastr.css" rel="stylesheet" />
+
+<script type="text/javascript" src="~/Scripts/VolunteerEdit.js"></script>
+
+<script type="text/javascript" src="~/Scripts/CountryHelper.js"></script>
+<script type="text/javascript" src="~/Scripts/AddressHelper.js"></script>
+
+<link rel="stylesheet" type="text/css" href="~/Content/jquery-ui-datepicker.css" />
+
+<script type="text/javascript">
+
+        //jQuery(function ($) {
+            var moduleId = 0;
+
+            var localizedSettings = {};
+
+            var viewmodel = new Web.volunteerViewModel(moduleId, localizedSettings);
+            viewmodel.init();
+
+            ko.applyBindings(viewmodel, $("#Volunteer-" + moduleId)[0]);
+
+            //function dnnEditBasicSettings() {
+                //$('#dnnEditBasicSettings').dnnPanels();
+                //$('#dnnEditBasicSettings .dnnFormExpandContent a').dnnExpandAll({ expandText: 'Expandir', collapseText: 'Minimizar', targetArea: '#dnnEditBasicSettings' });
+            //}
+
+            //dnnEditBasicSettings();
+            //Sys.WebForms.PageRequestManager.getInstance().add_endRequest(function () {
+                //dnnEditBasicSettings();
+            //});
+        //});
+</script>
+}
+
+    

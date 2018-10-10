@@ -1,0 +1,122 @@
+
+@section head {
+    <meta name="viewport" content="initial-scale=1.0">   
+}
+
+<div id="PlannedRoute-0">
+    <div class="dnnForm dnnEditBasicSettings" id="dnnEditBasicSettings">
+        <!--<div class="dnnFormExpandContent dnnRight "><a href="#">Expand All</a></div>-->
+
+        <h2 id="dnnSitePanel-BasicSettings" class="dnnFormSectionHead dnnClear">
+            Planned Route
+        </h2>
+        <fieldset>
+            <div class="dnnFormItem" style="margin-bottom: 20px; ">
+                <div><label for="name">Name</label></div>
+                <input id="name" type="text" data-bind="textInput: name" class="form-control" />
+            </div>
+            <div class="dnnFormItem" style="margin-bottom: 20px; ">
+                <div><label for="routeTypeId">Route Type</label></div>
+                @*<select data-bind="options: routeTypeList,
+                                    optionsText: 'name',
+                                    optionsValue: 'routeTypeId',
+                                    value: routeTypeId,
+                                    optionsCaption: ''" class="form-control"></select>*@
+            </div>
+            <div class="dnnFormItem" style="margin-bottom: 20px; ">
+                <div><label for="transportTypeId">Transport Type</label></div>
+                @*<select data-bind="options: transportTypeList,
+                                    optionsText: 'name',
+                                    optionsValue: 'transportTypeId',
+                                    value: transportTypeId,
+                                    optionsCaption: ''" class="form-control"></select>*@
+            </div>
+            <div class="dnnFormItem" style="margin-bottom: 20px; ">
+                <div><label for="description">Description</label></div>
+                <input id="description" type="text" data-bind="textInput: description" class="form-control" />
+            </div>
+            <div class="dnnFormItem" style="margin-bottom: 20px; ">
+                <div><label for="startHour">Start Hour</label></div>
+                <input data-bind="datepicker: startHour, datepickerOptions: {
+                                    yearRange: '-20:+100',
+                                    changeMonth: true,
+                                    changeYear: true,
+                                    dateFormat: 'dd-mm-yy' }"
+                                    class="form-control" />
+            </div>
+            <div class="dnnFormItem" style="margin-bottom: 20px; ">
+                <div><label for="estimatedDuration">Estimated Duration</label></div>
+                <input id="estimatedDuration" type="text" data-bind="textInput: estimatedDuration" class="form-control" />
+            </div>
+            <div class="dnnFormItem" style="margin-bottom: 20px; ">
+                <div><label for="totalDistance">Total Distance</label></div>
+                <input id="totalDistance" type="text" data-bind="textInput: totalDistance" class="form-control" />
+            </div>
+            <div class="dnnFormItem" style="margin-bottom: 20px; ">
+                <div><label for="routeDayOfTheWeek">Route Day Of The Week</label></div>
+                <input id="routeDayOfTheWeek" type="text" data-bind="textInput: routeDayOfTheWeek" class="form-control" />
+            </div>
+            <div class="dnnFormItem" style="margin-bottom: 20px; ">
+                <div><label for="active">Active</label></div>
+                <input id="active" type="checkbox" data-bind="checked: active" class="form-control" />
+            </div>
+        </fieldset>
+    </div>
+    <hr />
+    <div class="text-right" style="margin-bottom: 50px; ">
+		<a data-bind="click: cancel" href="#" class="btn btn-link">Cancel</a>
+		<a data-bind="click: save" href="#" class="btn btn-primary">Save</a>
+    </div>
+
+    <div id="map"></div>
+</div>
+
+@section scripts{
+<script type="text/javascript" src="~/Scripts/knockout-3.4.2.js"></script>
+<link rel="stylesheet" type="text/css" href="~/Scripts/jquery-ui-1.12.1.custom/jquery-ui.css" />
+<script type="text/javascript" src="~/Scripts/jquery-ui-1.12.1.custom/jquery-ui.js"></script>
+<script src="~/Scripts/toastr.js"></script>
+<link href="~/Content/toastr.css" rel="stylesheet" />
+
+<script type="text/javascript" src="~/Scripts/PlannedRouteEdit.js"></script>
+@*<script type="text/javascript" src="~/Scripts/RouteTypeHelper.js"></script>
+<script type="text/javascript" src="~/Scripts/TransportTypeHelper.js"></script>*@
+
+<link rel="stylesheet" type="text/css" href="~/Content/jquery-ui-datepicker.css" />
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCBlPfjNgqZR7bZB3I3Tw_tzwDUCthjcgk&callback=initMap" async defer></script>
+
+<script type="text/javascript">
+
+        //jQuery(function ($) {
+            var moduleId = 0;
+
+            var localizedSettings = {};
+
+            var viewmodel = new Web.plannedRouteViewModel(moduleId, localizedSettings);
+            viewmodel.init();
+
+            ko.applyBindings(viewmodel, $("#PlannedRoute-" + moduleId)[0]);
+
+            var map;
+            function initMap() {
+                map = new google.maps.Map(document.getElementById('map'), {
+                    center: { lat: -38.7223, lng: 9.1393 },
+                    zoom: 8
+                });
+            }
+
+            //function dnnEditBasicSettings() {
+                //$('#dnnEditBasicSettings').dnnPanels();
+                //$('#dnnEditBasicSettings .dnnFormExpandContent a').dnnExpandAll({ expandText: 'Expandir', collapseText: 'Minimizar', targetArea: '#dnnEditBasicSettings' });
+            //}
+
+            //dnnEditBasicSettings();
+            //Sys.WebForms.PageRequestManager.getInstance().add_endRequest(function () {
+                //dnnEditBasicSettings();
+            //});
+        //});
+</script>
+}
+
+    

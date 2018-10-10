@@ -1,0 +1,182 @@
+
+<!-- ################################################################ -->
+<!--                      Code generated with T4                      -->
+<!-- ################################################################ -->
+
+<div id="Partner-0">
+    <div class="dnnForm dnnEditBasicSettings" id="dnnEditBasicSettings">
+        <!--<div class="dnnFormExpandContent dnnRight "><a href="#">Expand All</a></div>-->
+
+        <h2 id="dnnSitePanel-BasicSettings" class="dnnFormSectionHead dnnClear">
+            Partner
+        </h2>
+        <fieldset>
+            <div class="formItem" style="margin-bottom: 20px; ">
+                <div><label for="nucleoId">Nucleo</label></div>
+                <select data-bind="options: nucleoList,
+                                    optionsText: 'name',
+                                    optionsValue: 'nucleoId',
+                                    value: nucleoId,
+                                    optionsCaption: ''" class="form-control"></select>
+            </div>
+            <div class="formItem" style="margin-bottom: 20px; ">
+                <div><label for="name">Name</label></div>
+                <input id="name" type="text" data-bind="textInput: name" class="form-control" />
+            </div>
+            <div class="formItem" style="margin-bottom: 20px; ">
+                <div><label for="enterpriseContributor">Enterprise Contributor</label></div>
+                <input id="enterpriseContributor" type="checkbox" data-bind="checked: enterpriseContributor" class="form-control" />
+            </div>
+            <div class="formItem" style="margin-bottom: 20px; ">
+                <div><label for="privateContributor">Private Contributor</label></div>
+                <input id="privateContributor" type="checkbox" data-bind="checked: privateContributor" class="form-control" />
+            </div>
+            <div class="formItem" style="margin-bottom: 20px; ">
+                <div><label for="contributionTypeId">Contribution Type</label></div>
+                <select data-bind="options: contributionTypeList,
+                                    optionsText: 'name',
+                                    optionsValue: 'contributionTypeId',
+                                    value: contributionTypeId,
+                                    optionsCaption: ''" class="form-control"></select>
+            </div>
+            <div class="formItem" style="margin-bottom: 20px; ">
+                <div><label for="partnershipTypeId">Partnership Type</label></div>
+                <select data-bind="options: partnershipTypeList,
+                                    optionsText: 'name',
+                                    optionsValue: 'partnershipTypeId',
+                                    value: partnershipTypeId,
+                                    optionsCaption: ''" class="form-control"></select>
+            </div>
+            <div class="formItem" style="margin-bottom: 20px; ">
+                <div><label for="contactPerson">Contact Person</label></div>
+                <input id="contactPerson" type="text" data-bind="textInput: contactPerson" class="form-control" />
+            </div>
+            <div class="formItem" style="margin-bottom: 20px; ">
+                <div><label for="department">Department</label></div>
+                <input id="department" type="text" data-bind="textInput: department" class="form-control" />
+            </div>
+            <div class="formItem" style="margin-bottom: 20px; ">
+                <div><label for="phone">Phone</label></div>
+                <input id="phone" type="text" data-bind="textInput: phone" class="form-control" />
+            </div>
+            <div class="formItem" style="margin-bottom: 20px; ">
+                <div><label for="email">Email</label></div>
+                <input id="email" type="text" data-bind="textInput: email" class="form-control" />
+            </div>
+            <div class="formItem" style="margin-bottom: 20px; ">
+                <div><label for="iban">Iban</label></div>
+                <input id="iban" type="text" data-bind="textInput: iban" class="form-control" />
+            </div>
+            <div class="formItem" style="margin-bottom: 20px; ">
+                <div><label for="bicSwift">Bic Swift</label></div>
+                <input id="bicSwift" type="text" data-bind="textInput: bicSwift" class="form-control" />
+            </div>
+            <div class="formItem" style="margin-bottom: 20px; ">
+                <div><label for="fiscalNumber">Fiscal Number</label></div>
+                <input id="fiscalNumber" type="text" data-bind="textInput: fiscalNumber" class="form-control" />
+            </div>
+            <div class="formItem" style="margin-bottom: 20px; ">
+                <div><label for="latitude">Latitude</label></div>
+                <input id="latitude" type="text" data-bind="textInput: latitude" class="form-control" />
+            </div>
+            <div class="formItem" style="margin-bottom: 20px; ">
+                <div><label for="longitude">Longitude</label></div>
+                <input id="longitude" type="text" data-bind="textInput: longitude" class="form-control" />
+            </div>
+            <div class="formItem" style="margin-bottom: 20px; ">
+                <div><label for="photoUrl">Photo Url</label></div>
+                <input id="photoUrl" type="text" data-bind="textInput: photoUrl" class="form-control" />
+            </div>
+            <div class="formItem" style="margin-bottom: 20px; ">
+                <div><label for="addressId">Address</label></div>
+                <select data-bind="options: addressList,
+                                    optionsText: 'name',
+                                    optionsValue: 'addressId',
+                                    value: addressId,
+                                    optionsCaption: ''" class="form-control"></select>
+            </div>
+            <div class="formItem" style="margin-bottom: 20px; ">
+                <div><label for="partnershipStartDate">Partnership Start Date</label></div>
+                <input data-bind="datepicker: partnershipStartDate, datepickerOptions: {
+                                    yearRange: '-20:+100',
+                                    changeMonth: true,
+                                    changeYear: true,
+                                    dateFormat: 'dd-mm-yy' }"
+                                    class="form-control" />
+            </div>
+            <div class="formItem" style="margin-bottom: 20px; ">
+                <div><label for="durationCommitment">Duration Commitment</label></div>
+                <input data-bind="datepicker: durationCommitment, datepickerOptions: {
+                                    yearRange: '-20:+100',
+                                    changeMonth: true,
+                                    changeYear: true,
+                                    dateFormat: 'dd-mm-yy' }"
+                                    class="form-control" />
+            </div>
+            <div class="formItem" style="margin-bottom: 20px; ">
+                <div><label for="refoodAreaInteraction">Refood Area Interaction</label></div>
+                <input id="refoodAreaInteraction" type="text" data-bind="textInput: refoodAreaInteraction" class="form-control" />
+            </div>
+            <div class="formItem" style="margin-bottom: 20px; ">
+                <div><label for="reliability">Reliability</label></div>
+                <input id="reliability" type="text" data-bind="textInput: reliability" class="form-control" />
+            </div>
+            <div class="formItem" style="margin-bottom: 20px; ">
+                <div><label for="interactionFrequency">Interaction Frequency</label></div>
+                <input id="interactionFrequency" type="text" data-bind="textInput: interactionFrequency" class="form-control" />
+            </div>
+            <div class="formItem" style="margin-bottom: 20px; ">
+                <div><label for="active">Active</label></div>
+                <input id="active" type="checkbox" data-bind="checked: active" class="form-control" />
+            </div>
+        </fieldset>
+    </div>
+    <hr />
+    <div class="text-right">
+		<a data-bind="click: cancel" href="#" class="btn btn-link">Cancel</a>
+		<a data-bind="click: save" href="#" class="btn btn-primary">Save</a>
+    </div>
+</div>
+
+@section scripts{
+<script type="text/javascript" src="~/Scripts/knockout-3.4.2.js"></script>
+<link rel="stylesheet" type="text/css" href="~/Scripts/jquery-ui-1.12.1.custom/jquery-ui.css" />
+<script type="text/javascript" src="~/Scripts/jquery-ui-1.12.1.custom/jquery-ui.js"></script>
+<script src="~/Scripts/toastr.js"></script>
+<link href="~/Content/toastr.css" rel="stylesheet" />
+
+<script type="text/javascript" src="~/Scripts/PartnerEdit.js"></script>
+
+<script type="text/javascript" src="~/Scripts/NucleoHelper.js"></script>
+<script type="text/javascript" src="~/Scripts/ContributionTypeHelper.js"></script>
+<script type="text/javascript" src="~/Scripts/PartnershipTypeHelper.js"></script>
+<script type="text/javascript" src="~/Scripts/AddressHelper.js"></script>
+
+<link rel="stylesheet" type="text/css" href="~/Content/jquery-ui-datepicker.css" />
+
+<script type="text/javascript">
+
+        //jQuery(function ($) {
+            var moduleId = 0;
+
+            var localizedSettings = {};
+
+            var viewmodel = new Web.partnerViewModel(moduleId, localizedSettings);
+            viewmodel.init();
+
+            ko.applyBindings(viewmodel, $("#Partner-" + moduleId)[0]);
+
+            //function dnnEditBasicSettings() {
+                //$('#dnnEditBasicSettings').dnnPanels();
+                //$('#dnnEditBasicSettings .dnnFormExpandContent a').dnnExpandAll({ expandText: 'Expandir', collapseText: 'Minimizar', targetArea: '#dnnEditBasicSettings' });
+            //}
+
+            //dnnEditBasicSettings();
+            //Sys.WebForms.PageRequestManager.getInstance().add_endRequest(function () {
+                //dnnEditBasicSettings();
+            //});
+        //});
+</script>
+}
+
+    

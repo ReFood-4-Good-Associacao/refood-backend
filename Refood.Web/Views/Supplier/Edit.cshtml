@@ -1,0 +1,106 @@
+
+<!-- ################################################################ -->
+<!--                      Code generated with T4                      -->
+<!-- ################################################################ -->
+
+<div id="Supplier-0">
+    <div class="dnnForm dnnEditBasicSettings" id="dnnEditBasicSettings">
+        <!--<div class="dnnFormExpandContent dnnRight "><a href="#">Expand All</a></div>-->
+
+        <h2 id="dnnSitePanel-BasicSettings" class="dnnFormSectionHead dnnClear">
+            Supplier
+        </h2>
+        <fieldset>
+            <div class="formItem" style="margin-bottom: 20px; ">
+                <div><label for="name">Name</label></div>
+                <input id="name" type="text" data-bind="textInput: name" class="form-control" />
+            </div>
+            <div class="formItem" style="margin-bottom: 20px; ">
+                <div><label for="supplierTypeId">Supplier Type</label></div>
+                <select data-bind="options: supplierTypeList,
+                                    optionsText: 'name',
+                                    optionsValue: 'supplierTypeId',
+                                    value: supplierTypeId,
+                                    optionsCaption: ''" class="form-control"></select>
+            </div>
+            <div class="formItem" style="margin-bottom: 20px; ">
+                <div><label for="phone">Phone</label></div>
+                <input id="phone" type="text" data-bind="textInput: phone" class="form-control" />
+            </div>
+            <div class="formItem" style="margin-bottom: 20px; ">
+                <div><label for="email">Email</label></div>
+                <input id="email" type="text" data-bind="textInput: email" class="form-control" />
+            </div>
+            <div class="formItem" style="margin-bottom: 20px; ">
+                <div><label for="latitude">Latitude</label></div>
+                <input id="latitude" type="text" data-bind="textInput: latitude" class="form-control" />
+            </div>
+            <div class="formItem" style="margin-bottom: 20px; ">
+                <div><label for="longitude">Longitude</label></div>
+                <input id="longitude" type="text" data-bind="textInput: longitude" class="form-control" />
+            </div>
+            <div class="formItem" style="margin-bottom: 20px; ">
+                <div><label for="description">Description</label></div>
+                <input id="description" type="text" data-bind="textInput: description" class="form-control" />
+            </div>
+            <div class="formItem" style="margin-bottom: 20px; ">
+                <div><label for="website">Website</label></div>
+                <input id="website" type="text" data-bind="textInput: website" class="form-control" />
+            </div>
+            <div class="formItem" style="margin-bottom: 20px; ">
+                <div><label for="addressId">Address</label></div>
+                <select data-bind="options: addressList,
+                                    optionsText: 'name',
+                                    optionsValue: 'addressId',
+                                    value: addressId,
+                                    optionsCaption: ''" class="form-control"></select>
+            </div>
+        </fieldset>
+    </div>
+    <hr />
+    <div class="text-right">
+		<a data-bind="click: cancel" href="#" class="btn btn-link">Cancel</a>
+		<a data-bind="click: save" href="#" class="btn btn-primary">Save</a>
+    </div>
+</div>
+
+@section scripts{
+<script type="text/javascript" src="~/Scripts/knockout-3.4.2.js"></script>
+<link rel="stylesheet" type="text/css" href="~/Scripts/jquery-ui-1.12.1.custom/jquery-ui.css" />
+<script type="text/javascript" src="~/Scripts/jquery-ui-1.12.1.custom/jquery-ui.js"></script>
+<script src="~/Scripts/toastr.js"></script>
+<link href="~/Content/toastr.css" rel="stylesheet" />
+
+<script type="text/javascript" src="~/Scripts/SupplierEdit.js"></script>
+
+<script type="text/javascript" src="~/Scripts/SupplierTypeHelper.js"></script>
+<script type="text/javascript" src="~/Scripts/AddressHelper.js"></script>
+
+<link rel="stylesheet" type="text/css" href="~/Content/jquery-ui-datepicker.css" />
+
+<script type="text/javascript">
+
+        //jQuery(function ($) {
+            var moduleId = 0;
+
+            var localizedSettings = {};
+
+            var viewmodel = new Web.supplierViewModel(moduleId, localizedSettings);
+            viewmodel.init();
+
+            ko.applyBindings(viewmodel, $("#Supplier-" + moduleId)[0]);
+
+            //function dnnEditBasicSettings() {
+                //$('#dnnEditBasicSettings').dnnPanels();
+                //$('#dnnEditBasicSettings .dnnFormExpandContent a').dnnExpandAll({ expandText: 'Expandir', collapseText: 'Minimizar', targetArea: '#dnnEditBasicSettings' });
+            //}
+
+            //dnnEditBasicSettings();
+            //Sys.WebForms.PageRequestManager.getInstance().add_endRequest(function () {
+                //dnnEditBasicSettings();
+            //});
+        //});
+</script>
+}
+
+    

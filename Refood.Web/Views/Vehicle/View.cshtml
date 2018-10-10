@@ -1,0 +1,322 @@
+
+<!-- ################################################################ -->
+<!--                      Code generated with T4                      -->
+<!-- ################################################################ -->
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css" />
+
+<h2 id="Vehicles-pageTitle">
+    Vehicle
+</h2>
+
+<div id="Vehicles-0">
+
+    <div id="Vehicles-filters" style="margin-top: 20px; margin-bottom: 5px; width: 100%; ">
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="makeFilter">Make</label>
+                    </td>
+                    <td>
+                        <input id="makeFilter" type="text" data-bind="textInput: makeFilter" class="form-control" style="width: 190px; " />
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="modelFilter">Model</label>
+                    </td>
+                    <td>
+                        <input id="modelFilter" type="text" data-bind="textInput: modelFilter" class="form-control" style="width: 190px; " />
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="ownerFilter">Owner</label>
+                    </td>
+                    <td>
+                        <input id="ownerFilter" type="text" data-bind="textInput: ownerFilter" class="form-control" style="width: 190px; " />
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="ownerIdFilter">Owner</label>
+                    </td>
+                    <td>
+                        <select data-bind="options: ownerList,
+                                            optionsText: 'name',
+                                            optionsValue: 'ownerId',
+                                            value: ownerIdFilter,
+                                            optionsCaption: ''" class="form-control" style="width: 190px; " ></select>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="nucleoIdFilter">Nucleo</label>
+                    </td>
+                    <td>
+                        <select data-bind="options: nucleoList,
+                                            optionsText: 'name',
+                                            optionsValue: 'nucleoId',
+                                            value: nucleoIdFilter,
+                                            optionsCaption: ''" class="form-control" style="width: 190px; " ></select>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="vehicleTypeIdFilter">Vehicle Type</label>
+                    </td>
+                    <td>
+                        <select data-bind="options: vehicleTypeList,
+                                            optionsText: 'name',
+                                            optionsValue: 'vehicleTypeId',
+                                            value: vehicleTypeIdFilter,
+                                            optionsCaption: ''" class="form-control" style="width: 190px; " ></select>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="energySourceIdFilter">Energy Source</label>
+                    </td>
+                    <td>
+                        <select data-bind="options: energySourceList,
+                                            optionsText: 'name',
+                                            optionsValue: 'energySourceId',
+                                            value: energySourceIdFilter,
+                                            optionsCaption: ''" class="form-control" style="width: 190px; " ></select>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="averageSpeedFilter">Average Speed</label>
+                    </td>
+                    <td>
+                        <input id="averageSpeedFilter" type="text" data-bind="textInput: averageSpeedFilter" class="form-control" style="width: 190px; " />
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="horsePowerFilter">Horse Power</label>
+                    </td>
+                    <td>
+                        <input id="horsePowerFilter" type="text" data-bind="textInput: horsePowerFilter" class="form-control" style="width: 190px; " />
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="fuelConsumptionFilter">Fuel Consumption</label>
+                    </td>
+                    <td>
+                        <input id="fuelConsumptionFilter" type="text" data-bind="textInput: fuelConsumptionFilter" class="form-control" style="width: 190px; " />
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="fuelAutonomyDistanceFilter">Fuel Autonomy Distance</label>
+                    </td>
+                    <td>
+                        <input id="fuelAutonomyDistanceFilter" type="text" data-bind="textInput: fuelAutonomyDistanceFilter" class="form-control" style="width: 190px; " />
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="rechargeTimeFilter">Recharge Time</label>
+                    </td>
+                    <td>
+                        <input id="rechargeTimeFilter" type="text" data-bind="textInput: rechargeTimeFilter" class="form-control" style="width: 190px; " />
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="licensePlateFilter">License Plate</label>
+                    </td>
+                    <td>
+                        <input id="licensePlateFilter" type="text" data-bind="textInput: licensePlateFilter" class="form-control" style="width: 190px; " />
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="colorFilter">Color</label>
+                    </td>
+                    <td>
+                        <input id="colorFilter" type="text" data-bind="textInput: colorFilter" class="form-control" style="width: 190px; " />
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="numberSeatsFilter">Number Seats</label>
+                    </td>
+                    <td>
+                        <input id="numberSeatsFilter" type="text" data-bind="textInput: numberSeatsFilter" class="form-control" style="width: 190px; " />
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="cargoVolumeCapacityFilter">Cargo Volume Capacity</label>
+                    </td>
+                    <td>
+                        <input id="cargoVolumeCapacityFilter" type="text" data-bind="textInput: cargoVolumeCapacityFilter" class="form-control" style="width: 190px; " />
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="activeFilter">Active</label>
+                    </td>
+                    <td>
+                        <input id="activeFilter" type="checkbox" data-bind="checked: activeFilter" />
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div style="clear: both;">
+    </div>
+
+    <div id="Vehicles-filterButtonsBar" style="width: 100%; text-align: right; margin-bottom: 20px; ">
+        <input type="button" value="Clear" data-bind="click: clearSearchFilters" class="btn btn-default" />
+        <input type="button" value="Search" data-bind="click: advancedSearch" class="btn btn-default" />
+        <a class="btn btn-primary" href="/Vehicle/Edit/">Create</a>
+    </div>
+
+    <div class="dnnClear">
+    </div>
+
+    <table id="VehiclesTable-0" class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th class="Vehicle-make">Make</th>
+                <th class="Vehicle-model">Model</th>
+                <th class="Vehicle-owner">Owner</th>
+                <th class="Vehicle-ownerId">Owner</th>
+                <th class="Vehicle-nucleoId">Nucleo</th>
+                <th class="Vehicle-vehicleTypeId">Vehicle Type</th>
+                <th class="Vehicle-energySourceId">Energy Source</th>
+                <th class="Vehicle-averageSpeed">Average Speed</th>
+                <th class="Vehicle-horsePower">Horse Power</th>
+                <th class="Vehicle-fuelConsumption">Fuel Consumption</th>
+                <th class="Vehicle-fuelAutonomyDistance">Fuel Autonomy Distance</th>
+                <th class="Vehicle-rechargeTime">Recharge Time</th>
+                <th class="Vehicle-licensePlate">License Plate</th>
+                <th class="Vehicle-color">Color</th>
+                <th class="Vehicle-numberSeats">Number Seats</th>
+                <th class="Vehicle-cargoVolumeCapacity">Cargo Volume Capacity</th>
+                <th class="Vehicle-active">Active</th>
+                <th class="datatable-buttons"></th>
+            </tr>
+        </thead>
+    </table>
+
+    <p><a class="btn btn-primary" href="/Vehicle/Edit/">Create</a></p>
+</div>
+
+@section scripts{
+<script type="text/javascript" src="~/Scripts/knockout-3.4.2.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.16/datatables.min.js"></script>
+<script type="text/javascript" src="~/Scripts/dataTables.bootstrap4.min.js"></script>
+<link rel="stylesheet" type="text/css" href="~/Scripts/jquery-ui-1.12.1.custom/jquery-ui.css" />
+<script type="text/javascript" src="~/Scripts/jquery-ui-1.12.1.custom/jquery-ui.js"></script>
+
+<script type="text/javascript" src="~/Scripts/VehicleView.js"></script>
+
+
+<script type="text/javascript" src="~/Scripts/OwnerHelper.js"></script>
+<script type="text/javascript" src="~/Scripts/NucleoHelper.js"></script>
+<script type="text/javascript" src="~/Scripts/VehicleTypeHelper.js"></script>
+<script type="text/javascript" src="~/Scripts/EnergySourceHelper.js"></script>
+
+<script language="javascript" type="text/javascript">
+    var vm;
+
+    //jQuery(function ($) {
+        var moduleId = 0;
+
+        var localizedSettings = {};
+
+        var viewmodel = new Web.vehicleListViewModel(moduleId, localizedSettings);
+        viewmodel.init();
+
+        ko.applyBindings(viewmodel, $("#Vehicles-" + moduleId)[0]);
+
+        vm = viewmodel;
+
+        // datatables
+
+        function initDataTable() {
+            $("#VehiclesTable-" + moduleId).DataTable();
+        }
+
+        $(function () {
+            initDataTable();
+        });
+
+    //});
+</script>
+}
+
+    

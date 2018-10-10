@@ -1,0 +1,68 @@
+﻿<#
+    // ################################################################
+    //                MVC Controller Implementation
+    // ################################################################
+#>
+
+// ################################################################
+//                      Code generated with T4
+// ################################################################
+
+<#if(UseDNN) {#>
+using DotNetNuke.Common;
+using DotNetNuke.Common.Utilities;
+using DotNetNuke.Security;
+using DotNetNuke.UI.Modules;
+using DotNetNuke.Web.Api;
+<#}#>
+using <#=NamespaceViewModels#>;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
+using System.Threading;
+using System.Web.Http;
+using System.Web.Mvc;
+using <#=NamespaceServices#>;
+using <#=NamespaceServices#>.DTOs;
+using <#=NamespaceServices#>.Interfaces;
+
+namespace <#=NamespaceModule + ".Services"#>
+{
+<#
+    CodeClass currentClass = classes.FirstOrDefault(c => c.Name == EntityNamePrefix + EntityName);
+    var properties = currentClass.Members.OfType<EnvDTE.CodeProperty>().Where(p => p.Access.HasFlag(vsCMAccess.vsCMAccessPublic));
+#>
+<#if(UseDNN) {#>
+    [SupportedModules("<#=NamespaceModule#>")]
+    [DnnModuleAuthorize(AccessLevel = SecurityAccessLevel.View)]
+<#}#>
+    public partial class <#=EntityName#>Controller : System.Web.Mvc.Controller 
+    {
+        private readonly I<#=EntityName#>Service _<#=EntityNameLowerCase#>Service;
+
+<#if (Uselog4net) {#>
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+<#}#>
+
+        public <#=EntityName#>Controller(I<#=EntityName#>Service <#=EntityNameLowerCase#>Service)
+        {
+            this._<#=EntityNameLowerCase#>Service = <#=EntityNameLowerCase#>Service;
+        }
+
+        public <#=EntityName#>Controller() : this(new <#=EntityName#>Service()) { }
+
+        public ActionResult Index()
+        {
+            return View("View");
+        }
+
+        public ActionResult Edit()
+        {
+            return View("Edit");
+        }
+
+    }
+}

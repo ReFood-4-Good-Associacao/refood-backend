@@ -1,0 +1,203 @@
+
+<!-- ################################################################ -->
+<!--                      Code generated with T4                      -->
+<!-- ################################################################ -->
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css" />
+
+<h2 id="Beneficiarys-pageTitle">
+    Beneficiary
+</h2>
+
+<div id="Beneficiarys-0">
+
+    <div id="Beneficiarys-filters" style="margin-top: 20px; margin-bottom: 5px; width: 100%; ">
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="nameFilter">Name</label>
+                    </td>
+                    <td>
+                        <input id="nameFilter" type="text" data-bind="textInput: nameFilter" class="form-control" style="width: 190px; " />
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="numberFilter">Number</label>
+                    </td>
+                    <td>
+                        <input id="numberFilter" type="text" data-bind="textInput: numberFilter" class="form-control" style="width: 190px; " />
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="addressIdFilter">Address</label>
+                    </td>
+                    <td>
+                        <select data-bind="options: addressList,
+                                            optionsText: 'name',
+                                            optionsValue: 'addressId',
+                                            value: addressIdFilter,
+                                            optionsCaption: ''" class="form-control" style="width: 190px; " ></select>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="numberOfAdultsFilter">Number Of Adults</label>
+                    </td>
+                    <td>
+                        <input id="numberOfAdultsFilter" type="text" data-bind="textInput: numberOfAdultsFilter" class="form-control" style="width: 190px; " />
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="numberOfChildrenFilter">Number Of Children</label>
+                    </td>
+                    <td>
+                        <input id="numberOfChildrenFilter" type="text" data-bind="textInput: numberOfChildrenFilter" class="form-control" style="width: 190px; " />
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="numberOfTupperwareFilter">Number Of Tupperware</label>
+                    </td>
+                    <td>
+                        <input id="numberOfTupperwareFilter" type="text" data-bind="textInput: numberOfTupperwareFilter" class="form-control" style="width: 190px; " />
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="numberOfSoupsFilter">Number Of Soups</label>
+                    </td>
+                    <td>
+                        <input id="numberOfSoupsFilter" type="text" data-bind="textInput: numberOfSoupsFilter" class="form-control" style="width: 190px; " />
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="descriptionFilter">Description</label>
+                    </td>
+                    <td>
+                        <input id="descriptionFilter" type="text" data-bind="textInput: descriptionFilter" class="form-control" style="width: 190px; " />
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="searchFilter">
+            <table>
+                <tr>
+                    <td style="width: 150px; vertical-align: middle; ">
+                        <label for="activeFilter">Active</label>
+                    </td>
+                    <td>
+                        <input id="activeFilter" type="checkbox" data-bind="checked: activeFilter" />
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div style="clear: both;">
+    </div>
+
+    <div id="Beneficiarys-filterButtonsBar" style="width: 100%; text-align: right; margin-bottom: 20px; ">
+        <input type="button" value="Clear" data-bind="click: clearSearchFilters" class="btn btn-default" />
+        <input type="button" value="Search" data-bind="click: advancedSearch" class="btn btn-default" />
+        <a class="btn btn-primary" href="/Beneficiary/Edit/">Create</a>
+    </div>
+
+    <div class="dnnClear">
+    </div>
+
+    <table id="BeneficiarysTable-0" class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th class="Beneficiary-name">Name</th>
+                <th class="Beneficiary-number">Number</th>
+                <th class="Beneficiary-addressId">Address</th>
+                <th class="Beneficiary-numberOfAdults">Number Of Adults</th>
+                <th class="Beneficiary-numberOfChildren">Number Of Children</th>
+                <th class="Beneficiary-numberOfTupperware">Number Of Tupperware</th>
+                <th class="Beneficiary-numberOfSoups">Number Of Soups</th>
+                <th class="Beneficiary-description">Description</th>
+                <th class="Beneficiary-active">Active</th>
+                <th class="datatable-buttons"></th>
+            </tr>
+        </thead>
+    </table>
+
+    <p><a class="btn btn-primary" href="/Beneficiary/Edit/">Create</a></p>
+</div>
+
+@section scripts{
+<script type="text/javascript" src="~/Scripts/knockout-3.4.2.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.16/datatables.min.js"></script>
+<script type="text/javascript" src="~/Scripts/dataTables.bootstrap4.min.js"></script>
+<link rel="stylesheet" type="text/css" href="~/Scripts/jquery-ui-1.12.1.custom/jquery-ui.css" />
+<script type="text/javascript" src="~/Scripts/jquery-ui-1.12.1.custom/jquery-ui.js"></script>
+
+<script type="text/javascript" src="~/Scripts/BeneficiaryView.js"></script>
+
+
+<script type="text/javascript" src="~/Scripts/AddressHelper.js"></script>
+
+<script language="javascript" type="text/javascript">
+    var vm;
+
+    //jQuery(function ($) {
+        var moduleId = 0;
+
+        var localizedSettings = {};
+
+        var viewmodel = new Web.beneficiaryListViewModel(moduleId, localizedSettings);
+        viewmodel.init();
+
+        ko.applyBindings(viewmodel, $("#Beneficiarys-" + moduleId)[0]);
+
+        vm = viewmodel;
+
+        // datatables
+
+        function initDataTable() {
+            $("#BeneficiarysTable-" + moduleId).DataTable();
+        }
+
+        $(function () {
+            initDataTable();
+        });
+
+    //});
+</script>
+}
+
+    

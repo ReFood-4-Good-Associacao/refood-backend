@@ -1,0 +1,2 @@
+<%@ ServiceHost Language="C#" Debug="true" Service="Refood.WebServices.VolunteerWS.VolunteerWebService CodeBehind="VolunteerWebService.svc.cs" %>
+    

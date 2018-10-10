@@ -1,0 +1,27 @@
+﻿<#
+    // ################################################################
+    //                        Settings html
+    // ################################################################
+#>
+[JavaScript:{ jsname: "JQuery" }]
+[JavaScript:{ jsname: "Knockout" }]
+[JavaScript:{ path: "~/Resources/Shared/scripts/dnn.jquery.js"}]
+[JavaScript:{ path: "~/DesktopModules/<#=NamespaceModule#>/scripts/QuickSettings.js"}]
+
+<!-- ################################################################ -->
+<!--                      Code generated with T4                      -->
+<!-- ################################################################ -->
+
+<div id="QuickSettings-[ModuleContext:ModuleId]" class="dnnForm">
+    <div class="dnnFormMessage dnnFormInfo">
+        [Resx:{key:"SettingsInfo"}]
+    </div>
+</div>
+<script language="javascript" type="text/javascript">
+    (function ($) {
+        var moduleId = parseInt("[ModuleContext:ModuleId]");
+        var element = 'QuickSettings-[ModuleContext:ModuleId]';
+        var quickSettings = new <#=ModuleName#>.quickSettings(element, moduleId);
+        quickSettings.init();
+    })(jQuery);
+</script>

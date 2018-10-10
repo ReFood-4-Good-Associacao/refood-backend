@@ -1,0 +1,153 @@
+﻿<#
+    // ################################################################
+    //                ViewModel Implementation
+    // ################################################################
+#>
+
+// ################################################################
+//                      Code generated with T4
+// ################################################################
+
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using <#=NamespaceServices#>.DTOs;
+
+namespace <#=NamespaceViewModels#>
+{
+<#
+    CodeClass currentClass = classes.FirstOrDefault(c => c.Name == EntityNamePrefix + EntityName);
+    var properties = currentClass.Members.OfType<EnvDTE.CodeProperty>().Where(p => p.Access.HasFlag(vsCMAccess.vsCMAccessPublic));
+#>
+
+    [JsonObject(MemberSerialization.OptIn)]
+    public partial class <#=EntityName#>ViewModel
+    {
+        public <#=EntityName#>ViewModel() { }
+
+        public <#=EntityName#>ViewModel(<#=EntityNameDTO#> t)
+        {
+<#
+// Iterate each property of the domain class, and write the respective mapping to the view model
+foreach(var currentProperty in properties)
+{
+#>
+            <#=currentProperty.Name#> = t.<#=currentProperty.Name#>;
+<#}#>
+        }
+
+        public <#=EntityName#>ViewModel(<#=EntityNameDTO#> t, string editUrl)
+        {
+<#
+// Iterate each property of the domain class, and write the respective mapping to the view model
+foreach(var currentProperty in properties)
+{
+#>
+            <#=currentProperty.Name#> = t.<#=currentProperty.Name#>;
+<#}#>
+            EditUrl = editUrl;
+        }
+
+        public <#=EntityNameDTO#> UpdateDTO(<#=EntityNameDTO#> dto, int? updateBy)
+        {
+            if (dto != null)
+            {
+<#
+// Iterate each property of the domain class, and write the respective mapping to the view model
+foreach(var currentProperty in properties)
+{
+    // skip audit properties because they are set with specific values
+    if(currentProperty.Name != "ModuleId" 
+        && currentProperty.Name != "CreateBy"
+        && currentProperty.Name != "UpdateBy"
+        && currentProperty.Name != "CreateOn"
+        && currentProperty.Name != "UpdateOn")
+    {
+                // copy the value of each property from the viewmodel
+#>
+                dto.<#=currentProperty.Name#> = this.<#=currentProperty.Name#>;
+<#  }#>
+<#}#>
+
+                dto.UpdateBy = updateBy;
+                dto.UpdateOn = System.DateTime.UtcNow;
+            }
+
+            return dto;
+        }
+
+<#
+// Iterate each property of the domain class, and declare a respective variable in the view model class
+foreach(var currentProperty in properties)
+{
+    string propertyNameLowerCase = currentProperty.Name.Substring(0, 1).ToLower() + currentProperty.Name.Substring(1, currentProperty.Name.Length - 1);
+#>
+        [JsonProperty("<#=propertyNameLowerCase#>")]
+        public <#=currentProperty.Type.AsString#> <#=currentProperty.Name#> { get; set; }
+
+<#}#>
+        [JsonProperty("editUrl")]
+        public string EditUrl { get; }
+
+
+<#if (Uselog4net) {#>
+
+        // logging helper
+        public static string Format<#=EntityName#>ViewModel(<#=EntityName#>ViewModel <#=EntityNameLowerCase#>ViewModel)
+        {
+            if (<#=EntityNameLowerCase#>ViewModel == null)
+            {
+                // null
+                return "<#=EntityNameLowerCase#>ViewModel: null";
+            }
+            else
+            {
+                // output values
+                return "<#=EntityNameLowerCase#>ViewModel: \n"
+                    + "{ \n"
+<#
+                // Iterate each property and write the value
+                int countB = 0;
+                foreach(var currentProperty in properties)
+                {
+                    // example code 1:
+                    // + "BusinessParameterId: " + "'" + businessParameterDTO.BusinessParameterId + "'" + ", " 
+
+                    // example code 2 (check nullable values):
+                    // + "Value: " + (businessParameterDTO.Value == null ? "'" + businessParameterDTO.Value + "'" : "null") + ", " 
+#> 
+                    + "    <#=currentProperty.Name#>: " + <# 
+                    
+                    if (currentProperty.Type.AsString.EndsWith("?") || currentProperty.Type.AsString == "string") { 
+                        // check null value
+                        #>(<#=EntityNameLowerCase#>ViewModel.<#=currentProperty.Name#> != null ? "'" + <#=EntityNameLowerCase#>ViewModel.<#=currentProperty.Name#> + "'" : "null")<# 
+                    } 
+                    else 
+                    { 
+                        #> "'" + <#=EntityNameLowerCase#>ViewModel.<#=currentProperty.Name#> + "'" <# 
+                    } 
+                    #> + <# 
+                    
+                    // separator
+                    if( countB < properties.Count() - 1) 
+                    { 
+                        #>", \n"<# 
+                    } 
+                    else 
+                    { 
+                        #>" \n" 
+<# 
+                    } 
+ 
+                    countB++;
+               } #>
+                    + "} \n";
+            }
+        }
+        
+<#}#>
+
+    }
+}

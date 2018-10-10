@@ -1,0 +1,83 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @RenderSection("head", required: false)
+    <meta name="description" content="The description of my page" />
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <img src="~/Content/images/logo.png" alt="refood logo" style="width: 32px; "/>
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar">Menu</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-admin">
+                    <span class="icon-bar">Admin</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("Refood", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("Núcleos", "Index", "Nucleo", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("Volunteers", "Index", "Volunteer", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("Suppliers", "Index", "Supplier", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("Routes", "Index", "PlannedRoute", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("Beneficiaries", "Index", "Beneficiary", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("Partners", "Index", "Partner", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li>@Html.ActionLink("Home", "Index", "Home", new { area = "" }, null)</li>
+                    <li>@Html.ActionLink("API docs", "Index", "Help", new { area = "" }, null)</li>
+                    <li>@Html.ActionLink("Swagger", "Index", "Swagger", new { area = "" }, null)</li>
+                </ul>
+            </div>
+            <div class="navbar-admin collapse">
+                <ul class="nav navbar-nav">
+                    <li>@Html.ActionLink("Supplier Types", "Index", "SupplierType", new { area = "" }, null)</li>
+                    <li>@Html.ActionLink("Countries", "Index", "Country", new { area = "" }, null)</li>
+                    <li>@Html.ActionLink("Districts", "Index", "District", new { area = "" }, null)</li>
+                    <li>@Html.ActionLink("Parishes", "Index", "Parish", new { area = "" }, null)</li>
+                    <li>@Html.ActionLink("Food Templates", "Index", "FoodTemplate", new { area = "" }, null)</li>
+                    <li>@Html.ActionLink("Energy Sources", "Index", "EnergySource", new { area = "" }, null)</li>
+                    <li>@Html.ActionLink("Vehicle Types", "Index", "VehicleType", new { area = "" }, null)</li>
+                    <li>@Html.ActionLink("Equipment", "Index", "Equipment", new { area = "" }, null)</li>
+                    <li>@Html.ActionLink("Task Types", "Index", "TaskType", new { area = "" }, null)</li>
+                    <li>@Html.ActionLink("Contribution Channels", "Index", "ContributionChannel", new { area = "" }, null)</li>
+                    <li>@Html.ActionLink("Contribution Types", "Index", "ContributionType", new { area = "" }, null)</li>
+
+                    <li>@Html.ActionLink("Food", "Index", "Food", new { area = "" }, null)</li>
+                    <li>@Html.ActionLink("Delivery Reports", "Index", "DeliveryReport", new { area = "" }, null)</li>
+                    <li>@Html.ActionLink("Tasks", "Index", "Task", new { area = "" }, null)</li>
+                    <li>@Html.ActionLink("Teams", "Index", "Team", new { area = "" }, null)</li>
+
+                    <li>@Html.ActionLink("Contributions (Monetary)", "Index", "ContributionMonetary", new { area = "" }, null)</li>
+                    <li>@Html.ActionLink("Expenses", "Index", "Expense", new { area = "" }, null)</li>
+
+                    <li>@Html.ActionLink("Tutorials", "Index", "Tutorial", new { area = "" }, null)</li>
+                    <li>@Html.ActionLink("Projects", "Index", "Project", new { area = "" }, null)</li>
+                    <li>@Html.ActionLink("Project Partners", "Index", "ProjectPartner", new { area = "" }, null)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - Refood</p>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

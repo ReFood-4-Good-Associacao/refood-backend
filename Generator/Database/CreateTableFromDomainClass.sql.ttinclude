@@ -1,0 +1,43 @@
+﻿<#
+    // ################################################################
+    //          Create Tables from domain classes T-SQL script
+    // ################################################################
+#>
+<#
+    CodeClass currentClass = classes.FirstOrDefault(c => c.Name == EntityNamePrefix + EntityName);
+    var properties = currentClass.Members.OfType<EnvDTE.CodeProperty>().Where(p => p.Access.HasFlag(vsCMAccess.vsCMAccessPublic));
+#>
+
+-- ################################################################
+--               <#=EntityNamePrefix#><#=EntityName#>s
+-- ################################################################
+
+<#  // drop table #>
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'<#=DatabaseOwner#>[<#=DatabaseObjectQualifier#><#=EntityNamePrefix#><#=EntityName#>s]') AND type in (N'U'))
+DROP TABLE <#=DatabaseOwner#>[<#=DatabaseObjectQualifier#><#=EntityNamePrefix#><#=EntityName#>s]
+GO
+
+<#  // create table #>
+CREATE TABLE <#=DatabaseOwner#><#=DatabaseObjectQualifier#><#=EntityNamePrefix#><#=EntityName#>s
+    (
+<#
+    // Iterate each property of the domain class
+    int count = 0;
+    foreach(var currentProperty in properties)
+    {
+#>
+        <#=currentProperty.Name#> <#=GetSQLDataType(currentProperty.Type.AsString.Replace("?","")).ToUpper()#> <#=(currentProperty.Type.AsString.EndsWith("?")) ? "NULL" : "NOT NULL" #><#=(currentProperty.Name == EntityName + "Id") ? " IDENTITY (1, 1)" : "" #><#if(count < properties.Count()-1) {#>,<#}#> 
+<#      count++; #>
+<#  }#>
+    )  ON [PRIMARY]
+GO
+
+<#  // add primary key #>
+ALTER TABLE <#=DatabaseOwner#><#=DatabaseObjectQualifier#><#=EntityNamePrefix#><#=EntityName#>s ADD CONSTRAINT
+    PK_<#=DatabaseObjectQualifier#><#=EntityNamePrefix#><#=EntityName#>s PRIMARY KEY CLUSTERED 
+    (
+        <#=EntityName#>Id
+    ) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+
+GO
+

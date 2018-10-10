@@ -1,0 +1,6 @@
+﻿<#
+    // ################################################################
+    //                Web API Controller Implementation
+    // ################################################################
+#>
+<%@ ServiceHost Language="C#" Debug="true" Service="<#=NamespaceBase + ".WebServices." + EntityName + "WS." + EntityName + "WebService"#> CodeBehind="<#=EntityName + "WebService"#>.svc.cs" %>

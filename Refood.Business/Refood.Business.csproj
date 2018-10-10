@@ -1,0 +1,181 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{515CC9A1-87BF-4028-BD7B-E08AA64B9B58}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Refood.Business</RootNamespace>
+    <AssemblyName>Refood.Business</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AddressService.gen.cs" />
+    <Compile Include="BeneficiaryService.gen.cs" />
+    <Compile Include="BenificiaryMemberService.gen.cs" />
+    <Compile Include="CalendarEventService.gen.cs" />
+    <Compile Include="CheckpointService.gen.cs" />
+    <Compile Include="ContributionChannelService.gen.cs" />
+    <Compile Include="ContributionMonetaryReviewerService.gen.cs" />
+    <Compile Include="ContributionMonetaryService.gen.cs" />
+    <Compile Include="ContributionTypeService.gen.cs" />
+    <Compile Include="CountryService.gen.cs" />
+    <Compile Include="DeliveryReportMessageService.gen.cs" />
+    <Compile Include="DeliveryReportMessageTypeService.gen.cs" />
+    <Compile Include="DeliveryReportService.gen.cs" />
+    <Compile Include="DistrictService.gen.cs" />
+    <Compile Include="DTO\AddressDTO.gen.cs" />
+    <Compile Include="DTO\BeneficiaryDTO.gen.cs" />
+    <Compile Include="DTO\BenificiaryMemberDTO.gen.cs" />
+    <Compile Include="DTO\CalendarEventDTO.gen.cs" />
+    <Compile Include="DTO\CheckpointDTO.gen.cs" />
+    <Compile Include="DTO\ContributionChannelDTO.gen.cs" />
+    <Compile Include="DTO\ContributionMonetaryDTO.gen.cs" />
+    <Compile Include="DTO\ContributionMonetaryReviewerDTO.gen.cs" />
+    <Compile Include="DTO\ContributionTypeDTO.gen.cs" />
+    <Compile Include="DTO\CountryDTO.gen.cs" />
+    <Compile Include="DTO\DeliveryReportDTO.gen.cs" />
+    <Compile Include="DTO\DeliveryReportMessageDTO.gen.cs" />
+    <Compile Include="DTO\DeliveryReportMessageTypeDTO.gen.cs" />
+    <Compile Include="DTO\DistrictDTO.gen.cs" />
+    <Compile Include="DTO\EnergySourceDTO.gen.cs" />
+    <Compile Include="DTO\EquipmentDTO.gen.cs" />
+    <Compile Include="DTO\ExpenseDTO.gen.cs" />
+    <Compile Include="DTO\ExperimentalPhaseLogDTO.gen.cs" />
+    <Compile Include="DTO\FoodDTO.gen.cs" />
+    <Compile Include="DTO\FoodTemplateDTO.gen.cs" />
+    <Compile Include="DTO\NucleoDTO.gen.cs" />
+    <Compile Include="DTO\ParishDTO.gen.cs" />
+    <Compile Include="DTO\PartnerDTO.gen.cs" />
+    <Compile Include="DTO\PartnershipTypeDTO.gen.cs" />
+    <Compile Include="DTO\PlannedRouteDTO.gen.cs" />
+    <Compile Include="DTO\ProjectDTO.gen.cs" />
+    <Compile Include="DTO\ProjectPartnerDTO.gen.cs" />
+    <Compile Include="DTO\RefoodUserDTO.gen.cs" />
+    <Compile Include="DTO\SupplierDTO.gen.cs" />
+    <Compile Include="DTO\SupplierTypeDTO.gen.cs" />
+    <Compile Include="DTO\TaskDTO.gen.cs" />
+    <Compile Include="DTO\TaskTypeDTO.gen.cs" />
+    <Compile Include="DTO\TeamDTO.gen.cs" />
+    <Compile Include="DTO\TutorialDTO.gen.cs" />
+    <Compile Include="DTO\VehicleDTO.gen.cs" />
+    <Compile Include="DTO\VehicleTypeDTO.gen.cs" />
+    <Compile Include="DTO\VolunteerDTO.gen.cs" />
+    <Compile Include="DTO\WeekDayDTO.gen.cs" />
+    <Compile Include="EnergySourceService.gen.cs" />
+    <Compile Include="EquipmentService.gen.cs" />
+    <Compile Include="ExpenseService.gen.cs" />
+    <Compile Include="ExperimentalPhaseLogService.gen.cs" />
+    <Compile Include="FoodService.gen.cs" />
+    <Compile Include="FoodTemplateService.gen.cs" />
+    <Compile Include="Interfaces\IAddressService.gen.cs" />
+    <Compile Include="Interfaces\IBeneficiaryService.gen.cs" />
+    <Compile Include="Interfaces\IBenificiaryMemberService.gen.cs" />
+    <Compile Include="Interfaces\ICalendarEventService.gen.cs" />
+    <Compile Include="Interfaces\ICheckpointService.gen.cs" />
+    <Compile Include="Interfaces\IContributionChannelService.gen.cs" />
+    <Compile Include="Interfaces\IContributionMonetaryReviewerService.gen.cs" />
+    <Compile Include="Interfaces\IContributionMonetaryService.gen.cs" />
+    <Compile Include="Interfaces\IContributionTypeService.gen.cs" />
+    <Compile Include="Interfaces\ICountryService.gen.cs" />
+    <Compile Include="Interfaces\IDeliveryReportMessageService.gen.cs" />
+    <Compile Include="Interfaces\IDeliveryReportMessageTypeService.gen.cs" />
+    <Compile Include="Interfaces\IDeliveryReportService.gen.cs" />
+    <Compile Include="Interfaces\IDistrictService.gen.cs" />
+    <Compile Include="Interfaces\IEnergySourceService.gen.cs" />
+    <Compile Include="Interfaces\IEquipmentService.gen.cs" />
+    <Compile Include="Interfaces\IExpenseService.gen.cs" />
+    <Compile Include="Interfaces\IExperimentalPhaseLogService.gen.cs" />
+    <Compile Include="Interfaces\IFoodService.gen.cs" />
+    <Compile Include="Interfaces\IFoodTemplateService.gen.cs" />
+    <Compile Include="Interfaces\INucleoService.gen.cs" />
+    <Compile Include="Interfaces\IParishService.gen.cs" />
+    <Compile Include="Interfaces\IPartnerService.gen.cs" />
+    <Compile Include="Interfaces\IPartnershipTypeService.gen.cs" />
+    <Compile Include="Interfaces\IPlannedRouteService.gen.cs" />
+    <Compile Include="Interfaces\IProjectPartnerService.gen.cs" />
+    <Compile Include="Interfaces\IProjectService.gen.cs" />
+    <Compile Include="Interfaces\IRefoodUserService.gen.cs" />
+    <Compile Include="Interfaces\ISupplierService.gen.cs" />
+    <Compile Include="Interfaces\ISupplierTypeService.gen.cs" />
+    <Compile Include="Interfaces\ITaskService.gen.cs" />
+    <Compile Include="Interfaces\ITaskTypeService.gen.cs" />
+    <Compile Include="Interfaces\ITeamService.gen.cs" />
+    <Compile Include="Interfaces\ITutorialService.gen.cs" />
+    <Compile Include="Interfaces\IVehicleService.gen.cs" />
+    <Compile Include="Interfaces\IVehicleTypeService.gen.cs" />
+    <Compile Include="Interfaces\IVolunteerService.gen.cs" />
+    <Compile Include="Interfaces\IWeekDayService.gen.cs" />
+    <Compile Include="NucleoService.gen.cs" />
+    <Compile Include="ParishService.gen.cs" />
+    <Compile Include="PartnerService.gen.cs" />
+    <Compile Include="PartnershipTypeService.gen.cs" />
+    <Compile Include="PlannedRouteService.gen.cs" />
+    <Compile Include="ProjectPartnerService.gen.cs" />
+    <Compile Include="ProjectService.gen.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RefoodUserService.gen.cs" />
+    <Compile Include="SupplierService.gen.cs" />
+    <Compile Include="SupplierTypeService.gen.cs" />
+    <Compile Include="TaskService.gen.cs" />
+    <Compile Include="TaskTypeService.gen.cs" />
+    <Compile Include="TeamService.gen.cs" />
+    <Compile Include="TutorialService.gen.cs" />
+    <Compile Include="VehicleService.gen.cs" />
+    <Compile Include="VehicleTypeService.gen.cs" />
+    <Compile Include="VolunteerService.gen.cs" />
+    <Compile Include="WeekDayService.gen.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Refood.Core\Refood.Core.csproj">
+      <Project>{7716677a-c324-4fc8-84ad-a6fa0809b349}</Project>
+      <Name>Refood.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

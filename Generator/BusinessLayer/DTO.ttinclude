@@ -1,0 +1,117 @@
+﻿<#
+    // ################################################################
+    //                  DTO Implementation
+    // ################################################################
+#>
+
+// ################################################################
+//                      Code generated with T4
+// ################################################################
+
+using System;
+using <#=NamespaceCore#>;
+
+namespace <#=NamespaceServices#>.DTOs
+{
+<#
+    CodeClass currentClass = classes.FirstOrDefault(c => c.Name == EntityNamePrefix + EntityName);
+    var properties = currentClass.Members.OfType<EnvDTE.CodeProperty>().Where(p => p.Access.HasFlag(vsCMAccess.vsCMAccessPublic));
+#>
+    public partial class <#=EntityName#>DTO
+    {
+<#
+        // Iterate each property of the domain class, and declare a respective variable in the dto class
+        foreach(var currentProperty in properties)
+        {
+        #>
+        public <#=currentProperty.Type.AsString#> <#=currentProperty.Name#> { get; set; }
+<#      }#>
+
+        public <#=EntityName#>DTO()
+        {
+        
+        }
+
+        public <#=EntityName#>DTO(<#=EntityNamePrefix#><#=EntityName#> <#=EntityNameLowerCase#>)
+        {
+<#
+            // Iterate each property of the domain class, and write the respective mapping to the dto class
+            foreach(var currentProperty in properties)
+            {
+            #>
+            <#=currentProperty.Name#> = <#=EntityNameLowerCase#>.<#=currentProperty.Name#>;
+<#          }#>
+        }
+
+        public static <#=EntityNamePrefix#><#=EntityName#> ConvertDTOtoEntity(<#=EntityName#>DTO dto)
+        {
+            <#=EntityNamePrefix#><#=EntityName#> <#=EntityNameLowerCase#> = new <#=EntityNamePrefix#><#=EntityName#>();
+
+<#
+            // Iterate each property of the domain class, and write the respective mapping from the dto back to the entity
+            foreach(var currentProperty in properties)
+            {
+            #>
+            <#=EntityNameLowerCase#>.<#=currentProperty.Name#> = dto.<#=currentProperty.Name#>;
+<#          }#>
+
+            return <#=EntityNameLowerCase#>;
+        }
+
+<#if (Uselog4net) {#>
+        // logging helper
+        public static string Format<#=EntityNameDTO#>(<#=EntityNameDTO#> <#=EntityNameLowerCase#>DTO)
+        {
+            if(<#=EntityNameLowerCase#>DTO == null)
+            {
+                // null
+                return "<#=EntityNameLowerCase#>DTO: null";
+            }
+            else
+            {
+                // output values
+                return "<#=EntityNameLowerCase#>DTO: \n"
+                    + "{ \n"
+<#
+                // Iterate each property and write the value
+                int countA = 0;
+                foreach(var currentProperty in properties)
+                {
+                    // example code 1:
+                    // + "BusinessParameterId: " + "'" + businessParameterDTO.BusinessParameterId + "'" + ", " 
+
+                    // example code 2 (check nullable values):
+                    // + "Value: " + (businessParameterDTO.Value == null ? "'" + businessParameterDTO.Value + "'" : "null") + ", " 
+#> 
+                    + "    <#=currentProperty.Name#>: " + <# 
+                    
+                    if (currentProperty.Type.AsString.EndsWith("?") || currentProperty.Type.AsString == "string") { 
+                        // check null value
+                        #>(<#=EntityNameLowerCase#>DTO.<#=currentProperty.Name#> != null ? "'" + <#=EntityNameLowerCase#>DTO.<#=currentProperty.Name#> + "'" : "null")<# 
+                    } 
+                    else 
+                    { 
+                        #> "'" + <#=EntityNameLowerCase#>DTO.<#=currentProperty.Name#> + "'" <# 
+                    } 
+                    #> + <# 
+                    
+                    // separator
+                    if( countA < properties.Count() - 1) 
+                    { 
+                        #>", \n"<# 
+                    } 
+                    else 
+                    { 
+                        #>" \n" 
+<#                  } 
+ 
+                    countA++;
+                } #>
+                    + "} \n";
+            }
+        }
+        
+<#}#>
+
+    }
+}

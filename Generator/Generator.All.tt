@@ -1,0 +1,621 @@
+﻿<#@ include file="Generator.Core.ttinclude" #>
+<#
+
+// ################################################################
+//                            Generator
+// ################################################################
+//
+// This is the T4 template to execute and accelerate software development, 
+// by generating source code files for each application layer for each specified domain class, 
+// using metadata from the domain library specified in the "NamespaceCore" parameter. 
+//
+// It uses several templates (.ttinclude) to generate each layer of an application project:
+//     - Repository interfaces
+//     - Repositories
+//     - Business layer interfaces
+//     - Business layer implementation
+//     - DTOs
+//     - View Models
+//     - Web API controllers
+//     - Javascript
+//     - Html views
+//     - Resource files (.resx)
+//
+// All files are currenly being generated into the same folder "Generated" found inside this project, 
+// and for the moment should be copied by hand to the appropriate projects to avoid losing handmade code
+
+
+// ################################################################
+//                       Project Parameters
+// ################################################################
+// Set the generation parameters for your current project here
+
+// Namespaces and conventions for the project
+
+NamespaceBase = "Refood";
+NamespaceCore = "Refood.Core";
+NamespaceServices = "Refood.Business";
+
+ModuleName = "Web";
+
+EntityName = "";
+EntityNamePrefix = "R_";
+EntityNameLowerCase = "";
+
+
+// Specific entities (domain class names) that should generate source code files
+// Note: these classes must already exist in the namespace specified in "NamespaceCore" parameter
+
+Entities = new List<string> { "Task" };
+
+
+// Generate "GetListByParentEntityId" functions (controller and javascript)
+// for the current specific entities only (set above in the "Entities" list)
+// example: class "ProductCategory" has a list of "Products", so we generate a function chain called "GetProductListByProductCategoryId(int id)" 
+// (query + business layer function + web api action + ajax get)
+
+ShouldGenerateParentEntityFunctions = false;
+ParentEntityName = "Beneficiary";
+
+
+// ################################################################
+//      Desired application layers to generate for the project
+// ################################################################
+
+GenerateSQLCreateTableScriptFromDomainClass = false;
+
+GenerateRepository = true;
+
+GenerateBusinessLayer = true;
+GenerateDTO = true;
+
+GenerateViewModel = true;
+GenerateWebAPIController = true;
+GenerateJavascript = true;
+GenerateJavascript_HelperScript = true;
+
+GenerateViewPage = true;
+GenerateViewPage_SearchFilters = true;
+GenerateViewPage_InlineEditTable = false;
+UseDataTablesPlugin = true;
+
+GenerateEditPage = true;
+GenerateSettingsPage = false;
+
+GenerateResources = false;
+
+GenerateWebServices = false;
+
+GenerateUnitTests = true;
+GenerateIntegrationTests = false;
+GenerateLoadTests = false;
+
+
+// ################################################################
+//                      Generation options
+// ################################################################
+
+// if true, all files are generated directly into their respective final destination folder 
+// (results in faster development, but may cause manual code loss)
+// if false, all files are generated to a local folder named "Generated", and must be copied 
+// (safer, but some files have the same name for different entities, so frontend must be generated for one entity at a time, such as View.html, Edit.html, View.resx, Edit.resx).
+ShouldGenerateAtFinalDestinationFolder = true;
+
+DestinationFolderDefault = "Generated"; // relative path
+SolutionFolder = "..\\"; // relative path
+
+FileNameGeneratedSuffix = ".gen";
+
+// if true, the result is several distinct web module projects, one for each specified entity in "Entities" list.
+// if false, the result is controllers, viewmodels, pages, javascript, etc for each entity, they all go to the same single web module project. 
+ShouldGenerateOneWebProjectPerEntity = false;
+
+
+// ################################################################
+//                  Desired external features
+// ################################################################
+
+UsePetaPocoORM = true;
+
+Uselog4net = true;
+
+UseDNN = false;
+UseDNNModuleId = false;
+
+UseKnockoutJs = true;
+// TODO - develop alternative to knockoutjs, possibly necessary for complex single page applications
+
+UsejQueryDatepickerPlugin = true;
+
+UseMSTest = true;
+UseNUnit = false;
+
+
+// ################################################################
+//  Generate each layer of source code files for each domain class
+// ################################################################
+
+classes = FindClasses(project, NamespaceCore, "");
+
+foreach(string currentEntity in Entities)
+{
+    EntityName = currentEntity;
+    EntityNameLowerCase = currentEntity.Substring(0, 1).ToLower() + currentEntity.Substring(1, currentEntity.Length - 1);
+    EntityNameDTO = EntityName + "DTO";
+    EntityNameDataContract = EntityName + "DataContract";
+
+    if (ShouldGenerateOneWebProjectPerEntity)
+    {
+        ModuleName = EntityName + "Module";
+    }
+
+    NamespaceModule = NamespaceBase + "." + ModuleName;
+    NamespaceViewModels = NamespaceModule + ".Services.ViewModels";
+    NamespaceDataContracts = NamespaceBase + ".WebServices." + EntityName + "WS.DataContracts";
+
+ 
+// ################################################################
+//                      Repository
+// ################################################################
+
+// Generate Database Repository Interface (without ORM dependencies)
+if (GenerateRepository) 
+{
+    #>
+<#@ include file="Core\IRepository.ttinclude" #>
+    <#
+    string destinationFolder = DestinationFolderDefault;
+    if(ShouldGenerateAtFinalDestinationFolder)
+    {
+        destinationFolder = SolutionFolder + NamespaceCore + "\\Repositories\\Interfaces";
+    }
+    SaveOutput("I" + EntityName + "Repository" + FileNameGeneratedSuffix + ".cs", destinationFolder);
+}
+
+// Generate Database Repository
+if (GenerateRepository) 
+{
+    if (UsePetaPocoORM) 
+    {
+        #>
+<#@ include file="Core\Repository.PetaPoco.ttinclude" #>
+        <#
+        string destinationFolder = DestinationFolderDefault;
+        if(ShouldGenerateAtFinalDestinationFolder)
+        {
+            destinationFolder = SolutionFolder + NamespaceCore + "\\Repositories";
+        }
+        SaveOutput(EntityName + "Repository" + FileNameGeneratedSuffix + ".cs", destinationFolder);
+    }
+    else 
+    {
+        // TODO NHibernate repository
+
+        // TODO Entity Framework repository
+
+        #>
+<#@ include file="Core\Repository.PetaPoco.ttinclude" #>
+        <#
+        string destinationFolder = DestinationFolderDefault;
+        if(ShouldGenerateAtFinalDestinationFolder)
+        {
+            destinationFolder = SolutionFolder + NamespaceCore + "\\Repositories";
+        }
+        SaveOutput(EntityName + "Repository" + FileNameGeneratedSuffix + ".cs", destinationFolder);
+    }
+}
+ 
+
+// ################################################################
+//                      Business Layer
+// ################################################################
+
+// Generate Business Layer interface
+if (GenerateBusinessLayer) 
+{
+    #>
+<#@ include file="BusinessLayer\Interface.ttinclude" #>
+    <#
+    string destinationFolder = DestinationFolderDefault;
+    if(ShouldGenerateAtFinalDestinationFolder)
+    {
+        destinationFolder = SolutionFolder + NamespaceServices + "\\Interfaces";
+    }
+    SaveOutput("I" + EntityName + "Service" + FileNameGeneratedSuffix + ".cs", destinationFolder);
+}
+ 
+// Generate Business Layer implementation
+if (GenerateBusinessLayer) 
+{
+    #>
+<#@ include file="BusinessLayer\BusinessLayer.ttinclude" #>
+    <#
+    string destinationFolder = DestinationFolderDefault;
+    if(ShouldGenerateAtFinalDestinationFolder)
+    {
+        destinationFolder = SolutionFolder + NamespaceServices;
+    }
+    SaveOutput(EntityName + "Service" + FileNameGeneratedSuffix + ".cs", destinationFolder);
+}
+
+// Generate Business Layer DTOs
+if (GenerateDTO) 
+{
+    #>
+<#@ include file="BusinessLayer\DTO.ttinclude" #>
+    <#
+    string destinationFolder = DestinationFolderDefault;
+    if(ShouldGenerateAtFinalDestinationFolder)
+    {
+        destinationFolder = SolutionFolder + NamespaceServices + "\\DTO";
+    }
+    SaveOutput(EntityName + "DTO" + FileNameGeneratedSuffix + ".cs", destinationFolder);
+}
+
+
+
+// ################################################################
+//                        Frontend
+// ################################################################
+
+// ################################################################
+//                       View Models
+// ################################################################
+
+// Generate Frontend view models
+if (GenerateViewModel) 
+{
+    #>
+<#@ include file="ViewModels\ViewModel.ttinclude" #>
+    <#
+    string destinationFolder = DestinationFolderDefault;
+    if(ShouldGenerateAtFinalDestinationFolder)
+    {
+        destinationFolder = SolutionFolder + NamespaceModule + "\\Models";
+    }
+    SaveOutput(EntityName + "ViewModel" + FileNameGeneratedSuffix + ".cs", destinationFolder);
+}
+
+
+// ################################################################
+//                   Controllers
+// ################################################################
+
+// Generate Controllers
+if (GenerateWebAPIController) 
+{
+    // Generate MVC Controller
+    if(UseDNN) 
+    {
+        #>
+<#@ include file="WebAPI\Controller.ttinclude" #>
+    <#
+        string destinationFolder = DestinationFolderDefault;
+        if(ShouldGenerateAtFinalDestinationFolder)
+        {
+            destinationFolder = SolutionFolder + NamespaceModule + "\\Services";
+        }
+        SaveOutput(EntityName + "Controller" + FileNameGeneratedSuffix + ".cs", destinationFolder);
+    }
+    else 
+    {
+        #>
+<#@ include file="WebAPI\ControllerMvc.ttinclude" #>
+    <#
+        string destinationFolder = DestinationFolderDefault;
+        if(ShouldGenerateAtFinalDestinationFolder)
+        {
+            destinationFolder = SolutionFolder + NamespaceModule + "\\Controllers";
+        }
+        SaveOutput(EntityName + "Controller" + FileNameGeneratedSuffix + ".cs", destinationFolder);
+    }
+            
+    // Generate Web API
+    if (GenerateWebAPIController) 
+    {    
+        #>
+<#@ include file="WebAPI\ControllerWebAPI.ttinclude" #>
+    <#
+        string webapiDestinationFolder = DestinationFolderDefault;
+        if(ShouldGenerateAtFinalDestinationFolder)
+        {
+            webapiDestinationFolder = SolutionFolder + NamespaceModule + "\\Controllers";
+        }
+        SaveOutput(EntityName + "ApiController" + FileNameGeneratedSuffix + ".cs", webapiDestinationFolder);
+    }
+}
+
+
+// ################################################################
+//                      Javascript files
+// ################################################################
+
+// Generate Frontend javascript
+if (GenerateJavascript) 
+{
+    #>
+<#@ include file="Scripts\EntityEditScript.ttinclude" #>
+    <#
+    string destinationFolder = DestinationFolderDefault;
+    if(ShouldGenerateAtFinalDestinationFolder)
+    {
+        destinationFolder = SolutionFolder + NamespaceModule + "\\Scripts";
+    }
+    SaveOutput(EntityName + "Edit" + ".js", destinationFolder);
+}
+
+if (GenerateJavascript) 
+{
+    #>
+<#@ include file="Scripts\EntityViewScript.ttinclude" #>
+    <#
+    string destinationFolder = DestinationFolderDefault;
+    if(ShouldGenerateAtFinalDestinationFolder)
+    {
+        destinationFolder = SolutionFolder + NamespaceModule + "\\Scripts";
+    }
+    SaveOutput(EntityName + "View" + ".js", destinationFolder);
+}
+
+if (GenerateJavascript && GenerateSettingsPage) 
+{
+    #>
+<#@ include file="Scripts\QuickSettingsScript.ttinclude" #>
+    <#
+    string destinationFolder = DestinationFolderDefault;
+    if(ShouldGenerateAtFinalDestinationFolder)
+    {
+        destinationFolder = SolutionFolder + NamespaceModule + "\\Scripts";
+    }
+    SaveOutput("QuickSettings" + ".js", destinationFolder);
+}
+
+if (GenerateJavascript_HelperScript) 
+{
+    #>
+<#@ include file="Scripts\EntityHelperScript.ttinclude" #>
+    <#
+    string destinationFolder = DestinationFolderDefault;
+    if(ShouldGenerateAtFinalDestinationFolder)
+    {
+        destinationFolder = SolutionFolder + NamespaceModule + "\\Scripts";
+    }
+    SaveOutput(EntityName + "Helper" + ".js", destinationFolder);
+}
+
+
+// ################################################################
+//                           Views
+// ################################################################
+
+// Generate Frontend views
+if (GenerateViewPage) 
+{
+    if(UseDNN) 
+    {
+        #>
+<#@ include file="Views\View.ttinclude" #>
+    <#
+        string destinationFolder = DestinationFolderDefault;
+        if(ShouldGenerateAtFinalDestinationFolder)
+        {
+            destinationFolder = SolutionFolder + NamespaceModule + "\\Views";
+        }
+        SaveOutput("View" + ".html", destinationFolder);
+    }
+    else
+    {
+        #>
+<#@ include file="Views\View.cshtml.ttinclude" #>
+    <#
+        string destinationFolder = DestinationFolderDefault;
+        if(ShouldGenerateAtFinalDestinationFolder)
+        {
+            destinationFolder = SolutionFolder + NamespaceModule + "\\Views\\" + EntityName;
+
+            string templateDirectory = Path.Combine(Path.GetDirectoryName(Host.TemplateFile), destinationFolder);
+            DirectoryInfo di = Directory.CreateDirectory(templateDirectory);
+        }
+        SaveOutput("View" + ".cshtml", destinationFolder);
+    }
+}
+
+if (GenerateEditPage) 
+{
+    if(UseDNN) 
+    {
+        #>
+<#@ include file="Views\Edit.ttinclude" #>
+    <#
+        string destinationFolder = DestinationFolderDefault;
+        if(ShouldGenerateAtFinalDestinationFolder)
+        {
+            destinationFolder = SolutionFolder + NamespaceModule + "\\Views";
+        }
+        SaveOutput("Edit" + ".html", destinationFolder);
+    }
+    else 
+    {
+        #>
+<#@ include file="Views\Edit.cshtml.ttinclude" #>
+    <#
+        string destinationFolder = DestinationFolderDefault;
+        if(ShouldGenerateAtFinalDestinationFolder)
+        {
+            destinationFolder = SolutionFolder + NamespaceModule + "\\Views\\" + EntityName;
+
+            string templateDirectory = Path.Combine(Path.GetDirectoryName(Host.TemplateFile), destinationFolder);
+            DirectoryInfo di = Directory.CreateDirectory(templateDirectory);
+        }
+        SaveOutput("Edit" + ".cshtml", destinationFolder);
+    }
+}
+
+if (GenerateSettingsPage) 
+{
+    #>
+<#@ include file="Views\Settings.ttinclude" #>
+    <#
+    string destinationFolder = DestinationFolderDefault;
+    if(ShouldGenerateAtFinalDestinationFolder)
+    {
+        destinationFolder = SolutionFolder + NamespaceModule + "\\Views";
+    }
+    SaveOutput("Settings" + ".html", destinationFolder);
+}
+
+
+// ################################################################
+//                   Resource Files (.resx)
+// ################################################################
+
+// Generate Frontend resource files
+if (GenerateResources && GenerateViewPage) 
+{
+    #>
+<#@ include file="Resources\View.resx.ttinclude" #>
+    <#
+    string destinationFolder = DestinationFolderDefault;
+    if(ShouldGenerateAtFinalDestinationFolder)
+    {
+        destinationFolder = SolutionFolder + NamespaceModule + "\\App_LocalResources";
+    }
+    SaveOutput("View" + ".resx", destinationFolder);
+}
+
+if (GenerateResources && GenerateEditPage) 
+{
+    #>
+<#@ include file="Resources\Edit.resx.ttinclude" #>
+    <#
+    string destinationFolder = DestinationFolderDefault;
+    if(ShouldGenerateAtFinalDestinationFolder)
+    {
+        destinationFolder = SolutionFolder + NamespaceModule + "\\App_LocalResources";
+    }
+    SaveOutput("Edit" + ".resx", destinationFolder);
+}
+
+
+// ################################################################
+//                   WCF Web Services
+// ################################################################
+
+// Generate WCF Web Services
+if (GenerateWebServices) 
+{
+    string destinationFolderWebService = DestinationFolderDefault;
+    if(ShouldGenerateAtFinalDestinationFolder)
+    {
+        destinationFolderWebService = SolutionFolder + NamespaceBase + ".WebServices." + EntityName + "WS";
+
+        string templateDirectory = Path.Combine(Path.GetDirectoryName(Host.TemplateFile), destinationFolderWebService);
+        DirectoryInfo di = Directory.CreateDirectory(templateDirectory);
+    }
+
+    // Generate Data Contract
+    if (GenerateWebServices) 
+    {
+        #>
+<#@ include file="WebServices\DataContract.cs.ttinclude" #>
+    <#
+        string templateDirectory = Path.Combine(Path.GetDirectoryName(Host.TemplateFile), destinationFolderWebService + "\\DataContracts");
+        DirectoryInfo di = Directory.CreateDirectory(templateDirectory);
+
+        SaveOutput(EntityName + "DataContract" + FileNameGeneratedSuffix + ".cs", destinationFolderWebService + "\\DataContracts");
+    }
+            
+    // Generate Service Contract interface
+    if (GenerateWebServices) 
+    {
+        #>
+<#@ include file="WebServices\ServiceContract.cs.ttinclude" #>
+    <#
+        SaveOutput("I" + EntityName + "WebService" + FileNameGeneratedSuffix + ".cs", destinationFolderWebService);
+    }
+            
+    // Generate Service implementation
+    if (GenerateWebServices) 
+    {
+        #>
+<#@ include file="WebServices\Service.svc.cs.ttinclude" #>
+    <#
+        SaveOutput(EntityName + "WebService" + ".svc.cs", destinationFolderWebService);
+    }
+            
+    // Generate Service svc file
+    if (GenerateWebServices) 
+    {
+        #>
+<#@ include file="WebServices\Service.svc.ttinclude" #>
+    <#
+        SaveOutput(EntityName + "WebService" + ".svc", destinationFolderWebService);
+    }
+}
+ 
+
+// ################################################################
+//                      Unit Tests
+// ################################################################
+
+// ################################################################
+//                      Unit Tests - Business Layer
+// ################################################################
+
+// Generate unit tests for Business Layer
+if (GenerateUnitTests) 
+{
+    if (UseNUnit && !UseMSTest) 
+    {
+    #>
+<# //TODO - NUnit T4 template - include file="Tests\UnitTests\NUnit\BusinessLayer.UnitTests.ttinclude" #>
+    <#
+    }
+    else 
+    {
+    #>
+<#@ include file="Tests\UnitTests\MSTest\BusinessLayer.UnitTests.ttinclude" #>
+    <#
+    }
+
+    string destinationFolder = DestinationFolderDefault;
+    if(ShouldGenerateAtFinalDestinationFolder)
+    {
+        destinationFolder = SolutionFolder + NamespaceServices + ".UnitTests";
+    }
+    SaveOutput(EntityName + "Service" + "UnitTests" + FileNameGeneratedSuffix + ".cs", destinationFolder);
+}
+
+}
+
+
+// ################################################################
+//             Generate SQL create table scripts (.sql)
+// ################################################################
+
+if (GenerateSQLCreateTableScriptFromDomainClass) 
+{
+    var allDomainClassNames = classes.Where(c => c.Name != null && c.Name.StartsWith(EntityNamePrefix))
+                                     .Select(c => c.Name.Replace(EntityNamePrefix,""))
+                                     .ToList();
+
+    foreach(string currentEntity in allDomainClassNames)
+    //foreach(string currentEntity in Entities)
+    {
+        EntityName = currentEntity;
+        EntityNameLowerCase = currentEntity.Substring(0, 1).ToLower() + currentEntity.Substring(1, currentEntity.Length - 1);
+#>
+<#@ include file="Database\CreateTableFromDomainClass.sql.ttinclude" #>
+<#
+    }
+    
+    // generate one sql file for all tables
+    string destinationFolder = DestinationFolderDefault;
+    if(ShouldGenerateAtFinalDestinationFolder)
+    {
+        destinationFolder = SolutionFolder + NamespaceCore;
+    }
+    SaveOutput("CreateAllTables" + FileNameGeneratedSuffix + ".sql", destinationFolder);
+}
+
+#>
