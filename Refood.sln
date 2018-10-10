@@ -13,6 +13,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Generator", "Generator\Gene
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Refood.Business.UnitTests", "Refood.Business.UnitTests\Refood.Business.UnitTests.csproj", "{EEE4006A-34F1-44C5-9CBE-C73F8DA134B0}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documents", "Documents", "{1802D370-6188-4715-BAC9-03518F330EDE}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+		Documents\refood backend architecture diagram.png = Documents\refood backend architecture diagram.png
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
