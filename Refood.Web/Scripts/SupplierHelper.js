@@ -52,7 +52,7 @@ Web.supplierHelper = function (isLoading, serviceRootUrl, moduleHeaders) {
         isLoading(true);
 
         // need to calculate a different Url for Supplier service
-        var restUrl = serviceRootUrl + "Supplier/GetList/";
+        var restUrl = serviceRootUrl + "api/SupplierApi/GetList";
         var jqXHR = $.ajax({
             url: restUrl,
             beforeSend: moduleHeaders,

@@ -11,11 +11,11 @@
             Planned Route
         </h2>
         <fieldset>
-            <div class="dnnFormItem" style="margin-bottom: 20px; ">
+            <div class="formItem" style="margin-bottom: 20px; ">
                 <div><label for="name">Name</label></div>
                 <input id="name" type="text" data-bind="textInput: name" class="form-control" />
             </div>
-            <div class="dnnFormItem" style="margin-bottom: 20px; ">
+            <div class="formItem" style="margin-bottom: 20px; ">
                 <div><label for="routeTypeId">Route Type</label></div>
                 @*<select data-bind="options: routeTypeList,
                                     optionsText: 'name',
@@ -23,7 +23,7 @@
                                     value: routeTypeId,
                                     optionsCaption: ''" class="form-control"></select>*@
             </div>
-            <div class="dnnFormItem" style="margin-bottom: 20px; ">
+            <div class="formItem" style="margin-bottom: 20px; ">
                 <div><label for="transportTypeId">Transport Type</label></div>
                 @*<select data-bind="options: transportTypeList,
                                     optionsText: 'name',
@@ -31,11 +31,11 @@
                                     value: transportTypeId,
                                     optionsCaption: ''" class="form-control"></select>*@
             </div>
-            <div class="dnnFormItem" style="margin-bottom: 20px; ">
+            <div class="formItem" style="margin-bottom: 20px; ">
                 <div><label for="description">Description</label></div>
                 <input id="description" type="text" data-bind="textInput: description" class="form-control" />
             </div>
-            <div class="dnnFormItem" style="margin-bottom: 20px; ">
+            <div class="formItem" style="margin-bottom: 20px; ">
                 <div><label for="startHour">Start Hour</label></div>
                 <input data-bind="datepicker: startHour, datepickerOptions: {
                                     yearRange: '-20:+100',
@@ -44,31 +44,43 @@
                                     dateFormat: 'dd-mm-yy' }"
                                     class="form-control" />
             </div>
-            <div class="dnnFormItem" style="margin-bottom: 20px; ">
+            <div class="formItem" style="margin-bottom: 20px; ">
                 <div><label for="estimatedDuration">Estimated Duration</label></div>
                 <input id="estimatedDuration" type="text" data-bind="textInput: estimatedDuration" class="form-control" />
             </div>
-            <div class="dnnFormItem" style="margin-bottom: 20px; ">
+            <div class="formItem" style="margin-bottom: 20px; ">
                 <div><label for="totalDistance">Total Distance</label></div>
                 <input id="totalDistance" type="text" data-bind="textInput: totalDistance" class="form-control" />
             </div>
-            <div class="dnnFormItem" style="margin-bottom: 20px; ">
+            <div class="formItem" style="margin-bottom: 20px; ">
                 <div><label for="routeDayOfTheWeek">Route Day Of The Week</label></div>
                 <input id="routeDayOfTheWeek" type="text" data-bind="textInput: routeDayOfTheWeek" class="form-control" />
             </div>
-            <div class="dnnFormItem" style="margin-bottom: 20px; ">
+            <div class="formItem" style="margin-bottom: 20px; ">
                 <div><label for="active">Active</label></div>
                 <input id="active" type="checkbox" data-bind="checked: active" class="form-control" />
             </div>
         </fieldset>
     </div>
     <hr />
+
+    <div id="map"></div>
+    <hr />
+
+    <!-- Suppliers -->
+    <div id="suppliersDiv" style="position: relative; left: -180px; top: -670px; width: 30%; height: 500px; ">
+        <div data-bind="foreach: supplierHelper.supplierList">
+            <div style="border: 1px solid #808080; border-radius: 5px; padding: 8px; ">
+                <div data-bind="text: name"></div>
+                <div data-bind="text: latitude() + ', ' + longitude()"></div>
+            </div>
+        </div>
+    </div>
+
     <div class="text-right" style="margin-bottom: 50px; ">
 		<a data-bind="click: cancel" href="#" class="btn btn-link">Cancel</a>
 		<a data-bind="click: save" href="#" class="btn btn-primary">Save</a>
     </div>
-
-    <div id="map"></div>
 </div>
 
 @section scripts{
@@ -79,6 +91,8 @@
 <link href="~/Content/toastr.css" rel="stylesheet" />
 
 <script type="text/javascript" src="~/Scripts/PlannedRouteEdit.js"></script>
+<script type="text/javascript" src="~/Scripts/SupplierHelper.js"></script>
+<script type="text/javascript" src="~/Scripts/SupplierTypeHelper.js"></script>
 @*<script type="text/javascript" src="~/Scripts/RouteTypeHelper.js"></script>
 <script type="text/javascript" src="~/Scripts/TransportTypeHelper.js"></script>*@
 
@@ -98,12 +112,13 @@
 
             ko.applyBindings(viewmodel, $("#PlannedRoute-" + moduleId)[0]);
 
-            var map;
             function initMap() {
-                map = new google.maps.Map(document.getElementById('map'), {
-                    center: { lat: -38.7223, lng: 9.1393 },
-                    zoom: 8
+                viewmodel.map = new google.maps.Map(document.getElementById('map'), {
+                    center: { lat: 38.7223, lng: -9.1393 },
+                    zoom: 12
                 });
+
+                viewmodel.loadSupplierListToMap(viewmodel.map);
             }
 
             //function dnnEditBasicSettings() {

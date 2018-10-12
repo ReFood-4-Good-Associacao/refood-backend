@@ -134,6 +134,7 @@
     <None Include="Database\Re-Food_ModeloDados_2018_05_10.xlsx" />
     <None Include="Database\Re-Food_ModeloDados_2018_08_23.xlsx" />
     <None Include="Database\Re-Food_ModeloDados_2018_05_22.xlsx" />
+    <None Include="Database\Re-Food_ModeloDados_2018_09_27.xlsx" />
     <None Include="Models\Generated\PetaPoco.Core.ttinclude" />
     <None Include="Models\Generated\PetaPoco.Generator.ttinclude" />
     <None Include="packages.config" />

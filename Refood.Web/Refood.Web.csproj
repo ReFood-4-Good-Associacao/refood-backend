@@ -758,8 +758,13 @@
     <Content Include="Scripts\esm\popper.js.map" />
     <Content Include="Scripts\esm\popper-utils.min.js.map" />
     <Content Include="Scripts\esm\popper-utils.js.map" />
+    <None Include="Properties\PublishProfiles\RefoodBackend - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\RefoodBackend - Web Deploy %282%29.pubxml" />
+    <None Include="Properties\PublishProfiles\RefoodBackend - Web Deploy %283%29.pubxml" />
+    <None Include="Properties\PublishProfiles\RefoodBackend - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\RefoodTest-refooddeploymentslot - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\RefoodWeb - Web Deploy.pubxml" />
+    <Content Include="RefoodBackend.PublishSettings" />
     <None Include="RefoodWeb - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\ExpenseEdit.js" />

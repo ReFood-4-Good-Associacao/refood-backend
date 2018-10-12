@@ -28,6 +28,11 @@ Web.plannedRouteViewModel = function (moduleId, resx) {
 
     //var routeTypeHelper = Web.routeTypeHelper(isLoading, '/', function(){});
     //var transportTypeHelper = Web.transportTypeHelper(isLoading, '/', function(){});
+    var supplierHelper = Web.supplierHelper(isLoading, '/', function () { });
+    var supplierTypeHelper = Web.supplierTypeHelper(isLoading, '/', function () { });
+
+    // google maps
+    var map;
 
 
 
@@ -43,7 +48,30 @@ Web.plannedRouteViewModel = function (moduleId, resx) {
 
         //routeTypeHelper.getRouteTypeList();
         //transportTypeHelper.getTransportTypeList();
+        
+        supplierTypeHelper.getSupplierTypeList();
+        supplierHelper.getSupplierList();
+
+        loadSupplierListToMap(map);
     };
+
+
+    // load suppliers to map
+    var loadSupplierListToMap = function (map) {
+        if (map != null && supplierHelper.supplierList().length > 0) {
+            console.log("load suppliers to map - count: " + supplierHelper.supplierList().length);
+
+            // https://developers.google.com/maps/documentation/javascript/adding-a-google-map
+            for (var i = 0; i < supplierHelper.supplierList().length; i++) {
+                var currentSupplier = supplierHelper.supplierList()[i];
+                var supplierCoordinates = { lat: currentSupplier.latitude(), lng: currentSupplier.longitude() };
+                var supplierMarker = new google.maps.Marker({ position: supplierCoordinates, map: map });
+
+                console.log("adding supplier to map: " + currentSupplier.name() + " (" + currentSupplier.latitude() + ", " + currentSupplier.longitude() + ")");
+            }
+        }
+    };
+
 
     var getQueryStrings = function () {
         var assoc = {};
@@ -80,7 +108,7 @@ Web.plannedRouteViewModel = function (moduleId, resx) {
     var getPlannedRoute = function (plannedRouteId) {
         isLoading(true);
 
-        var restUrl = baseUrl + "Get/?itemId=" + plannedRouteId;
+        var restUrl = baseUrl + "Get/?id=" + plannedRouteId;
         var jqXHR = $.ajax({
             url: restUrl,
             dataType: "json"
@@ -206,6 +234,10 @@ Web.plannedRouteViewModel = function (moduleId, resx) {
         isLoading: isLoading,
         //routeTypeList: routeTypeHelper.routeTypeList,
         //transportTypeList: transportTypeHelper.transportTypeList,
+        supplierHelper: supplierHelper,
+        supplierTypeHelper: supplierTypeHelper,
+        map: map,
+        loadSupplierListToMap: loadSupplierListToMap
     };
 }
 

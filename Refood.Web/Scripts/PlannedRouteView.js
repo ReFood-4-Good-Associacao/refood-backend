@@ -34,8 +34,8 @@ Web.plannedRouteListViewModel = function (moduleId, resx) {
 
     // helpers
 
-    var routeTypeHelper = Web.routeTypeHelper(isLoading, '/', function(){});
-    var transportTypeHelper = Web.transportTypeHelper(isLoading, '/', function(){});
+    //var routeTypeHelper = Web.routeTypeHelper(isLoading, '/', function(){});
+    //var transportTypeHelper = Web.transportTypeHelper(isLoading, '/', function(){});
 
 
 
@@ -46,8 +46,8 @@ Web.plannedRouteListViewModel = function (moduleId, resx) {
         //getPlannedRoutePage();
         getPlannedRouteListAdvanced();
 
-        routeTypeHelper.getRouteTypeList();
-        transportTypeHelper.getTransportTypeList();
+        //routeTypeHelper.getRouteTypeList();
+        //transportTypeHelper.getTransportTypeList();
     }
 
 
@@ -283,8 +283,8 @@ Web.plannedRouteListViewModel = function (moduleId, resx) {
         advancedSearch: advancedSearch,
         clearSearchFilters: clearSearchFilters,
 
-        routeTypeList: routeTypeHelper.routeTypeList,
-        transportTypeList: transportTypeHelper.transportTypeList,
+        //routeTypeList: routeTypeHelper.routeTypeList,
+        //transportTypeList: transportTypeHelper.transportTypeList,
 
         nameFilter: nameFilter,
         routeTypeIdFilter: routeTypeIdFilter,
