@@ -25,7 +25,6 @@ Web.plannedRouteViewModel = function (moduleId, resx) {
 
 
     // helpers
-
     //var routeTypeHelper = Web.routeTypeHelper(isLoading, '/', function(){});
     //var transportTypeHelper = Web.transportTypeHelper(isLoading, '/', function(){});
     var supplierHelper = Web.supplierHelper(isLoading, '/', function () { });
@@ -33,6 +32,9 @@ Web.plannedRouteViewModel = function (moduleId, resx) {
 
     // google maps
     var map;
+    var directionsService;
+    var directionsDisplay;
+    var markerArray = [];
 
 
 
@@ -53,23 +55,7 @@ Web.plannedRouteViewModel = function (moduleId, resx) {
         supplierHelper.getSupplierList();
 
         loadSupplierListToMap(map);
-    };
-
-
-    // load suppliers to map
-    var loadSupplierListToMap = function (map) {
-        if (map != null && supplierHelper.supplierList().length > 0) {
-            console.log("load suppliers to map - count: " + supplierHelper.supplierList().length);
-
-            // https://developers.google.com/maps/documentation/javascript/adding-a-google-map
-            for (var i = 0; i < supplierHelper.supplierList().length; i++) {
-                var currentSupplier = supplierHelper.supplierList()[i];
-                var supplierCoordinates = { lat: currentSupplier.latitude(), lng: currentSupplier.longitude() };
-                var supplierMarker = new google.maps.Marker({ position: supplierCoordinates, map: map });
-
-                console.log("adding supplier to map: " + currentSupplier.name() + " (" + currentSupplier.latitude() + ", " + currentSupplier.longitude() + ")");
-            }
-        }
+        loadRoutePathsToMap(map);
     };
 
 
@@ -102,6 +88,152 @@ Web.plannedRouteViewModel = function (moduleId, resx) {
     };
 
 
+
+    // #######################################################################################
+    // map
+    // #######################################################################################
+
+    // init map
+
+    var initMap = function () {
+        // directions service
+        directionsService = new google.maps.DirectionsService;
+        directionsDisplay = new google.maps.DirectionsRenderer;
+
+        // main map
+        map = new google.maps.Map(document.getElementById('map'), {
+            center: { lat: 38.7223, lng: -9.1393 },
+            zoom: 13
+        });
+        directionsDisplay.setMap(map);
+
+        // Instantiate an info window to hold directions step text.
+        var stepDisplay = new google.maps.InfoWindow;
+
+        // load refood data to map
+        loadSupplierListToMap(map);
+        loadRoutePathsToMap(map);
+    };
+
+
+    // load suppliers to map
+
+    var loadSupplierListToMap = function (map) {
+        if (map != null && supplierHelper.supplierList().length > 0) {
+            console.log("load suppliers to map - count: " + supplierHelper.supplierList().length);
+
+            // https://developers.google.com/maps/documentation/javascript/adding-a-google-map
+            for (var i = 0; i < supplierHelper.supplierList().length; i++) {
+                var currentSupplier = supplierHelper.supplierList()[i];
+                var supplierCoordinates = { lat: currentSupplier.latitude(), lng: currentSupplier.longitude() };
+
+                var supplierMarker = new google.maps.Marker({
+                    position: supplierCoordinates,
+                    label: i.toString(),
+                    //icon: 'dining',
+                    map: map
+                });
+
+                console.log("adding supplier to map: " + currentSupplier.name() + " (" + currentSupplier.latitude() + ", " + currentSupplier.longitude() + ")");
+            }
+        }
+    };
+
+
+    // load route paths to map
+    // Directions Service - https://developers.google.com/maps/documentation/javascript/directions
+    // Directions Service (Complex) - https://developers.google.com/maps/documentation/javascript/examples/directions-complex
+
+    var loadRoutePathsToMap = function (map) {
+        if (map != null && supplierHelper.supplierList().length > 0) {
+            console.log("load route paths to map - count: " + supplierHelper.supplierList().length);
+
+            // TODO - add starting point = nucleo coordinates
+            var nucleoCoordinates = '38.739497, -9.150911'; // teste - Núcleo Nossa Senhora de Fátima
+            var startPoint = nucleoCoordinates;
+            var endPoint = nucleoCoordinates;
+
+            // Travel modes: 'DRIVING', 'WALKING', 'BICYCLING', 'TRANSIT'
+            var travelMode = 'WALKING';
+
+            // waypoints
+            var waypoints = [];
+
+            // add each supplier to the route
+            for (var i = 0; i < supplierHelper.supplierList().length; i++) {
+                var currentSupplier = supplierHelper.supplierList()[i];
+                var currentPointText = currentSupplier.latitude() + ", " + currentSupplier.longitude();
+
+                waypoints.push({
+                    location: currentPointText,
+                    stopover: true
+                });
+            }
+
+            // TODO - add ending point = nucleo coordinates
+
+            // calculate route with waypoints
+            calculateAndDisplayRouteWithWaypoints(directionsService, directionsDisplay, startPoint, endPoint, waypoints, travelMode);
+        }
+    };
+
+
+    // calculate and display route
+
+    function calculateAndDisplayRoute(directionsService, directionsDisplay, startPoint, endPoint) {
+
+        directionsService.route({
+            origin: startPoint,
+            destination: endPoint,
+            travelMode: 'DRIVING' // Travel modes: 'DRIVING', 'WALKING', 'BICYCLING', 'TRANSIT'
+        }, function (response, status) {
+            if (status === 'OK') {
+                directionsDisplay.setDirections(response);
+            } else {
+                window.alert('Directions request failed due to ' + status);
+            }
+        });
+    }
+
+
+    // calculate and display route with waypoints
+
+    function calculateAndDisplayRouteWithWaypoints(directionsService, directionsDisplay, startPoint, endPoint, waypoints, travelMode) {
+
+        directionsService.route({
+            origin: startPoint,
+            destination: endPoint,
+            waypoints: waypoints,
+            optimizeWaypoints: true,
+            travelMode: travelMode // Travel modes: 'DRIVING', 'WALKING', 'BICYCLING', 'TRANSIT'
+        }, function (response, status) {
+            if (status === 'OK') {
+                directionsDisplay.setDirections(response);
+
+                var route = response.routes[0];
+                var summaryPanel = document.getElementById('directions-panel');
+                summaryPanel.innerHTML = '';
+
+                // For each route segment, display summary information.
+                for (var i = 0; i < route.legs.length; i++) {
+                    var routeSegment = i + 1;
+                    summaryPanel.innerHTML += '<b>Route Segment: ' + routeSegment +
+                        '</b><br>';
+                    summaryPanel.innerHTML += route.legs[i].start_address + ' to ';
+                    summaryPanel.innerHTML += route.legs[i].end_address + '<br>';
+                    summaryPanel.innerHTML += route.legs[i].distance.text + '<br><br>';
+                }
+            } else {
+                window.alert('Directions request failed due to ' + status);
+            }
+        });
+    }
+
+
+
+    // #######################################################################################
+    // ajax
+    // #######################################################################################
 
     // get
 
@@ -237,6 +369,9 @@ Web.plannedRouteViewModel = function (moduleId, resx) {
         supplierHelper: supplierHelper,
         supplierTypeHelper: supplierTypeHelper,
         map: map,
+        initMap: initMap,
+        directionsService: directionsService,
+        directionsDisplay: directionsDisplay,
         loadSupplierListToMap: loadSupplierListToMap
     };
 }

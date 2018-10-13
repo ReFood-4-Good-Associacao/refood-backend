@@ -10,6 +10,8 @@
         <h2 id="dnnSitePanel-BasicSettings" class="dnnFormSectionHead dnnClear">
             Planned Route
         </h2>
+
+        <!-- Planned Route details form -->
         <fieldset>
             <div class="formItem" style="margin-bottom: 20px; ">
                 <div><label for="name">Name</label></div>
@@ -64,23 +66,29 @@
     </div>
     <hr />
 
+    <!-- Map -->
     <div id="map"></div>
     <hr />
 
-    <!-- Suppliers -->
-    <div id="suppliersDiv" style="position: relative; left: -180px; top: -670px; width: 30%; height: 500px; ">
+    <!-- Suppliers Panel -->
+    <div id="suppliersDiv" style="position: relative; left: -180px; top: -735px; width: 16%; height: 500px; ">
         <div data-bind="foreach: supplierHelper.supplierList">
-            <div style="border: 1px solid #808080; border-radius: 5px; padding: 8px; ">
-                <div data-bind="text: name"></div>
-                <div data-bind="text: latitude() + ', ' + longitude()"></div>
+            <div style="border: 1px solid #808080; border-radius: 5px; padding: 8px; margin-bottom: 3px; ">
+                <div data-bind="text: name" style=""></div>
+                <div data-bind="text: latitude() + ', ' + longitude()" style="font-size: 10px; "></div>
             </div>
         </div>
     </div>
 
+    <!-- Directions Panel -->
+    <div id="directions-panel"></div>
+
+    <!-- Buttons Bar -->
     <div class="text-right" style="margin-bottom: 50px; ">
 		<a data-bind="click: cancel" href="#" class="btn btn-link">Cancel</a>
 		<a data-bind="click: save" href="#" class="btn btn-primary">Save</a>
     </div>
+
 </div>
 
 @section scripts{
@@ -113,12 +121,7 @@
             ko.applyBindings(viewmodel, $("#PlannedRoute-" + moduleId)[0]);
 
             function initMap() {
-                viewmodel.map = new google.maps.Map(document.getElementById('map'), {
-                    center: { lat: 38.7223, lng: -9.1393 },
-                    zoom: 12
-                });
-
-                viewmodel.loadSupplierListToMap(viewmodel.map);
+                viewmodel.initMap();
             }
 
             //function dnnEditBasicSettings() {
