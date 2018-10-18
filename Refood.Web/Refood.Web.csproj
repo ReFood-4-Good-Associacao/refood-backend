@@ -244,6 +244,7 @@
     <Compile Include="Controllers\BenificiaryMemberController.gen.cs" />
     <Compile Include="Controllers\CalendarEventApiController.gen.cs" />
     <Compile Include="Controllers\CalendarEventController.gen.cs" />
+    <Compile Include="Controllers\CheckpointApiController.gen.cs" />
     <Compile Include="Controllers\CheckpointController.gen.cs" />
     <Compile Include="Controllers\ContributionChannelApiController.gen.cs" />
     <Compile Include="Controllers\ContributionChannelController.gen.cs" />
@@ -598,6 +599,7 @@
     <Content Include="Scripts\CalendarEventEdit.js" />
     <Content Include="Scripts\CalendarEventHelper.js" />
     <Content Include="Scripts\CalendarEventView.js" />
+    <Content Include="Scripts\CheckpointHelper.js" />
     <Content Include="Scripts\ContributionChannelEdit.js" />
     <Content Include="Scripts\ContributionChannelHelper.js" />
     <Content Include="Scripts\ContributionChannelView.js" />

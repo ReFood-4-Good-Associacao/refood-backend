@@ -173,7 +173,9 @@ namespace Refood.Business.UnitTests
         public void GetCheckpointListAdvancedSearch_Success_Test()
         {
             // Arrange
+            int? plannedRouteId = null; 
             string name = null; 
+            int? orderNumber = null; 
             double? latitude = null; 
             double? longitude = null; 
             int? addressId = null; 
@@ -182,6 +184,8 @@ namespace Refood.Business.UnitTests
             System.DateTime? minimumTimeTo = null; 
             System.DateTime? maximumTimeFrom = null; 
             System.DateTime? maximumTimeTo = null; 
+            int? nucleoId = null; 
+            int? supplierId = null; 
             bool? active = null; 
 
             //int pageIndex = 0;
@@ -197,7 +201,9 @@ namespace Refood.Business.UnitTests
             // create mock for repository
             var mock = new Mock<ICheckpointRepository>();
             mock.Setup(s => s.GetCheckpointListAdvancedSearch(
-                 Moq.It.IsAny<string>() // name 
+                 Moq.It.IsAny<int?>() // plannedRouteId 
+                , Moq.It.IsAny<string>() // name 
+                , Moq.It.IsAny<int?>() // orderNumber 
                 , Moq.It.IsAny<double?>() // latitude 
                 , Moq.It.IsAny<double?>() // longitude 
                 , Moq.It.IsAny<int?>() // addressId 
@@ -206,6 +212,8 @@ namespace Refood.Business.UnitTests
                 , Moq.It.IsAny<System.DateTime?>() // minimumTimeTo 
                 , Moq.It.IsAny<System.DateTime?>() // maximumTimeFrom 
                 , Moq.It.IsAny<System.DateTime?>() // maximumTimeTo 
+                , Moq.It.IsAny<int?>() // nucleoId 
+                , Moq.It.IsAny<int?>() // supplierId 
                 , Moq.It.IsAny<bool?>() // active 
             )).Returns(list);
 
@@ -215,7 +223,9 @@ namespace Refood.Business.UnitTests
 
             // Act
             var resultList = checkpointService.GetCheckpointListAdvancedSearch(
-                 name 
+                 plannedRouteId 
+                , name 
+                , orderNumber 
                 , latitude 
                 , longitude 
                 , addressId 
@@ -224,6 +234,8 @@ namespace Refood.Business.UnitTests
                 , minimumTimeTo 
                 , maximumTimeFrom 
                 , maximumTimeTo 
+                , nucleoId 
+                , supplierId 
                 , active 
             );
             
@@ -255,6 +267,21 @@ namespace Refood.Business.UnitTests
             Assert.IsNotNull(dto);
         }
 
+        [TestMethod]
+        public void GetCheckpointListByPlannedRouteId_Success_Test()
+        {
+            // Arrange
+
+
+            // Act
+
+
+            // Assert
+
+
+            Assert.Fail();
+        }
+
 
 
         // example data
@@ -265,8 +292,12 @@ namespace Refood.Business.UnitTests
 
             // int
             checkpoint.CheckpointId = id;
+            // int
+            checkpoint.PlannedRouteId = 1;
             // string
             checkpoint.Name = "NameTestValue";
+            // int
+            checkpoint.OrderNumber = 1;
             // double?
             checkpoint.Latitude = 1;
             // double?
@@ -279,6 +310,10 @@ namespace Refood.Business.UnitTests
             checkpoint.MinimumTime = new System.DateTime();
             // System.DateTime?
             checkpoint.MaximumTime = new System.DateTime();
+            // int?
+            checkpoint.NucleoId = 1;
+            // int?
+            checkpoint.SupplierId = 1;
             // bool
             checkpoint.Active = false;
             // bool
@@ -301,8 +336,12 @@ namespace Refood.Business.UnitTests
 
             // int
             checkpoint.CheckpointId = id;
+            // int
+            checkpoint.PlannedRouteId = 1;
             // string
             checkpoint.Name = "NameTestValue";
+            // int
+            checkpoint.OrderNumber = 1;
             // double?
             checkpoint.Latitude = 1;
             // double?
@@ -315,6 +354,10 @@ namespace Refood.Business.UnitTests
             checkpoint.MinimumTime = new System.DateTime();
             // System.DateTime?
             checkpoint.MaximumTime = new System.DateTime();
+            // int?
+            checkpoint.NucleoId = 1;
+            // int?
+            checkpoint.SupplierId = 1;
             // bool
             checkpoint.Active = false;
             // bool

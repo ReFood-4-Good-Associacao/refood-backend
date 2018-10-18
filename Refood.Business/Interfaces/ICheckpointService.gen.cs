@@ -23,7 +23,9 @@ namespace Refood.Business.Interfaces
         IList<CheckpointDTO> GetCheckpoints(string searchTerm, int pageIndex, int pageSize);
 
         IEnumerable<CheckpointDTO> GetCheckpointListAdvancedSearch(
-            string name 
+            int? plannedRouteId 
+            ,string name 
+            ,int? orderNumber 
             ,double? latitude 
             ,double? longitude 
             ,int? addressId 
@@ -32,10 +34,14 @@ namespace Refood.Business.Interfaces
             ,System.DateTime? minimumTimeTo 
             ,System.DateTime? maximumTimeFrom 
             ,System.DateTime? maximumTimeTo 
+            ,int? nucleoId 
+            ,int? supplierId 
             ,bool? active 
         );
 
         void UpdateCheckpoint(CheckpointDTO dto);
+
+        IEnumerable<CheckpointDTO> GetCheckpointListByPlannedRouteId(int checkpointId);
 
     }
 }

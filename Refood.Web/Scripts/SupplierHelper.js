@@ -48,7 +48,7 @@ Web.supplierHelper = function (isLoading, serviceRootUrl, moduleHeaders) {
 
     // get
 
-    var getSupplierList = function () {
+    var getSupplierList = function (callback) {
         isLoading(true);
 
         // need to calculate a different Url for Supplier service
@@ -61,6 +61,10 @@ Web.supplierHelper = function (isLoading, serviceRootUrl, moduleHeaders) {
         }).done(function (data) {
             if (data) {
                 loadSuppliers(data);
+
+                if (callback != null) {
+                    callback(data);
+                }
             }
             else {
                 clear();

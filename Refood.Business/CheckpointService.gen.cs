@@ -175,7 +175,9 @@ namespace Refood.Business
         }
 
         public IEnumerable<CheckpointDTO> GetCheckpointListAdvancedSearch(
-             string name 
+             int? plannedRouteId 
+            , string name 
+            , int? orderNumber 
             , double? latitude 
             , double? longitude 
             , int? addressId 
@@ -184,6 +186,8 @@ namespace Refood.Business
             , System.DateTime? minimumTimeTo 
             , System.DateTime? maximumTimeFrom 
             , System.DateTime? maximumTimeTo 
+            , int? nucleoId 
+            , int? supplierId 
             , bool? active 
         )
         {
@@ -192,7 +196,9 @@ namespace Refood.Business
                 log.Debug("GetCheckpointListAdvancedSearch"); 
 
                 IEnumerable<R_Checkpoint> results = Repository.GetCheckpointListAdvancedSearch(
-                     name 
+                     plannedRouteId 
+                    , name 
+                    , orderNumber 
                     , latitude 
                     , longitude 
                     , addressId 
@@ -201,6 +207,8 @@ namespace Refood.Business
                     , minimumTimeTo 
                     , maximumTimeFrom 
                     , maximumTimeTo 
+                    , nucleoId 
+                    , supplierId 
                     , active 
                 );
             
@@ -234,6 +242,31 @@ namespace Refood.Business
                 Repository.UpdateCheckpoint(t);
 
                 log.Debug("result: 'success'"); 
+            }
+            catch(System.Exception e)
+            {
+                // error
+                log.Error(e.ToString()); 
+
+                throw;
+            }
+        }
+
+        public IEnumerable<CheckpointDTO> GetCheckpointListByPlannedRouteId(int checkpointId)
+        {
+            try
+            {
+                
+                log.Debug("PlannedRouteId: " + checkpointId + " "); 
+
+                // get list by PlannedRoute id
+                IEnumerable<R_Checkpoint> results = Repository.GetCheckpointListByPlannedRouteId(checkpointId);
+            
+                IEnumerable<CheckpointDTO> resultsDTO = results.Select(e => new CheckpointDTO(e));
+
+                log.Debug("result: 'success', count: " + (resultsDTO != null ? resultsDTO.Count().ToString() : "null")); 
+
+                return resultsDTO;
             }
             catch(System.Exception e)
             {

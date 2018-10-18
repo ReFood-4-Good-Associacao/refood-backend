@@ -83,7 +83,7 @@ foreach(var currentProperty in properties)
 
     // get
 
-    var get<#=EntityName#>List = function () {
+    var get<#=EntityName#>List = function (callback) {
         isLoading(true);
 
         // need to calculate a different Url for <#=EntityName#> service
@@ -96,6 +96,10 @@ foreach(var currentProperty in properties)
         }).done(function (data) {
             if (data) {
                 load<#=EntityName#>s(data);
+
+                if (callback != null) {
+                    callback(data);
+                }
             }
             else {
                 clear();
@@ -106,7 +110,7 @@ foreach(var currentProperty in properties)
     };
 
 <#if (ShouldGenerateParentEntityFunctions) {#>
-    var getListBy<#=ParentEntityName#>Id = function (itemId) {
+    var getListBy<#=ParentEntityName#>Id = function (itemId, callback) {
         isLoading(true);
 
         // need to calculate a different Url for <#=EntityName#> service
@@ -119,6 +123,10 @@ foreach(var currentProperty in properties)
         }).done(function (data) {
             if (data) {
                 load<#=EntityName#>s(data);
+
+                if (callback != null) {
+                    callback(data);
+                }
             }
             else {
                 clear();
@@ -209,7 +217,7 @@ foreach(var currentProperty in properties)
 {#>
     // save
 
-    var save<#=EntityName#>s = function (<#if (ShouldGenerateParentEntityFunctions) {#>parentId<#}#>) {
+    var save<#=EntityName#>s = function (<#if (ShouldGenerateParentEntityFunctions) {#>parentId, <#}#>callback) {
         isLoading(true);
         var ajaxMethod = "POST";
         var restUrl = serviceRootUrl + "api/<#=EntityName#>Api/SaveList/";
@@ -246,6 +254,10 @@ foreach(var currentProperty in properties)
             get<#=EntityName#>List();
 <#  }#>
 <#}#>
+
+            if (callback != null) {
+                callback(data);
+            }
         }).always(function (data) {
             isLoading(false);
         });

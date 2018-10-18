@@ -29,6 +29,7 @@ Web.plannedRouteViewModel = function (moduleId, resx) {
     //var transportTypeHelper = Web.transportTypeHelper(isLoading, '/', function(){});
     var supplierHelper = Web.supplierHelper(isLoading, '/', function () { });
     var supplierTypeHelper = Web.supplierTypeHelper(isLoading, '/', function () { });
+    var checkpointHelper = Web.checkpointHelper(isLoading, '/', function () { });
 
     // google maps
     var map;
@@ -38,7 +39,9 @@ Web.plannedRouteViewModel = function (moduleId, resx) {
 
 
 
+    // #######################################################################################
     // init
+    // #######################################################################################
 
     var init = function () {
         var qs = getQueryStrings();
@@ -51,13 +54,21 @@ Web.plannedRouteViewModel = function (moduleId, resx) {
         //routeTypeHelper.getRouteTypeList();
         //transportTypeHelper.getTransportTypeList();
         
+        // get lists
         supplierTypeHelper.getSupplierTypeList();
-        supplierHelper.getSupplierList();
-
-        loadSupplierListToMap(map);
-        loadRoutePathsToMap(map);
+        supplierHelper.getSupplierList(function getSupplierListCallback(data) {
+            // load all suppliers to map
+            loadSupplierListToMap(map);
+        });
+        
+        if (plannedRouteId) {
+            // get checkpoints
+            checkpointHelper.getListByPlannedRouteId(plannedRouteId, function getListByPlannedRouteIdCallback(data) {
+                // load current route checkpoints to map
+                loadRoutePathsToMap(map);
+            });
+        }
     };
-
 
     var getQueryStrings = function () {
         var assoc = {};
@@ -102,7 +113,7 @@ Web.plannedRouteViewModel = function (moduleId, resx) {
 
         // main map
         map = new google.maps.Map(document.getElementById('map'), {
-            center: { lat: 38.7223, lng: -9.1393 },
+            center: { lat: 38.7223, lng: -9.1393 }, // Lisboa
             zoom: 13
         });
         directionsDisplay.setMap(map);
@@ -368,6 +379,7 @@ Web.plannedRouteViewModel = function (moduleId, resx) {
         //transportTypeList: transportTypeHelper.transportTypeList,
         supplierHelper: supplierHelper,
         supplierTypeHelper: supplierTypeHelper,
+        checkpointHelper: checkpointHelper,
         map: map,
         initMap: initMap,
         directionsService: directionsService,

@@ -567,7 +567,19 @@ namespace Refood.Core
 
 
 
+		[Column] public int PlannedRouteId { get; set; }
+
+
+
+
+
 		[Column] public string Name { get; set; }
+
+
+
+
+
+		[Column] public int OrderNumber { get; set; }
 
 
 
@@ -604,6 +616,18 @@ namespace Refood.Core
 
 
 		[Column] public DateTime? MaximumTime { get; set; }
+
+
+
+
+
+		[Column] public int? NucleoId { get; set; }
+
+
+
+
+
+		[Column] public int? SupplierId { get; set; }
 
 
 

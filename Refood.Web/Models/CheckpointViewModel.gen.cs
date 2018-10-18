@@ -21,13 +21,17 @@ namespace Refood.Web.Services.ViewModels
         public CheckpointViewModel(CheckpointDTO t)
         {
             CheckpointId = t.CheckpointId;
+            PlannedRouteId = t.PlannedRouteId;
             Name = t.Name;
+            OrderNumber = t.OrderNumber;
             Latitude = t.Latitude;
             Longitude = t.Longitude;
             AddressId = t.AddressId;
             EstimatedTimeArrival = t.EstimatedTimeArrival;
             MinimumTime = t.MinimumTime;
             MaximumTime = t.MaximumTime;
+            NucleoId = t.NucleoId;
+            SupplierId = t.SupplierId;
             Active = t.Active;
             IsDeleted = t.IsDeleted;
             CreateBy = t.CreateBy;
@@ -39,13 +43,17 @@ namespace Refood.Web.Services.ViewModels
         public CheckpointViewModel(CheckpointDTO t, string editUrl)
         {
             CheckpointId = t.CheckpointId;
+            PlannedRouteId = t.PlannedRouteId;
             Name = t.Name;
+            OrderNumber = t.OrderNumber;
             Latitude = t.Latitude;
             Longitude = t.Longitude;
             AddressId = t.AddressId;
             EstimatedTimeArrival = t.EstimatedTimeArrival;
             MinimumTime = t.MinimumTime;
             MaximumTime = t.MaximumTime;
+            NucleoId = t.NucleoId;
+            SupplierId = t.SupplierId;
             Active = t.Active;
             IsDeleted = t.IsDeleted;
             CreateBy = t.CreateBy;
@@ -60,13 +68,17 @@ namespace Refood.Web.Services.ViewModels
             if (dto != null)
             {
                 dto.CheckpointId = this.CheckpointId;
+                dto.PlannedRouteId = this.PlannedRouteId;
                 dto.Name = this.Name;
+                dto.OrderNumber = this.OrderNumber;
                 dto.Latitude = this.Latitude;
                 dto.Longitude = this.Longitude;
                 dto.AddressId = this.AddressId;
                 dto.EstimatedTimeArrival = this.EstimatedTimeArrival;
                 dto.MinimumTime = this.MinimumTime;
                 dto.MaximumTime = this.MaximumTime;
+                dto.NucleoId = this.NucleoId;
+                dto.SupplierId = this.SupplierId;
                 dto.Active = this.Active;
                 dto.IsDeleted = this.IsDeleted;
 
@@ -80,8 +92,14 @@ namespace Refood.Web.Services.ViewModels
         [JsonProperty("checkpointId")]
         public int CheckpointId { get; set; }
 
+        [JsonProperty("plannedRouteId")]
+        public int PlannedRouteId { get; set; }
+
         [JsonProperty("name")]
         public string Name { get; set; }
+
+        [JsonProperty("orderNumber")]
+        public int OrderNumber { get; set; }
 
         [JsonProperty("latitude")]
         public double? Latitude { get; set; }
@@ -100,6 +118,12 @@ namespace Refood.Web.Services.ViewModels
 
         [JsonProperty("maximumTime")]
         public System.DateTime? MaximumTime { get; set; }
+
+        [JsonProperty("nucleoId")]
+        public int? NucleoId { get; set; }
+
+        [JsonProperty("supplierId")]
+        public int? SupplierId { get; set; }
 
         [JsonProperty("active")]
         public bool Active { get; set; }
@@ -139,13 +163,17 @@ namespace Refood.Web.Services.ViewModels
                     + "{ \n"
  
                     + "    CheckpointId: " +  "'" + checkpointViewModel.CheckpointId + "'"  + ", \n" 
+                    + "    PlannedRouteId: " +  "'" + checkpointViewModel.PlannedRouteId + "'"  + ", \n" 
                     + "    Name: " + (checkpointViewModel.Name != null ? "'" + checkpointViewModel.Name + "'" : "null") + ", \n" 
+                    + "    OrderNumber: " +  "'" + checkpointViewModel.OrderNumber + "'"  + ", \n" 
                     + "    Latitude: " + (checkpointViewModel.Latitude != null ? "'" + checkpointViewModel.Latitude + "'" : "null") + ", \n" 
                     + "    Longitude: " + (checkpointViewModel.Longitude != null ? "'" + checkpointViewModel.Longitude + "'" : "null") + ", \n" 
                     + "    AddressId: " + (checkpointViewModel.AddressId != null ? "'" + checkpointViewModel.AddressId + "'" : "null") + ", \n" 
                     + "    EstimatedTimeArrival: " +  "'" + checkpointViewModel.EstimatedTimeArrival + "'"  + ", \n" 
                     + "    MinimumTime: " + (checkpointViewModel.MinimumTime != null ? "'" + checkpointViewModel.MinimumTime + "'" : "null") + ", \n" 
                     + "    MaximumTime: " + (checkpointViewModel.MaximumTime != null ? "'" + checkpointViewModel.MaximumTime + "'" : "null") + ", \n" 
+                    + "    NucleoId: " + (checkpointViewModel.NucleoId != null ? "'" + checkpointViewModel.NucleoId + "'" : "null") + ", \n" 
+                    + "    SupplierId: " + (checkpointViewModel.SupplierId != null ? "'" + checkpointViewModel.SupplierId + "'" : "null") + ", \n" 
                     + "    Active: " +  "'" + checkpointViewModel.Active + "'"  + ", \n" 
                     + "    IsDeleted: " +  "'" + checkpointViewModel.IsDeleted + "'"  + ", \n" 
                     + "    CreateBy: " + (checkpointViewModel.CreateBy != null ? "'" + checkpointViewModel.CreateBy + "'" : "null") + ", \n" 

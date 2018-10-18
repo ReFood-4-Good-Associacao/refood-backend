@@ -46,7 +46,7 @@ EntityNameLowerCase = "";
 // Specific entities (domain class names) that should generate source code files
 // Note: these classes must already exist in the namespace specified in "NamespaceCore" parameter
 
-Entities = new List<string> { "Task" };
+Entities = new List<string> { "Checkpoint" };
 
 
 // Generate "GetListByParentEntityId" functions (controller and javascript)
@@ -54,8 +54,8 @@ Entities = new List<string> { "Task" };
 // example: class "ProductCategory" has a list of "Products", so we generate a function chain called "GetProductListByProductCategoryId(int id)" 
 // (query + business layer function + web api action + ajax get)
 
-ShouldGenerateParentEntityFunctions = false;
-ParentEntityName = "Beneficiary";
+ShouldGenerateParentEntityFunctions = true;
+ParentEntityName = "PlannedRoute";
 
 
 // ################################################################

@@ -300,13 +300,17 @@ GO
 CREATE TABLE R_Checkpoint
     (
     CheckpointId INT NOT NULL IDENTITY (1, 1),
+    PlannedRouteId INT NOT NULL,
     Name nvarchar(max) NOT NULL,
+    OrderNumber INT NOT NULL,
     Latitude FLOAT NULL,
     Longitude FLOAT NULL,
     AddressId INT NULL,
     EstimatedTimeArrival INT NOT NULL,
     MinimumTime DATETIME NULL,
     MaximumTime DATETIME NULL,
+    NucleoId INT NULL,
+    SupplierId INT NULL,
     Active BIT NOT NULL,
     IsDeleted BIT NOT NULL,
     CreateBy INT NULL,
