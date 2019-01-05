@@ -303,7 +303,6 @@
     <Compile Include="Controllers\TeamController.gen.cs" />
     <Compile Include="Controllers\TutorialApiController.gen.cs" />
     <Compile Include="Controllers\TutorialController.gen.cs" />
-    <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Controllers\VehicleApiController.gen.cs" />
     <Compile Include="Controllers\VehicleController.gen.cs" />
     <Compile Include="Controllers\VehicleTypeApiController.gen.cs" />
